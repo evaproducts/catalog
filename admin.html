@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة إيفا براند</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; direction: rtl; }
+        .box { background: #fff; padding: 25px; border-radius: 12px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { font-size: 18px; color: #1c1e21; border-right: 4px solid #d4af37; padding-right: 10px; margin-bottom: 20px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { background: #27ae60; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #219150; }
+        .delete-btn { background: #e74c3c; margin-top: 5px; }
+        .blue-btn { background: #2980b9; }
+        .link-home { display: block; text-align: center; margin-top: 20px; color: #d4af37; text-decoration: none; font-weight: bold; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🖼️ تحديث لوغو الماركة</h2>
+    <input type="file" id="logoInput" accept="image/*">
+    <button onclick="updateLogo()" class="blue-btn">حفظ اللوغو</button>
+</div>
+
+<div class="box">
+    <h2>📂 إدارة الأقسام (إضافة، تعديل، حذف)</h2>
+    
+    <label>إضافة قسم جديد:</label>
+    <input type="text" id="newCatId" placeholder="رمز القسم بالانجليزي (مثال: F)">
+    <input type="text" id="newCatName" placeholder="اسم القسم بالعربي (مثال: الأحذية)">
+    <button onclick="addCategory()" class="blue-btn">إضافة القسم</button>
+
+    <hr>
+
+    <label>تعديل اسم قسم موجود أو حذفه:</label>
+    <select id="catSelect" onchange="loadCatData()"></select>
+    <input type="text" id="editCatName" placeholder="اسم القسم الجديد">
+    <button onclick="updateCategory()">تعديل اسم القسم</button>
+    <button onclick="deleteCategory()" class="delete-btn">حذف القسم نهائياً</button>
+</div>
+
+<div class="box">
+    <h2>➕ إضافة منتج جديد</h2>
+    <label>اختر القسم:</label>
+    <select id="pCategory"></select>
+    
+    <label>صورة المنتج:</label>
+    <input type="file" id="pImage" accept="image/*">
+    
+    <input type="text" id="pName" placeholder="اسم المنتج">
+    <input type="text" id="pCode" placeholder="كود المنتج (مثلاً F1)">
+    <input type="text" id="pPrice" placeholder="السعر بالشيكل">
+    <button onclick="saveProduct()">حفظ المنتج في الكتالوج</button>
+</div>
+
+<div class="box">
+    <h2>🗑️ حذف منتج بالكود</h2>
+    <input type="text" id="delCode" placeholder="أدخل كود المنتج للحذف">
+    <button class="delete-btn" onclick="deleteProduct()">حذف المنتج</button>
+</div>
+
+<a href="index.html" class="link-home">⬅️ معاينة الكتالوج الأساسي</a>
+
+<script>
+    // تهيئة الأقسام الافتراضية إذا لم تكن موجودة
+    if (!localStorage.getItem('eva_categories')) {
+        localStorage.setItem('eva_categories', JSON.stringify([
+            {id: 'A', name: 'الحقائب'},
+            {id: 'B', name: 'العطور'},
+            {id: 'C', name: 'الساعات'},
+            {id: 'D', name: 'الهدايا'},
+            {id: 'E', name: 'الإكسسوارات'}
+        ]));
+    }
+
+    function updateSelects() {
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let optionsHtml = categories.map(c => `<option value="${c.id}">${c.name} (رمز: ${c.id})</option>`).join('');
+        
+        document.getElementById('pCategory').innerHTML = optionsHtml;
+        document.getElementById('catSelect').innerHTML = optionsHtml;
+        loadCatData();
+    }
+
+    function loadCatData() {
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let selectedId = document.getElementById('catSelect').value;
+        let cat = categories.find(c => c.id === selectedId);
+        if(cat) {
+            document.getElementById('editCatName').value = cat.name;
+        }
+    }
+
+    function addCategory() {
+        let id = document.getElementById('newCatId').value.trim().toUpperCase();
+        let name = document.getElementById('newCatName').value.trim();
+        if(!id || !name) return alert('الرجاء تعبئة رمز واسم القسم');
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        if(categories.some(c => c.id === id)) return alert('رمز القسم موجود مسبقاً، اختر رمزاً آخر');
+
+        categories.push({id: id, name: name});
+        localStorage.setItem('eva_categories', JSON.stringify(categories));
+        alert('تمت إضافة القسم بنجاح!');
+        location.reload();
+    }
+
+    function updateCategory() {
+        let selectedId = document.getElementById('catSelect').value;
+        let newName = document.getElementById('editCatName').value.trim();
+        if(!newName) return alert('أدخل الاسم الجديد');
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let cat = categories.find(c => c.id === selectedId);
+        if(cat) {
+            cat.name = newName;
+            localStorage.setItem('eva_categories', JSON.stringify(categories));
+            alert('تم تعديل اسم القسم بنجاح!');
+            location.reload();
+        }
+    }
+
+    function deleteCategory() {
+        let selectedId = document.getElementById('catSelect').value;
+        if(!confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف كافة المنتجات الموجودة بداخله أيضاً!')) return;
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        categories = categories.filter(c => c.id !== selectedId);
+        localStorage.setItem('eva_categories', JSON.stringify(categories));
+
+        // حذف المنتجات التابعة لهذا القسم
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        products = products.filter(p => p.category !== selectedId);
+        localStorage.setItem('eva_products', JSON.stringify(products));
+
+        alert('تم حذف القسم ومنتجاته بنجاح!');
+        location.reload();
+    }
+
+    function updateLogo() {
+        const file = document.getElementById('logoInput').files[0];
+        if(!file) return alert('اختر صورة أولاً');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('eva_logo', e.target.result);
+            alert('تم تحديث اللوغو بنجاح!');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function saveProduct() {
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        const file = document.getElementById('pImage').files[0];
+        const name = document.getElementById('pName').value;
+        const code = document.getElementById('pCode').value;
+        const price = document.getElementById('pPrice').value;
+        const cat = document.getElementById('pCategory').value;
+
+        if(!file || !name || !code || !price) return alert('أكمل كافة البيانات');
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            products.push({ category: cat, name: name, code: code, price: price, image: e.target.result });
+            localStorage.setItem('eva_products', JSON.stringify(products));
+            alert('تم حفظ المنتج بنجاح!');
+            location.reload();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function deleteProduct() {
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        const code = document.getElementById('delCode').value;
+        products = products.filter(p => p.code !== code);
+        localStorage.setItem('eva_products', JSON.stringify(products));
+        alert('تم حذف المنتج بنجاح');
+        location.reload();
+    }
+
+    updateSelects();
+</script>
+
+</body>
+</html>
