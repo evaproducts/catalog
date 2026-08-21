@@ -81,7 +81,7 @@
 <!-- ربط مكتبات Firebase -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
@@ -97,7 +97,6 @@
 
     let allProducts = [];
 
-    // ضغط الصور تلقائياً
     function compressImage(file, callback) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -117,19 +116,31 @@
         };
     }
 
-    // حساب الكود التسلسلي التلقائي للمنتج حسب القسم (مثل A1, A2...)
     window.updateProductCodePreview = function() {
         const selectedCat = document.getElementById('pCategory').value;
         if (!selectedCat) return;
-        
-        // تصفية المنتجات التي تنتمي لهذا القسم
         const catProducts = allProducts.filter(p => p.category === selectedCat);
         let nextNum = catProducts.length + 1;
         document.getElementById('pCode').value = selectedCat + nextNum;
     }
 
+    async function addUpdateLog(text) {
+        try {
+            const updatesRef = doc(db, "settings", "updates");
+            const snap = await getDoc(updatesRef);
+            let list = [];
+            if(snap.exists() && snap.data().list) {
+                list = snap.data().list;
+            }
+            list.push(text);
+            if(list.length > 10) list = list.slice(-10); // الاحتفاظ بأحدث 10 إشعارات
+            await setDoc(updatesRef, { list });
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
     async function initAdmin() {
-        // تحميل الأقسام
         const catSnapshot = await getDocs(collection(db, "categories"));
         let categories = [];
         catSnapshot.forEach(doc => categories.push({ id: doc.id, ...doc.data() }));
@@ -147,16 +158,13 @@
         let lastId = categories[categories.length - 1].id;
         document.getElementById('autoCatId').value = String.fromCharCode(lastId.charCodeAt(0) + 1);
 
-        // تحميل المنتجات لحساب الأكواد التسلسلية بدقة
         const prodSnapshot = await getDocs(collection(db, "products"));
         allProducts = [];
         prodSnapshot.forEach(docItem => allProducts.push({ id: docItem.id, ...docItem.data() }));
 
-        // تحديث كود أول منتج تلقائياً
         updateProductCodePreview();
-
-        // تحميل الوسيطات وإعدادات الإدارة واللوغو
         loadAgents();
+
         const settingsSnap = await getDocs(collection(db, "settings"));
         settingsSnap.forEach(d => {
             if(d.id === 'notice') document.getElementById('adminNoticeInput').value = d.data().text || '';
@@ -239,16 +247,21 @@
                 filesProcessed++;
                 if (filesProcessed === filesInput.files.length) {
                     let code = document.getElementById('pCode').value.trim();
-                    // تخزين المستند بحيث يكون معرف الوثيقة في فايسبوك هو كود المنتج نفسه (مثلاً A1)
+                    let name = document.getElementById('pName').value.trim();
+                    
                     await setDoc(doc(db, "products", code), {
                         category: document.getElementById('pCategory').value,
-                        name: document.getElementById('pName').value.trim(),
+                        name: name,
                         code: code,
                         price: document.getElementById('pPrice').value.trim(),
                         agentPrice: document.getElementById('pAgentPrice').value.trim(),
                         images: imagesArray
                     });
-                    alert('تم حفظ المنتج بنجاح برمز: ' + code);
+
+                    // إضافة إشعار تلقائي في لوحة التحديثات السحابية
+                    await addUpdateLog(`✨ تمت إضافة منتج جديد: ${name} (رمز: ${code})`);
+
+                    alert('تم حفظ المنتج بنجاح بررمز: ' + code);
                     location.reload();
                 }
             });
@@ -260,6 +273,10 @@
         if(!code) return alert('الرجاء إدخال كود المنتج المراد حذفه');
         
         await deleteDoc(doc(db, "products", code));
+        
+        // إضافة إشعار تلقائي بالحذف
+        await addUpdateLog(`🗑️ المنتج برمز (${code}) لم يعد متوفراً حالياً.`);
+
         alert('تم حذف المنتج بنجاح!');
         location.reload();
     }
