@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الشاملة | إيفا براند</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 15px; direction: rtl; margin: 0; }
+        .box { background: #fff; padding: 20px; border-radius: 12px; max-width: 600px; margin: 15px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { font-size: 17px; color: #1c1e21; border-right: 4px solid #d4af37; padding-right: 10px; margin-bottom: 15px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Arial, sans-serif; font-size: 14px; }
+        input[readonly] { background-color: #f9f9f9; color: #888; cursor: not-allowed; }
+        button { background: #27ae60; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #219150; }
+        .delete-btn { background: #e74c3c; margin-top: 5px; }
+        .blue-btn { background: #2980b9; }
+        .link-home { display: block; text-align: center; margin-top: 20px; color: #ad1457; text-decoration: none; font-weight: bold; font-size: 15px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        
+        /* جدول عرض الوسيطات */
+        .agents-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .agents-table th, .agents-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .agents-table th { background-color: #f9f9f9; color: #333; }
+        .agent-del-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🖼️ تحديث لوغو الماركة</h2>
+    <input type="file" id="logoInput" accept="image/*">
+    <button onclick="updateLogo()" class="blue-btn">حفظ اللوغو</button>
+</div>
+
+<div class="box">
+    <h2>📢 إدارة رسالة الإدارة البارزة</h2>
+    <label>رسالة الإدارة:</label>
+    <textarea id="adminNoticeInput" rows="2" placeholder="اكتب رسالة الإدارة لتظهر في أعلى الكتالوج..."></textarea>
+    <button onclick="saveAdminNotice()" class="blue-btn">حفظ رسالة الإدارة</button>
+</div>
+
+<div class="box">
+    <h2>👥 إدارة الوسيطات (صلاحيات الأسعار الخاصة)</h2>
+    <label>اسم الوسيطة:</label>
+    <input type="text" id="agentName" placeholder="مثال: ريم أحمد">
+    
+    <label>اسم المستخدم (User):</label>
+    <input type="text" id="agentUser" placeholder="مثال: reem2026">
+
+    <label>كلمة المرور (Password):</label>
+    <input type="text" id="agentPass" placeholder="مثال: 123456">
+
+    <button onclick="addAgent()" class="blue-btn">إضافة وسيطة جديدة</button>
+
+    <hr>
+    <label>الوسيطات المسجلات حالياً:</label>
+    <div style="overflow-x: auto;">
+        <table class="agents-table">
+            <thead>
+                <tr>
+                    <th>اسم الوسيطة</th>
+                    <th>اسم المستخدم</th>
+                    <th>كلمة المرور</th>
+                    <th>إجراء</th>
+                </tr>
+            </thead>
+            <tbody id="agentsTableBody">
+                <!-- سيتم تعبئتها تلقائياً -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="box">
+    <h2>📂 إدارة الأقسام (إضافة وتعديل وحذف)</h2>
+    
+    <label>رمز القسم (يُولد تلقائياً):</label>
+    <input type="text" id="autoCatId" readonly style="font-weight: bold; color: #b8860b;">
+
+    <label>اسم القسم بالعربي:</label>
+    <input type="text" id="newCatName" placeholder="مثال: الحقائب الفاخرة">
+    <button onclick="addCategory()" class="blue-btn">إضافة القسم الجديد</button>
+
+    <hr>
+
+    <label>تعديل اسم قسم موجود أو حذفه:</label>
+    <select id="catSelect" onchange="loadCatData()"></select>
+    <input type="text" id="editCatName" placeholder="اسم القسم الجديد">
+    <button onclick="updateCategory()">تعديل اسم القسم</button>
+    <button onclick="deleteCategory()" class="delete-btn">حذف القسم نهائياً</button>
+</div>
+
+<div class="box">
+    <h2>➕ إضافة منتج جديد للكتالوج</h2>
+    <label>اختر القسم:</label>
+    <select id="pCategory" onchange="updateProductCodePreview()"></select>
+    
+    <label>صور المنتج (يمكنك اختيار عدة صور):</label>
+    <input type="file" id="pImages" accept="image/*" multiple>
+    
+    <label>اسم المنتج:</label>
+    <input type="text" id="pName" placeholder="مثال: حقيبة جلدية راقية">
+    
+    <label>كود المنتج (يُولد تلقائياً):</label>
+    <input type="text" id="pCode" readonly style="font-weight: bold; color: #b8860b;">
+
+    <label>سعر المعرض بالشيكل (للجمهور):</label>
+    <input type="number" id="pPrice" placeholder="مثال: 100">
+
+    <label>سعر الوسيط بالشيكل (خاص بالوسيطات):</label>
+    <input type="number" id="pAgentPrice" placeholder="مثال: 80">
+
+    <button onclick="saveProduct()">حفظ المنتج في الكتالوج</button>
+</div>
+
+<div class="box">
+    <h2>🗑️ حذف منتج بالكود</h2>
+    <input type="text" id="delCode" placeholder="أدخل كود المنتج للحذف (مثلاً A1)">
+    <button class="delete-btn" onclick="deleteProduct()">حذف المنتج وإرسال إشعار عدم توفر</button>
+</div>
+
+<a href="index.html" class="link-home">⬅️ معاينة الكتالوج الأساسي (الشاشة الثانية)</a>
+
+<script>
+    // دالة لتوليد الرمز التالي للأقسام (A, B... Z, AA, AB...)
+    function getNextCategoryCode(categories) {
+        if (!categories || categories.length === 0) return 'A';
+        let lastId = categories[categories.length - 1].id;
+        let code = '';
+        let i = lastId.length - 1;
+        let carry = true;
+
+        while (i >= 0 && carry) {
+            let char = lastId[i];
+            if (char === 'Z') {
+                code = 'A' + code;
+                i--;
+            } else {
+                code = String.fromCharCode(char.charCodeAt(0) + 1) + lastId.substring(i + 1);
+                carry = false;
+            }
+        }
+        if (carry) {
+            code = 'A'.repeat(lastId.length + 1);
+        }
+        return code;
+    }
+
+    // تهيئة البيانات الافتراضية
+    if (!localStorage.getItem('eva_categories')) {
+        localStorage.setItem('eva_categories', JSON.stringify([
+            {id: 'A', name: 'الحقائب الفاخرة'},
+            {id: 'B', name: 'العطور والساعات'}
+        ]));
+    }
+    if (!localStorage.getItem('eva_max_counters')) {
+        localStorage.setItem('eva_max_counters', JSON.stringify({ 'A': 1, 'B': 1 }));
+    }
+
+    // إدارة الوسيطات
+    function loadAgentsTable() {
+        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
+        let tbody = document.getElementById('agentsTableBody');
+        if (agents.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="color: #888;">لا توجد وسيطات مضافات حالياً</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = agents.map((agent, index) => `
+            <tr>
+                <td>${agent.name}</td>
+                <td><b>${agent.username}</b></td>
+                <td><code>${agent.password}</code></td>
+                <td><button class="agent-del-btn" onclick="deleteAgent(${index})">حذف</button></td>
+            </tr>
+        `).join('');
+    }
+
+    function addAgent() {
+        let name = document.getElementById('agentName').value.trim();
+        let username = document.getElementById('agentUser').value.trim();
+        let password = document.getElementById('agentPass').value.trim();
+
+        if(!name || !username || !password) {
+            return alert('الرجاء إدخال اسم الوسيطة، اسم المستخدم، وكلمة المرور');
+        }
+
+        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
+        if(agents.some(a => a.username === username)) {
+            return alert('اسم المستخدم هذا مستخدم مسبقاً، اختر اسماً آخر!');
+        }
+
+        agents.push({name: name, username: username, password: password});
+        localStorage.setItem('eva_agents', JSON.stringify(agents));
+
+        alert('تمت إضافة الوسيطة بنجاح!');
+        document.getElementById('agentName').value = '';
+        document.getElementById('agentUser').value = '';
+        document.getElementById('agentPass').value = '';
+        loadAgentsTable();
+    }
+
+    function deleteAgent(index) {
+        if(!confirm('هل أنت متأكد من حذف هذه الوسيطة؟')) return;
+        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
+        agents.splice(index, 1);
+        localStorage.setItem('eva_agents', JSON.stringify(agents));
+        loadAgentsTable();
+    }
+
+    function updateSelects() {
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let optionsHtml = categories.map(c => `<option value="${c.id}">${c.name} (رمز: ${c.id})</option>`).join('');
+        
+        let pCatEl = document.getElementById('pCategory');
+        let catSelEl = document.getElementById('catSelect');
+        if(pCatEl) pCatEl.innerHTML = optionsHtml;
+        if(catSelEl) catSelEl.innerHTML = optionsHtml;
+
+        document.getElementById('autoCatId').value = getNextCategoryCode(categories);
+
+        loadCatData();
+        updateProductCodePreview();
+    }
+
+    function loadCatData() {
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let selectedId = document.getElementById('catSelect').value;
+        let cat = categories.find(c => c.id === selectedId);
+        if(cat) {
+            document.getElementById('editCatName').value = cat.name;
+        }
+    }
+
+    function updateProductCodePreview() {
+        let catId = document.getElementById('pCategory').value;
+        if (!catId) return;
+
+        let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
+        if (!counters[catId]) {
+            let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+            let catProducts = products.filter(p => p.category === catId);
+            counters[catId] = catProducts.length + 1;
+        }
+
+        document.getElementById('pCode').value = catId + counters[catId];
+    }
+
+    function addCategory() {
+        let id = document.getElementById('autoCatId').value.trim();
+        let name = document.getElementById('newCatName').value.trim();
+        if(!name) return alert('الرجاء إدخال اسم القسم بالعربي');
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        categories.push({id: id, name: name});
+        localStorage.setItem('eva_categories', JSON.stringify(categories));
+
+        let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
+        counters[id] = 1;
+        localStorage.setItem('eva_max_counters', JSON.stringify(counters));
+
+        alert('تمت إضافة القسم بنجاح بررمز تلقائي: ' + id);
+        location.reload();
+    }
+
+    function updateCategory() {
+        let selectedId = document.getElementById('catSelect').value;
+        let newName = document.getElementById('editCatName').value.trim();
+        if(!newName) return alert('أدخل الاسم الجديد');
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let cat = categories.find(c => c.id === selectedId);
+        if(cat) {
+            cat.name = newName;
+            localStorage.setItem('eva_categories', JSON.stringify(categories));
+            alert('تم تعديل اسم القسم بنجاح!');
+            location.reload();
+        }
+    }
+
+    function deleteCategory() {
+        let selectedId = document.getElementById('catSelect').value;
+        if(!confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف كافة المنتجات الموجودة بداخله أيضاً!')) return;
+
+        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        categories = categories.filter(c => c.id !== selectedId);
+        localStorage.setItem('eva_categories', JSON.stringify(categories));
+
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        products = products.filter(p => p.category !== selectedId);
+        localStorage.setItem('eva_products', JSON.stringify(products));
+
+        alert('تم حذف القسم ومنتجاته بنجاح!');
+        location.reload();
+    }
+
+    function updateLogo() {
+        const file = document.getElementById('logoInput').files[0];
+        if(!file) return alert('اختر صورة اللوغو أولاً');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('eva_logo', e.target.result);
+            alert('تم تحديث اللوغو بنجاح!');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function saveAdminNotice() {
+        const noticeText = document.getElementById('adminNoticeInput').value.trim();
+        localStorage.setItem('eva_admin_notice', noticeText);
+        alert('تم حفظ وتحديث رسالة الإدارة بنجاح!');
+    }
+
+    function saveProduct() {
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        const filesInput = document.getElementById('pImages');
+        const name = document.getElementById('pName').value.trim();
+        const code = document.getElementById('pCode').value.trim();
+        const price = document.getElementById('pPrice').value.trim();
+        const agentPrice = document.getElementById('pAgentPrice').value.trim();
+        const cat = document.getElementById('pCategory').value;
+
+        if(filesInput.files.length === 0 || !name || !code || !price || !agentPrice) {
+            return alert('الرجاء إكمال كافة بيانات المنتج واختيار صورة واحدة على الأقل');
+        }
+
+        let imagesArray = [];
+        let filesProcessed = 0;
+
+        for (let i = 0; i < filesInput.files.length; i++) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                imagesArray.push(e.target.result);
+                filesProcessed++;
+                
+                if (filesProcessed === filesInput.files.length) {
+                    products.push({
+                        category: cat,
+                        name: name,
+                        code: code,
+                        price: price,
+                        agentPrice: agentPrice,
+                        images: imagesArray
+                    });
+                    localStorage.setItem('eva_products', JSON.stringify(products));
+
+                    let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
+                    let currentNum = parseInt(code.replace(cat, '')) || 1;
+                    counters[cat] = currentNum + 1;
+                    localStorage.setItem('eva_max_counters', JSON.stringify(counters));
+
+                    let updates = JSON.parse(localStorage.getItem('eva_updates')) || [];
+                    updates.push(`✨ تم إضافة المنتج الجديد برمز (${code})`);
+                    localStorage.setItem('eva_updates', JSON.stringify(updates));
+
+                    alert('تم حفظ المنتج بنجاح برمز: ' + code);
+                    location.reload();
+                }
+            };
+            reader.readAsDataURL(filesInput.files[i]);
+        }
+    }
+
+    function deleteProduct() {
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
+        const code = document.getElementById('delCode').value.trim().toUpperCase();
+        if(!code) return alert('أدخل كود المنتج المراد حذفه');
+        
+        let productExists = products.find(p => p.code === code);
+        if(!productExists) {
+            return alert('لم يتم العثور على منتج بهذا الكود!');
+        }
+        
+        let filtered = products.filter(p => p.code !== code);
+        localStorage.setItem('eva_products', JSON.stringify(filtered));
+
+        let updates = JSON.parse(localStorage.getItem('eva_updates')) || [];
+        updates.push(`⚠️ تنبيه: المنتج برمز (${code}) لم يعد متوفراً حالياً.`);
+        localStorage.setItem('eva_updates', JSON.stringify(updates));
+
+        alert('تم حذف المنتج بنجاح وتوليد إشعار عدم توفر في الكتالوج');
+        location.reload();
+    }
+
+    window.onload = function() {
+        updateSelects();
+        loadAgentsTable();
+        let savedNotice = localStorage.getItem('eva_admin_notice');
+        if(savedNotice) {
+            document.getElementById('adminNoticeInput').value = savedNotice;
+        }
+    };
+</script>
+
+</body>
+</html>
