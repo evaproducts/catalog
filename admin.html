@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الشاملة | إيفا براند</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 15px; direction: rtl; margin: 0; }
+        .box { background: #fff; padding: 20px; border-radius: 12px; max-width: 600px; margin: 15px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { font-size: 17px; color: #1c1e21; border-right: 4px solid #d4af37; padding-right: 10px; margin-bottom: 15px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Arial, sans-serif; font-size: 14px; }
+        input[readonly] { background-color: #f9f9f9; color: #888; cursor: not-allowed; }
+        button { background: #27ae60; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #219150; }
+        .delete-btn { background: #e74c3c; margin-top: 5px; }
+        .blue-btn { background: #2980b9; }
+        .link-home { display: block; text-align: center; margin-top: 20px; color: #ad1457; text-decoration: none; font-weight: bold; font-size: 15px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        .agents-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .agents-table th, .agents-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .agents-table th { background-color: #f9f9f9; color: #333; }
+        .agent-del-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
 
+<div class="box">
+    <h2>🖼️ تحديث لوغو الماركة</h2>
+    <input type="file" id="logoInput" accept="image/*">
+    <button onclick="updateLogo()" class="blue-btn">حفظ اللوغو</button>
+</div>
+
+<div class="box">
+    <h2>📢 إدارة رسالة الإدارة البارزة</h2>
+    <textarea id="adminNoticeInput" rows="2" placeholder="اكتب رسالة الإدارة لتظهر في أعلى الكتالوج..."></textarea>
+    <button onclick="saveAdminNotice()" class="blue-btn">حفظ رسالة الإدارة</button>
+</div>
+
+<div class="box">
+    <h2>👥 إدارة الوسيطات</h2>
+    <input type="text" id="agentName" placeholder="اسم الوسيطة">
+    <input type="text" id="agentUser" placeholder="اسم المستخدم">
+    <input type="text" id="agentPass" placeholder="كلمة المرور">
+    <button onclick="addAgent()" class="blue-btn">إضافة وسيطة جديدة</button>
+    <hr>
+    <table class="agents-table"><tbody id="agentsTableBody"></tbody></table>
+</div>
+
+<div class="box">
+    <h2>📂 إدارة الأقسام</h2>
+    <input type="text" id="autoCatId" readonly>
+    <input type="text" id="newCatName" placeholder="اسم القسم الجديد">
+    <button onclick="addCategory()" class="blue-btn">إضافة القسم</button>
+    <hr>
+    <select id="catSelect" onchange="loadCatData()"></select>
+    <input type="text" id="editCatName" placeholder="تعديل الاسم">
+    <button onclick="updateCategory()" class="blue-btn">تعديل</button>
+    <button onclick="deleteCategory()" class="delete-btn">حذف القسم</button>
+</div>
+
+<div class="box">
+    <h2>➕ إضافة منتج جديد (صور مضغوطة تلقائياً)</h2>
+    <select id="pCategory" onchange="updateProductCodePreview()"></select>
+    <input type="file" id="pImages" accept="image/*" multiple>
+    <input type="text" id="pName" placeholder="اسم المنتج">
+    <input type="text" id="pCode" placeholder="كود المنتج (مثلاً A1)" id="pCode">
+    <input type="number" id="pPrice" placeholder="سعر المعرض">
+    <input type="number" id="pAgentPrice" placeholder="سعر الوسيط">
+    <button onclick="saveProduct()">حفظ المنتج</button>
+</div>
+
+<div class="box">
+    <h2>🗑️ حذف منتج</h2>
+    <input type="text" id="delCode" placeholder="كود المنتج (مثلاً A1)">
+    <button class="delete-btn" onclick="deleteProduct()">حذف المنتج</button>
+</div>
+
+<a href="index.html" class="link-home">⬅️ معاينة الكتالوج</a>
+
+<!-- ربط مكتبات Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
+        authDomain: "evabrandcatalog.firebaseapp.com",
+        projectId: "evabrandcatalog",
+        storageBucket: "evabrandcatalog.firebasestorage.app",
+        messagingSenderId: "795421907629",
+        appId: "1:795421907629:web:e75bc5be8c4556ab660424"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ضغط الصور تلقائياً[cite: 1]
+    function compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800;
+                const scaleSize = MAX_WIDTH / img.width;
+                canvas.width = MAX_WIDTH;
+                canvas.height = img.height * scaleSize;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                callback(canvas.toDataURL('image/jpeg', 0.7));
+            };
+        };
+    }
+
+    window.compressImage = compressImage;
+    window.db = db;
+    window.SDK = { collection, getDocs, setDoc, doc, deleteDoc, addDoc };
+
+    // تحميل البيانات الأساسية عند فتح اللوحة
+    async function initAdmin() {
+        // تحميل الأقسام
+        const catSnapshot = await getDocs(collection(db, "categories"));
+        let categories = [];
+        catSnapshot.forEach(doc => categories.push({ id: doc.id, ...doc.data() }));
+        
+        if (categories.length === 0) {
+            // بيانات افتراضية لو القاعدة فارغة
+            await setDoc(doc(db, "categories", "A"), { name: "الحقائب الفاخرة" });
+            await setDoc(doc(db, "categories", "B"), { name: "العطور والساعات" });
+            categories = [{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}];
+        }
+
+        let html = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        document.getElementById('pCategory').innerHTML = html;
+        document.getElementById('catSelect').innerHTML = html;
+        
+        // حساب الكود التالي للقسم
+        let lastId = categories[categories.length - 1].id;
+        document.getElementById('autoCatId').value = String.fromCharCode(lastId.charCodeAt(0) + 1);
+
+        // تحميل الوسيطات
+        loadAgents();
+        // تحميل الإدارة واللوغو
+        const settingsSnap = await getDocs(collection(db, "settings"));
+        settingsSnap.forEach(d => {
+            if(d.id === 'notice') document.getElementById('adminNoticeInput').value = d.data().text || '';
+        });
+    }
+
+    async function loadAgents() {
+        const snapshot = await getDocs(collection(db, "agents"));
+        let agents = [];
+        snapshot.forEach(doc => agents.push({ firebaseId: doc.id, ...doc.data() }));
+        document.getElementById('agentsTableBody').innerHTML = agents.length === 0 ? `<tr><td>لا توجد وسيطات</td></tr>` : agents.map((a, i) => `<tr><td>${a.name}</td><td>${a.username}</td><td>${a.password}</td><td><button class="agent-del-btn" onclick="deleteAgent('${a.firebaseId}')">حذف</button></td></tr>`).join('');
+    }
+
+    window.addAgent = async function() {
+        let name = document.getElementById('agentName').value.trim();
+        let username = document.getElementById('agentUser').value.trim();
+        let password = document.getElementById('agentPass').value.trim();
+        if(!name || !username || !password) return alert('الرجاء تعبئة الحقول');
+        await addDoc(collection(db, "agents"), {name, username, password});
+        alert('تمت إضافة الوسيطة بنجاح!');
+        location.reload();
+    }
+
+    window.deleteAgent = async function(id) {
+        await deleteDoc(doc(db, "agents", id));
+        alert('تم الحذف!');
+        location.reload();
+    }
+
+    window.addCategory = async function() {
+        let id = document.getElementById('autoCatId').value.trim();
+        let name = document.getElementById('newCatName').value.trim();
+        if(!name) return;
+        await setDoc(doc(db, "categories", id), { name });
+        alert('تم إضافة القسم!');
+        location.reload();
+    }
+
+    window.updateCategory = async function() {
+        let id = document.getElementById('catSelect').value;
+        let name = document.getElementById('editCatName').value.trim();
+        if(!name) return;
+        await setDoc(doc(db, "categories", id), { name }, { merge: true });
+        alert('تم التعديل!');
+        location.reload();
+    }
+
+    window.deleteCategory = async function() {
+        let id = document.getElementById('catSelect').value;
+        await deleteDoc(doc(db, "categories", id));
+        alert('تم الحذف!');
+        location.reload();
+    }
+
+    window.saveAdminNotice = async function() {
+        let text = document.getElementById('adminNoticeInput').value.trim();
+        await setDoc(doc(db, "settings", "notice"), { text });
+        alert('تم حفظ رسالة الإدارة!');
+    }
+
+    window.updateLogo = function() {
+        const file = document.getElementById('logoInput').files[0];
+        if(!file) return;
+        compressImage(file, async function(data) {
+            await setDoc(doc(db, "settings", "logo"), { img: data });
+            alert('تم تحديث اللوغو بنجاح!');
+        });
+    }
+
+    window.saveProduct = function() {
+        const filesInput = document.getElementById('pImages');
+        if(filesInput.files.length === 0) return alert('اختر صوراً للمنتج');
+        
+        let imagesArray = [];
+        let filesProcessed = 0;
+
+        for (let i = 0; i < filesInput.files.length; i++) {
+            compressImage(filesInput.files[i], async function(compressedData) {
+                imagesArray.push(compressedData);
+                filesProcessed++;
+                if (filesProcessed === filesInput.files.length) {
+                    let code = 'P_' + Date.now(); // كود مميز لمنع التكرار
+                    await setDoc(doc(db, "products", code), {
+                        category: document.getElementById('pCategory').value,
+                        name: document.getElementById('pName').value.trim(),
+                        code: code,
+                        price: document.getElementById('pPrice').value.trim(),
+                        agentPrice: document.getElementById('pAgentPrice').value.trim(),
+                        images: imagesArray
+                    });
+                    alert('تم حفظ المنتج بنجاح!');
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    window.deleteProduct = async function() {
+        let code = document.getElementById('delCode').value.trim();
+        // سنبحث عن المنتج بالحذف المباشر أو عبر الكود
+        const snapshot = await getDocs(collection(db, "products"));
+        snapshot.forEach(async (documentItem) => {
+            if(documentItem.data().code === code || documentItem.id === code) {
+                await deleteDoc(doc(db, "products", documentItem.id));
+            }
+        });
+        alert('تم تنفيذ طلب الحذف!');
+        location.reload();
+    }
+
+    initAdmin();
+</script>
+
+</body>
+</html>
