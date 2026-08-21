@@ -434,7 +434,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // عداد الزيارات المحلي
         let visits = localStorage.getItem('eva_visits');
         visits = visits ? parseInt(visits) + 1 : 35;
         localStorage.setItem('eva_visits', visits);
@@ -456,17 +455,23 @@
                     document.getElementById('adminNoticeBox').style.display = 'block';
                 }
 
-                // 2. جلب الأقسام من السحابة
+                // 2. جلب التحديثات والإشعارات من السحابة
+                const updatesDoc = await getDoc(doc(db, "settings", "updates"));
+                if (updatesDoc.exists() && updatesDoc.data().list) {
+                    const updatesListEl = document.getElementById('updatesList');
+                    updatesListEl.innerHTML = updatesDoc.data().list.map(u => `<li>${u}</li>`).join('');
+                }
+
+                // 3. جلب الأقسام من السحابة
                 const catSnapshot = await getDocs(collection(db, "categories"));
                 let categories = [];
                 catSnapshot.forEach(docItem => categories.push({ id: docItem.id, ...docItem.data() }));
 
-                // 3. جلب المنتجات من السحابة
+                // 4. جلب المنتجات من السحابة
                 const prodSnapshot = await getDocs(collection(db, "products"));
                 let products = [];
                 prodSnapshot.forEach(docItem => products.push(docItem.data()));
 
-                // 4. التحقق من حالة دخول الوسيطة
                 const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
 
                 const navContainer = document.getElementById('navContainer');
@@ -535,7 +540,6 @@
             }
         }
 
-        // إدارة جلسة الوسيطات (التحقق عبر قاعدة البيانات)
         window.checkAgentSession = async function() {
             let loggedAgent = localStorage.getItem('eva_logged_agent');
             let statusText = document.getElementById('loginStatusText');
@@ -603,7 +607,6 @@
         window.openModal = function(src) { document.getElementById('imageModal').style.display='block'; document.getElementById('modalImg').src=src; }
         window.closeModal = function() { document.getElementById('imageModal').style.display='none'; }
 
-        // بدء التشغيل
         loadCatalogData();
         checkAgentSession();
     </script>
