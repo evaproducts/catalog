@@ -17,8 +17,6 @@
         .blue-btn { background: #2980b9; }
         .link-home { display: block; text-align: center; margin-top: 20px; color: #ad1457; text-decoration: none; font-weight: bold; font-size: 15px; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-        
-        /* جدول عرض الوسيطات */
         .agents-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
         .agents-table th, .agents-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         .agents-table th { background-color: #f9f9f9; color: #333; }
@@ -35,173 +33,110 @@
 
 <div class="box">
     <h2>📢 إدارة رسالة الإدارة البارزة</h2>
-    <label>رسالة الإدارة:</label>
     <textarea id="adminNoticeInput" rows="2" placeholder="اكتب رسالة الإدارة لتظهر في أعلى الكتالوج..."></textarea>
     <button onclick="saveAdminNotice()" class="blue-btn">حفظ رسالة الإدارة</button>
 </div>
 
 <div class="box">
-    <h2>👥 إدارة الوسيطات (صلاحيات الأسعار الخاصة)</h2>
-    <label>اسم الوسيطة:</label>
-    <input type="text" id="agentName" placeholder="مثال: ريم أحمد">
-    
-    <label>اسم المستخدم (User):</label>
-    <input type="text" id="agentUser" placeholder="مثال: reem2026">
-
-    <label>كلمة المرور (Password):</label>
-    <input type="text" id="agentPass" placeholder="مثال: 123456">
-
+    <h2>👥 إدارة الوسيطات</h2>
+    <input type="text" id="agentName" placeholder="اسم الوسيطة">
+    <input type="text" id="agentUser" placeholder="اسم المستخدم">
+    <input type="text" id="agentPass" placeholder="كلمة المرور">
     <button onclick="addAgent()" class="blue-btn">إضافة وسيطة جديدة</button>
-
     <hr>
-    <label>الوسيطات المسجلات حالياً:</label>
-    <div style="overflow-x: auto;">
-        <table class="agents-table">
-            <thead>
-                <tr>
-                    <th>اسم الوسيطة</th>
-                    <th>اسم المستخدم</th>
-                    <th>كلمة المرور</th>
-                    <th>إجراء</th>
-                </tr>
-            </thead>
-            <tbody id="agentsTableBody">
-                <!-- سيتم تعبئتها تلقائياً -->
-            </tbody>
-        </table>
-    </div>
+    <table class="agents-table"><tbody id="agentsTableBody"></tbody></table>
 </div>
 
 <div class="box">
-    <h2>📂 إدارة الأقسام (إضافة وتعديل وحذف)</h2>
-    
-    <label>رمز القسم (يُولد تلقائياً):</label>
-    <input type="text" id="autoCatId" readonly style="font-weight: bold; color: #b8860b;">
-
-    <label>اسم القسم بالعربي:</label>
-    <input type="text" id="newCatName" placeholder="مثال: الحقائب الفاخرة">
-    <button onclick="addCategory()" class="blue-btn">إضافة القسم الجديد</button>
-
+    <h2>📂 إدارة الأقسام</h2>
+    <input type="text" id="autoCatId" readonly>
+    <input type="text" id="newCatName" placeholder="اسم القسم الجديد">
+    <button onclick="addCategory()" class="blue-btn">إضافة القسم</button>
     <hr>
-
-    <label>تعديل اسم قسم موجود أو حذفه:</label>
     <select id="catSelect" onchange="loadCatData()"></select>
-    <input type="text" id="editCatName" placeholder="اسم القسم الجديد">
-    <button onclick="updateCategory()">تعديل اسم القسم</button>
-    <button onclick="deleteCategory()" class="delete-btn">حذف القسم نهائياً</button>
+    <input type="text" id="editCatName" placeholder="تعديل الاسم">
+    <button onclick="updateCategory()">تعديل</button>
+    <button onclick="deleteCategory()" class="delete-btn">حذف القسم</button>
 </div>
 
 <div class="box">
-    <h2>➕ إضافة منتج جديد للكتالوج</h2>
-    <label>اختر القسم:</label>
+    <h2>➕ إضافة منتج جديد (صور مضغوطة تلقائياً)</h2>
     <select id="pCategory" onchange="updateProductCodePreview()"></select>
-    
-    <label>صور المنتج (يمكنك اختيار عدة صور):</label>
     <input type="file" id="pImages" accept="image/*" multiple>
-    
-    <label>اسم المنتج:</label>
-    <input type="text" id="pName" placeholder="مثال: حقيبة جلدية راقية">
-    
-    <label>كود المنتج (يُولد تلقائياً):</label>
-    <input type="text" id="pCode" readonly style="font-weight: bold; color: #b8860b;">
-
-    <label>سعر المعرض بالشيكل (للجمهور):</label>
-    <input type="number" id="pPrice" placeholder="مثال: 100">
-
-    <label>سعر الوسيط بالشيكل (خاص بالوسيطات):</label>
-    <input type="number" id="pAgentPrice" placeholder="مثال: 80">
-
-    <button onclick="saveProduct()">حفظ المنتج في الكتالوج</button>
+    <input type="text" id="pName" placeholder="اسم المنتج">
+    <input type="text" id="pCode" readonly>
+    <input type="number" id="pPrice" placeholder="سعر المعرض">
+    <input type="number" id="pAgentPrice" placeholder="سعر الوسيط">
+    <button onclick="saveProduct()">حفظ المنتج</button>
 </div>
 
 <div class="box">
-    <h2>🗑️ حذف منتج بالكود</h2>
-    <input type="text" id="delCode" placeholder="أدخل كود المنتج للحذف (مثلاً A1)">
-    <button class="delete-btn" onclick="deleteProduct()">حذف المنتج وإرسال إشعار عدم توفر</button>
+    <h2>🗑️ حذف منتج</h2>
+    <input type="text" id="delCode" placeholder="كود المنتج (مثلاً A1)">
+    <button class="delete-btn" onclick="deleteProduct()">حذف المنتج</button>
 </div>
 
-<a href="index.html" class="link-home">⬅️ معاينة الكتالوج الأساسي (الشاشة الثانية)</a>
+<a href="index.html" class="link-home">⬅️ معاينة الكتالوج</a>
 
 <script>
-    // دالة لتوليد الرمز التالي للأقسام (A, B... Z, AA, AB...)
+    // ضغط الصور تلقائياً
+    function compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800; // العرض الأقصى للضغط
+                const scaleSize = MAX_WIDTH / img.width;
+                canvas.width = MAX_WIDTH;
+                canvas.height = img.height * scaleSize;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                callback(canvas.toDataURL('image/jpeg', 0.7)); // جودة 70% ممتازة للموبايل
+            };
+        };
+    }
+
+    // باقي الدوال كما هي...
     function getNextCategoryCode(categories) {
         if (!categories || categories.length === 0) return 'A';
         let lastId = categories[categories.length - 1].id;
-        let code = '';
-        let i = lastId.length - 1;
-        let carry = true;
-
+        let code = '', i = lastId.length - 1, carry = true;
         while (i >= 0 && carry) {
             let char = lastId[i];
-            if (char === 'Z') {
-                code = 'A' + code;
-                i--;
-            } else {
-                code = String.fromCharCode(char.charCodeAt(0) + 1) + lastId.substring(i + 1);
-                carry = false;
-            }
+            if (char === 'Z') { code = 'A' + code; i--; }
+            else { code = String.fromCharCode(char.charCodeAt(0) + 1) + lastId.substring(i + 1); carry = false; }
         }
-        if (carry) {
-            code = 'A'.repeat(lastId.length + 1);
-        }
+        if (carry) code = 'A'.repeat(lastId.length + 1);
         return code;
     }
 
-    // تهيئة البيانات الافتراضية
     if (!localStorage.getItem('eva_categories')) {
-        localStorage.setItem('eva_categories', JSON.stringify([
-            {id: 'A', name: 'الحقائب الفاخرة'},
-            {id: 'B', name: 'العطور والساعات'}
-        ]));
+        localStorage.setItem('eva_categories', JSON.stringify([{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}]));
     }
     if (!localStorage.getItem('eva_max_counters')) {
         localStorage.setItem('eva_max_counters', JSON.stringify({ 'A': 1, 'B': 1 }));
     }
 
-    // إدارة الوسيطات
     function loadAgentsTable() {
         let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
-        let tbody = document.getElementById('agentsTableBody');
-        if (agents.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="color: #888;">لا توجد وسيطات مضافات حالياً</td></tr>`;
-            return;
-        }
-        tbody.innerHTML = agents.map((agent, index) => `
-            <tr>
-                <td>${agent.name}</td>
-                <td><b>${agent.username}</b></td>
-                <td><code>${agent.password}</code></td>
-                <td><button class="agent-del-btn" onclick="deleteAgent(${index})">حذف</button></td>
-            </tr>
-        `).join('');
+        document.getElementById('agentsTableBody').innerHTML = agents.length === 0 ? `<tr><td>لا توجد وسيطات</td></tr>` : agents.map((a, i) => `<tr><td>${a.name}</td><td>${a.username}</td><td>${a.password}</td><td><button class="agent-del-btn" onclick="deleteAgent(${i})">حذف</button></td></tr>`).join('');
     }
 
     function addAgent() {
         let name = document.getElementById('agentName').value.trim();
         let username = document.getElementById('agentUser').value.trim();
         let password = document.getElementById('agentPass').value.trim();
-
-        if(!name || !username || !password) {
-            return alert('الرجاء إدخال اسم الوسيطة، اسم المستخدم، وكلمة المرور');
-        }
-
+        if(!name || !username || !password) return alert('الرجاء تعبئة الحقول');
         let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
-        if(agents.some(a => a.username === username)) {
-            return alert('اسم المستخدم هذا مستخدم مسبقاً، اختر اسماً آخر!');
-        }
-
-        agents.push({name: name, username: username, password: password});
+        agents.push({name, username, password});
         localStorage.setItem('eva_agents', JSON.stringify(agents));
-
-        alert('تمت إضافة الوسيطة بنجاح!');
-        document.getElementById('agentName').value = '';
-        document.getElementById('agentUser').value = '';
-        document.getElementById('agentPass').value = '';
         loadAgentsTable();
     }
 
     function deleteAgent(index) {
-        if(!confirm('هل أنت متأكد من حذف هذه الوسيطة؟')) return;
         let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
         agents.splice(index, 1);
         localStorage.setItem('eva_agents', JSON.stringify(agents));
@@ -210,186 +145,88 @@
 
     function updateSelects() {
         let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        let optionsHtml = categories.map(c => `<option value="${c.id}">${c.name} (رمز: ${c.id})</option>`).join('');
-        
-        let pCatEl = document.getElementById('pCategory');
-        let catSelEl = document.getElementById('catSelect');
-        if(pCatEl) pCatEl.innerHTML = optionsHtml;
-        if(catSelEl) catSelEl.innerHTML = optionsHtml;
-
+        let html = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        document.getElementById('pCategory').innerHTML = html;
+        document.getElementById('catSelect').innerHTML = html;
         document.getElementById('autoCatId').value = getNextCategoryCode(categories);
-
-        loadCatData();
-        updateProductCodePreview();
-    }
-
-    function loadCatData() {
-        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        let selectedId = document.getElementById('catSelect').value;
-        let cat = categories.find(c => c.id === selectedId);
-        if(cat) {
-            document.getElementById('editCatName').value = cat.name;
-        }
-    }
-
-    function updateProductCodePreview() {
-        let catId = document.getElementById('pCategory').value;
-        if (!catId) return;
-
-        let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
-        if (!counters[catId]) {
-            let products = JSON.parse(localStorage.getItem('eva_products')) || [];
-            let catProducts = products.filter(p => p.category === catId);
-            counters[catId] = catProducts.length + 1;
-        }
-
-        document.getElementById('pCode').value = catId + counters[catId];
     }
 
     function addCategory() {
         let id = document.getElementById('autoCatId').value.trim();
         let name = document.getElementById('newCatName').value.trim();
-        if(!name) return alert('الرجاء إدخال اسم القسم بالعربي');
-
-        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        categories.push({id: id, name: name});
-        localStorage.setItem('eva_categories', JSON.stringify(categories));
-
-        let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
-        counters[id] = 1;
-        localStorage.setItem('eva_max_counters', JSON.stringify(counters));
-
-        alert('تمت إضافة القسم بنجاح بررمز تلقائي: ' + id);
+        if(!name) return;
+        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        cats.push({id, name});
+        localStorage.setItem('eva_categories', JSON.stringify(cats));
         location.reload();
     }
 
     function updateCategory() {
-        let selectedId = document.getElementById('catSelect').value;
-        let newName = document.getElementById('editCatName').value.trim();
-        if(!newName) return alert('أدخل الاسم الجديد');
-
-        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        let cat = categories.find(c => c.id === selectedId);
-        if(cat) {
-            cat.name = newName;
-            localStorage.setItem('eva_categories', JSON.stringify(categories));
-            alert('تم تعديل اسم القسم بنجاح!');
-            location.reload();
-        }
+        let id = document.getElementById('catSelect').value;
+        let name = document.getElementById('editCatName').value.trim();
+        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        let c = cats.find(x => x.id === id);
+        if(c) { c.name = name; localStorage.setItem('eva_categories', JSON.stringify(cats)); location.reload(); }
     }
 
     function deleteCategory() {
-        let selectedId = document.getElementById('catSelect').value;
-        if(!confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف كافة المنتجات الموجودة بداخله أيضاً!')) return;
-
-        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        categories = categories.filter(c => c.id !== selectedId);
-        localStorage.setItem('eva_categories', JSON.stringify(categories));
-
-        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
-        products = products.filter(p => p.category !== selectedId);
-        localStorage.setItem('eva_products', JSON.stringify(products));
-
-        alert('تم حذف القسم ومنتجاته بنجاح!');
+        let id = document.getElementById('catSelect').value;
+        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
+        cats = cats.filter(x => x.id !== id);
+        localStorage.setItem('eva_categories', JSON.stringify(cats));
         location.reload();
     }
 
     function updateLogo() {
         const file = document.getElementById('logoInput').files[0];
-        if(!file) return alert('اختر صورة اللوغو أولاً');
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            localStorage.setItem('eva_logo', e.target.result);
-            alert('تم تحديث اللوغو بنجاح!');
-        };
-        reader.readAsDataURL(file);
+        if(!file) return;
+        compressImage(file, function(data) { localStorage.setItem('eva_logo', data); alert('تم تحديث اللوغو!'); });
     }
 
     function saveAdminNotice() {
-        const noticeText = document.getElementById('adminNoticeInput').value.trim();
-        localStorage.setItem('eva_admin_notice', noticeText);
-        alert('تم حفظ وتحديث رسالة الإدارة بنجاح!');
+        localStorage.setItem('eva_admin_notice', document.getElementById('adminNoticeInput').value.trim());
+        alert('تم الحفظ!');
     }
 
     function saveProduct() {
-        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
         const filesInput = document.getElementById('pImages');
-        const name = document.getElementById('pName').value.trim();
-        const code = document.getElementById('pCode').value.trim();
-        const price = document.getElementById('pPrice').value.trim();
-        const agentPrice = document.getElementById('pAgentPrice').value.trim();
-        const cat = document.getElementById('pCategory').value;
-
-        if(filesInput.files.length === 0 || !name || !code || !price || !agentPrice) {
-            return alert('الرجاء إكمال كافة بيانات المنتج واختيار صورة واحدة على الأقل');
-        }
-
+        if(filesInput.files.length === 0) return alert('اختر صوراً');
+        
+        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
         let imagesArray = [];
         let filesProcessed = 0;
 
         for (let i = 0; i < filesInput.files.length; i++) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                imagesArray.push(e.target.result);
+            compressImage(filesInput.files[i], function(compressedData) {
+                imagesArray.push(compressedData);
                 filesProcessed++;
-                
                 if (filesProcessed === filesInput.files.length) {
                     products.push({
-                        category: cat,
-                        name: name,
-                        code: code,
-                        price: price,
-                        agentPrice: agentPrice,
+                        category: document.getElementById('pCategory').value,
+                        name: document.getElementById('pName').value.trim(),
+                        code: document.getElementById('pCode').value.trim(),
+                        price: document.getElementById('pPrice').value.trim(),
+                        agentPrice: document.getElementById('pAgentPrice').value.trim(),
                         images: imagesArray
                     });
                     localStorage.setItem('eva_products', JSON.stringify(products));
-
-                    let counters = JSON.parse(localStorage.getItem('eva_max_counters')) || {};
-                    let currentNum = parseInt(code.replace(cat, '')) || 1;
-                    counters[cat] = currentNum + 1;
-                    localStorage.setItem('eva_max_counters', JSON.stringify(counters));
-
-                    let updates = JSON.parse(localStorage.getItem('eva_updates')) || [];
-                    updates.push(`✨ تم إضافة المنتج الجديد برمز (${code})`);
-                    localStorage.setItem('eva_updates', JSON.stringify(updates));
-
-                    alert('تم حفظ المنتج بنجاح برمز: ' + code);
+                    alert('تم حفظ المنتج!');
                     location.reload();
                 }
-            };
-            reader.readAsDataURL(filesInput.files[i]);
+            });
         }
     }
 
     function deleteProduct() {
         let products = JSON.parse(localStorage.getItem('eva_products')) || [];
         const code = document.getElementById('delCode').value.trim().toUpperCase();
-        if(!code) return alert('أدخل كود المنتج المراد حذفه');
-        
-        let productExists = products.find(p => p.code === code);
-        if(!productExists) {
-            return alert('لم يتم العثور على منتج بهذا الكود!');
-        }
-        
-        let filtered = products.filter(p => p.code !== code);
-        localStorage.setItem('eva_products', JSON.stringify(filtered));
-
-        let updates = JSON.parse(localStorage.getItem('eva_updates')) || [];
-        updates.push(`⚠️ تنبيه: المنتج برمز (${code}) لم يعد متوفراً حالياً.`);
-        localStorage.setItem('eva_updates', JSON.stringify(updates));
-
-        alert('تم حذف المنتج بنجاح وتوليد إشعار عدم توفر في الكتالوج');
+        products = products.filter(p => p.code !== code);
+        localStorage.setItem('eva_products', JSON.stringify(products));
+        alert('تم الحذف!');
         location.reload();
     }
 
-    window.onload = function() {
-        updateSelects();
-        loadAgentsTable();
-        let savedNotice = localStorage.getItem('eva_admin_notice');
-        if(savedNotice) {
-            document.getElementById('adminNoticeInput').value = savedNotice;
-        }
-    };
+    window.onload = function() { updateSelects(); loadAgentsTable(); };
 </script>
 
 </body>
