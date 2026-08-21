@@ -64,7 +64,7 @@
     <select id="pCategory" onchange="updateProductCodePreview()"></select>
     <input type="file" id="pImages" accept="image/*" multiple>
     <input type="text" id="pName" placeholder="اسم المنتج">
-    <input type="text" id="pCode" placeholder="كود المنتج (مثلاً A1)" id="pCode">
+    <input type="text" id="pCode" readonly placeholder="كود المنتج التلقائي">
     <input type="number" id="pPrice" placeholder="سعر المعرض">
     <input type="number" id="pAgentPrice" placeholder="سعر الوسيط">
     <button onclick="saveProduct()">حفظ المنتج</button>
@@ -95,7 +95,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ضغط الصور تلقائياً[cite: 1]
+    let allProducts = [];
+
+    // ضغط الصور تلقائياً
     function compressImage(file, callback) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -115,11 +117,17 @@
         };
     }
 
-    window.compressImage = compressImage;
-    window.db = db;
-    window.SDK = { collection, getDocs, setDoc, doc, deleteDoc, addDoc };
+    // حساب الكود التسلسلي التلقائي للمنتج حسب القسم (مثل A1, A2...)
+    window.updateProductCodePreview = function() {
+        const selectedCat = document.getElementById('pCategory').value;
+        if (!selectedCat) return;
+        
+        // تصفية المنتجات التي تنتمي لهذا القسم
+        const catProducts = allProducts.filter(p => p.category === selectedCat);
+        let nextNum = catProducts.length + 1;
+        document.getElementById('pCode').value = selectedCat + nextNum;
+    }
 
-    // تحميل البيانات الأساسية عند فتح اللوحة
     async function initAdmin() {
         // تحميل الأقسام
         const catSnapshot = await getDocs(collection(db, "categories"));
@@ -127,7 +135,6 @@
         catSnapshot.forEach(doc => categories.push({ id: doc.id, ...doc.data() }));
         
         if (categories.length === 0) {
-            // بيانات افتراضية لو القاعدة فارغة
             await setDoc(doc(db, "categories", "A"), { name: "الحقائب الفاخرة" });
             await setDoc(doc(db, "categories", "B"), { name: "العطور والساعات" });
             categories = [{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}];
@@ -137,13 +144,19 @@
         document.getElementById('pCategory').innerHTML = html;
         document.getElementById('catSelect').innerHTML = html;
         
-        // حساب الكود التالي للقسم
         let lastId = categories[categories.length - 1].id;
         document.getElementById('autoCatId').value = String.fromCharCode(lastId.charCodeAt(0) + 1);
 
-        // تحميل الوسيطات
+        // تحميل المنتجات لحساب الأكواد التسلسلية بدقة
+        const prodSnapshot = await getDocs(collection(db, "products"));
+        allProducts = [];
+        prodSnapshot.forEach(docItem => allProducts.push({ id: docItem.id, ...docItem.data() }));
+
+        // تحديث كود أول منتج تلقائياً
+        updateProductCodePreview();
+
+        // تحميل الوسيطات وإعدادات الإدارة واللوغو
         loadAgents();
-        // تحميل الإدارة واللوغو
         const settingsSnap = await getDocs(collection(db, "settings"));
         settingsSnap.forEach(d => {
             if(d.id === 'notice') document.getElementById('adminNoticeInput').value = d.data().text || '';
@@ -225,7 +238,8 @@
                 imagesArray.push(compressedData);
                 filesProcessed++;
                 if (filesProcessed === filesInput.files.length) {
-                    let code = 'P_' + Date.now(); // كود مميز لمنع التكرار
+                    let code = document.getElementById('pCode').value.trim();
+                    // تخزين المستند بحيث يكون معرف الوثيقة في فايسبوك هو كود المنتج نفسه (مثلاً A1)
                     await setDoc(doc(db, "products", code), {
                         category: document.getElementById('pCategory').value,
                         name: document.getElementById('pName').value.trim(),
@@ -234,7 +248,7 @@
                         agentPrice: document.getElementById('pAgentPrice').value.trim(),
                         images: imagesArray
                     });
-                    alert('تم حفظ المنتج بنجاح!');
+                    alert('تم حفظ المنتج بنجاح برمز: ' + code);
                     location.reload();
                 }
             });
@@ -242,15 +256,11 @@
     }
 
     window.deleteProduct = async function() {
-        let code = document.getElementById('delCode').value.trim();
-        // سنبحث عن المنتج بالحذف المباشر أو عبر الكود
-        const snapshot = await getDocs(collection(db, "products"));
-        snapshot.forEach(async (documentItem) => {
-            if(documentItem.data().code === code || documentItem.id === code) {
-                await deleteDoc(doc(db, "products", documentItem.id));
-            }
-        });
-        alert('تم تنفيذ طلب الحذف!');
+        let code = document.getElementById('delCode').value.trim().toUpperCase();
+        if(!code) return alert('الرجاء إدخال كود المنتج المراد حذفه');
+        
+        await deleteDoc(doc(db, "products", code));
+        alert('تم حذف المنتج بنجاح!');
         location.reload();
     }
 
