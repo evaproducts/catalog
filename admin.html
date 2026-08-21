@@ -55,7 +55,7 @@
     <hr>
     <select id="catSelect" onchange="loadCatData()"></select>
     <input type="text" id="editCatName" placeholder="تعديل الاسم">
-    <button onclick="updateCategory()">تعديل</button>
+    <button onclick="updateCategory()" class="blue-btn">تعديل</button>
     <button onclick="deleteCategory()" class="delete-btn">حذف القسم</button>
 </div>
 
@@ -64,7 +64,7 @@
     <select id="pCategory" onchange="updateProductCodePreview()"></select>
     <input type="file" id="pImages" accept="image/*" multiple>
     <input type="text" id="pName" placeholder="اسم المنتج">
-    <input type="text" id="pCode" readonly>
+    <input type="text" id="pCode" placeholder="كود المنتج (مثلاً A1)" id="pCode">
     <input type="number" id="pPrice" placeholder="سعر المعرض">
     <input type="number" id="pAgentPrice" placeholder="سعر الوسيط">
     <button onclick="saveProduct()">حفظ المنتج</button>
@@ -78,8 +78,24 @@
 
 <a href="index.html" class="link-home">⬅️ معاينة الكتالوج</a>
 
-<script>
-    // ضغط الصور تلقائياً
+<!-- ربط مكتبات Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
+        authDomain: "evabrandcatalog.firebaseapp.com",
+        projectId: "evabrandcatalog",
+        storageBucket: "evabrandcatalog.firebasestorage.app",
+        messagingSenderId: "795421907629",
+        appId: "1:795421907629:web:e75bc5be8c4556ab660424"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ضغط الصور تلقائياً[cite: 1]
     function compressImage(file, callback) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -88,145 +104,157 @@
             img.src = event.target.result;
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 800; // العرض الأقصى للضغط
+                const MAX_WIDTH = 800;
                 const scaleSize = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scaleSize;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                callback(canvas.toDataURL('image/jpeg', 0.7)); // جودة 70% ممتازة للموبايل
+                callback(canvas.toDataURL('image/jpeg', 0.7));
             };
         };
     }
 
-    // باقي الدوال كما هي...
-    function getNextCategoryCode(categories) {
-        if (!categories || categories.length === 0) return 'A';
-        let lastId = categories[categories.length - 1].id;
-        let code = '', i = lastId.length - 1, carry = true;
-        while (i >= 0 && carry) {
-            let char = lastId[i];
-            if (char === 'Z') { code = 'A' + code; i--; }
-            else { code = String.fromCharCode(char.charCodeAt(0) + 1) + lastId.substring(i + 1); carry = false; }
+    window.compressImage = compressImage;
+    window.db = db;
+    window.SDK = { collection, getDocs, setDoc, doc, deleteDoc, addDoc };
+
+    // تحميل البيانات الأساسية عند فتح اللوحة
+    async function initAdmin() {
+        // تحميل الأقسام
+        const catSnapshot = await getDocs(collection(db, "categories"));
+        let categories = [];
+        catSnapshot.forEach(doc => categories.push({ id: doc.id, ...doc.data() }));
+        
+        if (categories.length === 0) {
+            // بيانات افتراضية لو القاعدة فارغة
+            await setDoc(doc(db, "categories", "A"), { name: "الحقائب الفاخرة" });
+            await setDoc(doc(db, "categories", "B"), { name: "العطور والساعات" });
+            categories = [{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}];
         }
-        if (carry) code = 'A'.repeat(lastId.length + 1);
-        return code;
+
+        let html = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        document.getElementById('pCategory').innerHTML = html;
+        document.getElementById('catSelect').innerHTML = html;
+        
+        // حساب الكود التالي للقسم
+        let lastId = categories[categories.length - 1].id;
+        document.getElementById('autoCatId').value = String.fromCharCode(lastId.charCodeAt(0) + 1);
+
+        // تحميل الوسيطات
+        loadAgents();
+        // تحميل الإدارة واللوغو
+        const settingsSnap = await getDocs(collection(db, "settings"));
+        settingsSnap.forEach(d => {
+            if(d.id === 'notice') document.getElementById('adminNoticeInput').value = d.data().text || '';
+        });
     }
 
-    if (!localStorage.getItem('eva_categories')) {
-        localStorage.setItem('eva_categories', JSON.stringify([{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}]));
-    }
-    if (!localStorage.getItem('eva_max_counters')) {
-        localStorage.setItem('eva_max_counters', JSON.stringify({ 'A': 1, 'B': 1 }));
-    }
-
-    function loadAgentsTable() {
-        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
-        document.getElementById('agentsTableBody').innerHTML = agents.length === 0 ? `<tr><td>لا توجد وسيطات</td></tr>` : agents.map((a, i) => `<tr><td>${a.name}</td><td>${a.username}</td><td>${a.password}</td><td><button class="agent-del-btn" onclick="deleteAgent(${i})">حذف</button></td></tr>`).join('');
+    async function loadAgents() {
+        const snapshot = await getDocs(collection(db, "agents"));
+        let agents = [];
+        snapshot.forEach(doc => agents.push({ firebaseId: doc.id, ...doc.data() }));
+        document.getElementById('agentsTableBody').innerHTML = agents.length === 0 ? `<tr><td>لا توجد وسيطات</td></tr>` : agents.map((a, i) => `<tr><td>${a.name}</td><td>${a.username}</td><td>${a.password}</td><td><button class="agent-del-btn" onclick="deleteAgent('${a.firebaseId}')">حذف</button></td></tr>`).join('');
     }
 
-    function addAgent() {
+    window.addAgent = async function() {
         let name = document.getElementById('agentName').value.trim();
         let username = document.getElementById('agentUser').value.trim();
         let password = document.getElementById('agentPass').value.trim();
         if(!name || !username || !password) return alert('الرجاء تعبئة الحقول');
-        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
-        agents.push({name, username, password});
-        localStorage.setItem('eva_agents', JSON.stringify(agents));
-        loadAgentsTable();
+        await addDoc(collection(db, "agents"), {name, username, password});
+        alert('تمت إضافة الوسيطة بنجاح!');
+        location.reload();
     }
 
-    function deleteAgent(index) {
-        let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
-        agents.splice(index, 1);
-        localStorage.setItem('eva_agents', JSON.stringify(agents));
-        loadAgentsTable();
+    window.deleteAgent = async function(id) {
+        await deleteDoc(doc(db, "agents", id));
+        alert('تم الحذف!');
+        location.reload();
     }
 
-    function updateSelects() {
-        let categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        let html = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        document.getElementById('pCategory').innerHTML = html;
-        document.getElementById('catSelect').innerHTML = html;
-        document.getElementById('autoCatId').value = getNextCategoryCode(categories);
-    }
-
-    function addCategory() {
+    window.addCategory = async function() {
         let id = document.getElementById('autoCatId').value.trim();
         let name = document.getElementById('newCatName').value.trim();
         if(!name) return;
-        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        cats.push({id, name});
-        localStorage.setItem('eva_categories', JSON.stringify(cats));
+        await setDoc(doc(db, "categories", id), { name });
+        alert('تم إضافة القسم!');
         location.reload();
     }
 
-    function updateCategory() {
+    window.updateCategory = async function() {
         let id = document.getElementById('catSelect').value;
         let name = document.getElementById('editCatName').value.trim();
-        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        let c = cats.find(x => x.id === id);
-        if(c) { c.name = name; localStorage.setItem('eva_categories', JSON.stringify(cats)); location.reload(); }
-    }
-
-    function deleteCategory() {
-        let id = document.getElementById('catSelect').value;
-        let cats = JSON.parse(localStorage.getItem('eva_categories')) || [];
-        cats = cats.filter(x => x.id !== id);
-        localStorage.setItem('eva_categories', JSON.stringify(cats));
+        if(!name) return;
+        await setDoc(doc(db, "categories", id), { name }, { merge: true });
+        alert('تم التعديل!');
         location.reload();
     }
 
-    function updateLogo() {
+    window.deleteCategory = async function() {
+        let id = document.getElementById('catSelect').value;
+        await deleteDoc(doc(db, "categories", id));
+        alert('تم الحذف!');
+        location.reload();
+    }
+
+    window.saveAdminNotice = async function() {
+        let text = document.getElementById('adminNoticeInput').value.trim();
+        await setDoc(doc(db, "settings", "notice"), { text });
+        alert('تم حفظ رسالة الإدارة!');
+    }
+
+    window.updateLogo = function() {
         const file = document.getElementById('logoInput').files[0];
         if(!file) return;
-        compressImage(file, function(data) { localStorage.setItem('eva_logo', data); alert('تم تحديث اللوغو!'); });
+        compressImage(file, async function(data) {
+            await setDoc(doc(db, "settings", "logo"), { img: data });
+            alert('تم تحديث اللوغو بنجاح!');
+        });
     }
 
-    function saveAdminNotice() {
-        localStorage.setItem('eva_admin_notice', document.getElementById('adminNoticeInput').value.trim());
-        alert('تم الحفظ!');
-    }
-
-    function saveProduct() {
+    window.saveProduct = function() {
         const filesInput = document.getElementById('pImages');
-        if(filesInput.files.length === 0) return alert('اختر صوراً');
+        if(filesInput.files.length === 0) return alert('اختر صوراً للمنتج');
         
-        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
         let imagesArray = [];
         let filesProcessed = 0;
 
         for (let i = 0; i < filesInput.files.length; i++) {
-            compressImage(filesInput.files[i], function(compressedData) {
+            compressImage(filesInput.files[i], async function(compressedData) {
                 imagesArray.push(compressedData);
                 filesProcessed++;
                 if (filesProcessed === filesInput.files.length) {
-                    products.push({
+                    let code = 'P_' + Date.now(); // كود مميز لمنع التكرار
+                    await setDoc(doc(db, "products", code), {
                         category: document.getElementById('pCategory').value,
                         name: document.getElementById('pName').value.trim(),
-                        code: document.getElementById('pCode').value.trim(),
+                        code: code,
                         price: document.getElementById('pPrice').value.trim(),
                         agentPrice: document.getElementById('pAgentPrice').value.trim(),
                         images: imagesArray
                     });
-                    localStorage.setItem('eva_products', JSON.stringify(products));
-                    alert('تم حفظ المنتج!');
+                    alert('تم حفظ المنتج بنجاح!');
                     location.reload();
                 }
             });
         }
     }
 
-    function deleteProduct() {
-        let products = JSON.parse(localStorage.getItem('eva_products')) || [];
-        const code = document.getElementById('delCode').value.trim().toUpperCase();
-        products = products.filter(p => p.code !== code);
-        localStorage.setItem('eva_products', JSON.stringify(products));
-        alert('تم الحذف!');
+    window.deleteProduct = async function() {
+        let code = document.getElementById('delCode').value.trim();
+        // سنبحث عن المنتج بالحذف المباشر أو عبر الكود
+        const snapshot = await getDocs(collection(db, "products"));
+        snapshot.forEach(async (documentItem) => {
+            if(documentItem.data().code === code || documentItem.id === code) {
+                await deleteDoc(doc(db, "products", documentItem.id));
+            }
+        });
+        alert('تم تنفيذ طلب الحذف!');
         location.reload();
     }
 
-    window.onload = function() { updateSelects(); loadAgentsTable(); };
+    initAdmin();
 </script>
 
 </body>
