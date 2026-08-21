@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتالوج الوسيطات الحصري | إيفا براند</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #fce4ec 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .top-alert-bar {
+            background: #b8860b;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: #fff;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 2px solid #f8bbd0;
+            position: relative;
+        }
+
+        .agent-login-bar {
+            background: #fff0f5;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #f8bbd0;
+            font-size: 14px;
+        }
+        .agent-login-btn {
+            background: #ad1457;
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .agent-login-btn:hover {
+            background: #880e4f;
+        }
+
+        #display-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #d4af37;
+            margin-bottom: 10px;
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 5px 0;
+            color: #880e4f;
+            font-size: 26px;
+        }
+        header p {
+            color: #ad1457;
+            font-size: 14px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .admin-notice-box {
+            background: #fff;
+            border-right: 5px solid #ad1457;
+            border-left: 1px solid #f8bbd0;
+            border-top: 1px solid #f8bbd0;
+            border-bottom: 1px solid #f8bbd0;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #444;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .updates-box {
+            background: #fff0f5;
+            border: 2px dashed #d81b60;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #ad1457;
+            box-shadow: 0 2px 8px rgba(216, 27, 96, 0.05);
+        }
+        .updates-box h4 {
+            margin: 0 0 8px 0;
+            font-size: 15px;
+            color: #880e4f;
+        }
+        .updates-box ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+        .updates-box li {
+            margin-bottom: 5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .nav-link-btn {
+            background: #fff;
+            border: 1px solid #f8bbd0;
+            color: #ad1457;
+            padding: 10px 22px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: 0.3s;
+        }
+        .nav-link-btn.active {
+            background: #ad1457;
+            color: #fff;
+            border-color: #ad1457;
+            box-shadow: 0 3px 10px rgba(173, 20, 87, 0.3);
+        }
+
+        .section { display: none; }
+        .section.active-section { display: block; }
+        .section h2 {
+            font-size: 20px;
+            color: #880e4f;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f8bbd0;
+            padding-bottom: 8px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .product-card {
+            background: #fff;
+            border: 1px solid #f8bbd0;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.1);
+        }
+
+        .product-images {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            margin-bottom: 8px;
+            padding-bottom: 3px;
+        }
+        .product-images img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #f8bbd0;
+            transition: 0.2s;
+        }
+        .product-images img:hover {
+            border-color: #ad1457;
+        }
+        .main-product-img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .product-card h3 {
+            font-size: 15px;
+            margin: 5px 0;
+            color: #333;
+        }
+        .prices {
+            font-size: 13px;
+            color: #555;
+            margin: 8px 0;
+            background: #fff0f5;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #f8bbd0;
+        }
+        .price-ex {
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+        }
+        .price-agent {
+            color: #ad1457;
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+            margin-top: 4px;
+            border-top: 1px dashed #f8bbd0;
+            padding-top: 4px;
+        }
+        .product-code {
+            color: #b8860b;
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+            transition: 0.3s;
+        }
+        .whatsapp-btn:hover {
+            background: #20ba5a;
+        }
+
+        .footer-visitor-box {
+            text-align: center;
+            margin: 30px 0 10px 0;
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .footer-link a {
+            color: #ad1457;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            text-align: center;
+            padding-top: 50px;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+        .close-modal {
+            color: #fff;
+            font-size: 35px;
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            cursor: pointer;
+        }
+
+        .login-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        .login-box button {
+            background: #ad1457;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-box button:hover { background: #880e4f; }
+    </style>
+</head>
+<body>
+
+    <div class="top-alert-bar">
+        ⚠️ المنتج الذي تقوم ببيعه احجزه فوراً لضمان توفره (فترة الحجز أسبوع واحد).
+    </div>
+
+    <div class="agent-login-bar" id="agentLoginBar">
+        <span id="loginStatusText">خاص بالوسيطات المعتمدات:</span>
+        <button class="agent-login-btn" onclick="openLoginModal()" id="loginBtnUI">دخول الوسيطات</button>
+    </div>
+
+    <header>
+        <img id="display-logo" alt="Logo">
+        <h1>معرض إيفا براند</h1>
+        <p>عالم من الهدايا الفاخرة - كتالوج الوسيطات الحصري</p>
+    </header>
+
+    <div class="container">
+
+        <div id="adminNoticeBox" class="admin-notice-box" style="display: none;">
+            <strong>📢 رسالة الإدارة:</strong> <span id="adminNoticeText"></span>
+        </div>
+
+        <div id="updatesBoxContainer" class="updates-box">
+            <h4>🔔 آخر التحديثات والإشعارات:</h4>
+            <ul id="updatesList">
+                <li>✨ أهلاً بكُنَّ وسيطات إيفا براند! تم إطلاق الكتالوج المحدث[cite: 2].</li>
+            </ul>
+        </div>
+
+        <div id="navContainer" class="nav-tabs"></div>
+        <div id="sectionsContainer"></div>
+
+        <div class="footer-visitor-box">
+            الزيارات: <span id="visitCount">35</span>
+        </div>
+
+        <div class="footer-link">
+            تصفحي روابطنا الأخرى: <a href="https://linky.ps/eva" target="_blank">linky.ps/eva</a>
+        </div>
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة © معرض إيفا براند 2026[cite: 2]
+    </footer>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img id="modalImg">
+    </div>
+
+    <div id="loginModal" class="login-modal">
+        <div class="login-box">
+            <h3 style="color: #880e4f; margin-top:0;">تسجيل دخول الوسيطة</h3>
+            <input type="text" id="loginUser" placeholder="اسم المستخدم">
+            <input type="password" id="loginPass" placeholder="كلمة المرور">
+            <button onclick="handleAgentLogin()">دخول</button>
+            <br><br>
+            <button style="background: #95a5a6; padding: 6px;" onclick="closeLoginModal()">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        let visits = localStorage.getItem('eva_visits');
+        visits = visits ? parseInt(visits) + 1 : 35;
+        localStorage.setItem('eva_visits', visits);
+        document.getElementById('visitCount').innerText = visits;
+
+        const savedLogo = localStorage.getItem('eva_logo');
+        if(savedLogo) {
+            const logoEl = document.getElementById('display-logo');
+            logoEl.src = savedLogo;
+            logoEl.style.display = 'block';
+        }
+
+        const savedNotice = localStorage.getItem('eva_admin_notice');
+        if(savedNotice && savedNotice.trim() !== "") {
+            document.getElementById('adminNoticeText').innerText = savedNotice;
+            document.getElementById('adminNoticeBox').style.display = 'block';
+        }
+
+        function loadUpdates() {
+            let savedUpdates = JSON.parse(localStorage.getItem('eva_updates')) || ["✨ تم إطلاق الكتالوج الحصري للوسيطات - أهلاً بكم[cite: 2]."];
+            const updatesListEl = document.getElementById('updatesList');
+            updatesListEl.innerHTML = savedUpdates.slice(-5).reverse().map(u => `<li>${u}</li>`).join('');
+        }
+        loadUpdates();
+
+        function checkAgentSession() {
+            let loggedAgent = localStorage.getItem('eva_logged_agent');
+            let statusText = document.getElementById('loginStatusText');
+            let loginBtnUI = document.getElementById('loginBtnUI');
+
+            if(loggedAgent) {
+                statusText.innerHTML = `👋 أهلاً بكِ، <b>${loggedAgent}</b>`;
+                loginBtnUI.innerText = "تسجيل خروج";
+                loginBtnUI.style.background = "#e74c3c";
+                loginBtnUI.onclick = logoutAgent;
+            } else {
+                statusText.innerHTML = "خاص بالوسيطات المعتمدات:";
+                loginBtnUI.innerText = "دخول الوسيطات";
+                loginBtnUI.style.background = "#ad1457";
+                loginBtnUI.onclick = openLoginModal;
+            }
+        }
+
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function handleAgentLogin() {
+            let u = document.getElementById('loginUser').value.trim();
+            let p = document.getElementById('loginPass').value.trim();
+            let agents = JSON.parse(localStorage.getItem('eva_agents')) || [];
+
+            let found = agents.find(a => a.username === u && a.password === p);
+            if(found) {
+                localStorage.setItem('eva_logged_agent', found.name);
+                closeLoginModal();
+                alert(`أهلاً بكِ ${found.name}! تم تسجيل الدخول بنجاح.`);
+                loadCatalog();
+                checkAgentSession();
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+            }
+        }
+
+        function logoutAgent() {
+            localStorage.removeItem('eva_logged_agent');
+            alert('تم تسجيل الخروج بنجاح.');
+            loadCatalog();
+            checkAgentSession();
+        }
+
+        function loadCatalog() {
+            const categories = JSON.parse(localStorage.getItem('eva_categories')) || [];
+            const rawProducts = JSON.parse(localStorage.getItem('eva_products')) || [];
+            const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
+
+            // تجميع المنتجات الفريدة حسب كود المنتج لمنع تكرار البطاقات إذا كانت الصور متعددة
+            let productsMap = {};
+            rawProducts.forEach(p => {
+                if(!productsMap[p.code]) {
+                    // دمج جميع الصور في مصفوفة موحدة
+                    let allImgs = [];
+                    if(p.images) allImgs = allImgs.concat(p.images);
+                    if(p.image && !allImgs.includes(p.image)) allImgs.push(p.image);
+                    
+                    productsMap[p.code] = {
+                        ...p,
+                        images: allImgs
+                    };
+                } else {
+                    // إذا وجد نفس الكود، نقوم بدمج الصور الإضافية لضمان عدم ضياع أي صورة
+                    if(p.images) {
+                        p.images.forEach(img => {
+                            if(!productsMap[p.code].images.includes(img)) {
+                                productsMap[p.code].images.push(img);
+                            }
+                        });
+                    }
+                }
+            });
+            const products = Object.values(productsMap);
+
+            const navContainer = document.getElementById('navContainer');
+            const sectionsContainer = document.getElementById('sectionsContainer');
+
+            let navHtml = '';
+            let secHtml = '';
+
+            categories.forEach((cat, index) => {
+                const isActive = index === 0 ? 'active' : '';
+                const isSecActive = index === 0 ? 'active-section' : '';
+
+                navHtml += `<button class="nav-link-btn ${isActive}" onclick="switchTab('${cat.id}', this)">${cat.name} (${cat.id})</button>`;
+
+                const catProducts = products.filter(p => p.category === cat.id);
+                
+                let productsContent = '';
+                if(catProducts.length === 0) {
+                    productsContent = '<p style="color:#888; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
+                } else {
+                    productsContent = `<div class="products-grid">` + catProducts.map(p => {
+                        let images = p.images && p.images.length > 0 ? p.images : [];
+                        let mainImg = images.length > 0 ? images[0] : '';
+                        let thumbsHtml = images.length > 1 ? `
+                            <div class="product-images">
+                                ${images.map(img => `<img src="${img}" onclick="changeMainImage(this, '${p.code}')">`).join('')}
+                            </div>
+                        ` : '';
+
+                        let priceHtml = `<span class="price-ex">السعر: ${p.price} ₪</span>`;
+                        if(isAgentLogged) {
+                            priceHtml = `
+                                <span class="price-ex">سعر المعرض: ${p.price} ₪</span>
+                                <span class="price-agent">سعر الوسيط: ${p.agentPrice} ₪</span>
+                            `;
+                        }
+
+                        return `
+                            <div class="product-card">
+                                ${mainImg ? `<img src="${mainImg}" class="main-product-img" id="main-img-${p.code}" onclick="openModal('${mainImg}')">` : ''}
+                                ${thumbsHtml}
+                                <h3>${p.name}</h3>
+                                <div class="prices">
+                                    ${priceHtml}
+                                    <span class="product-code">رمز المنتج: ${p.code}</span>
+                                </div>
+                                <a href="https://wa.me/970597180456?text=أود طلب المنتج بررمز ${p.code}" target="_blank" class="whatsapp-btn">اطلب واتساب</a>
+                            </div>
+                        `;
+                    }).join('') + `</div>`;
+                }
+
+                secHtml += `
+                    <div id="${cat.id}" class="section ${isSecActive}">
+                        <h2>✨ ${cat.name} (قسم ${cat.id})</h2>
+                        ${productsContent}
+                    </div>
+                `;
+            });
+
+            navContainer.innerHTML = navHtml;
+            sectionsContainer.innerHTML = secHtml;
+        }
+
+        function switchTab(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            btn.classList.add('active');
+        }
+
+        function changeMainImage(thumbElement, code) {
+            const mainImg = document.getElementById(`main-img-${code}`);
+            if(mainImg) mainImg.src = thumbElement.src;
+        }
+
+        function openModal(src) { document.getElementById('imageModal').style.display='block'; document.getElementById('modalImg').src=src; }
+        function closeModal() { document.getElementById('imageModal').style.display='none'; }
+
+        loadCatalog();
+        checkAgentSession();
+    </script>
+</body>
+</html>
