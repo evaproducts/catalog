@@ -10,11 +10,12 @@
         h2 { font-size: 17px; color: #1c1e21; border-right: 4px solid #d4af37; padding-right: 10px; margin-bottom: 15px; }
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #555; }
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Arial, sans-serif; font-size: 14px; }
-        input[readonly] { background-color: #f9f9f9; color: #888; cursor: not-allowed; }
+        input[readonly] { background-color: #f9f9f9; color: #880e4f; font-weight: bold; cursor: not-allowed; }
         button { background: #27ae60; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         button:hover { background: #219150; }
         .delete-btn { background: #e74c3c; margin-top: 5px; }
         .blue-btn { background: #2980b9; }
+        .orange-btn { background: #e67e22; }
         .link-home { display: block; text-align: center; margin-top: 20px; color: #ad1457; text-decoration: none; font-weight: bold; font-size: 15px; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
         .agents-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
@@ -68,6 +69,13 @@
     <input type="number" id="pPrice" placeholder="سعر المعرض">
     <input type="number" id="pAgentPrice" placeholder="سعر الوسيط">
     <button onclick="saveProduct()">حفظ المنتج</button>
+</div>
+
+<div class="box">
+    <h2>✏️ تحديث صور منتج موجود (برمز المنتج)</h2>
+    <input type="text" id="updateProdCode" placeholder="أدخل كود المنتج (مثلاً A1)">
+    <input type="file" id="updateProdImages" accept="image/*" multiple>
+    <button onclick="updateProductImageByCode()" class="orange-btn">تحديث صور المنتج الجديد</button>
 </div>
 
 <div class="box">
@@ -133,7 +141,7 @@
                 list = snap.data().list;
             }
             list.push(text);
-           if(list.length > 5) list = list.slice(-5);
+            if(list.length > 5) list = list.slice(-5);
             await setDoc(updatesRef, { list });
         } catch(e) {
             console.error(e);
@@ -258,10 +266,43 @@
                         images: imagesArray
                     });
 
-                    // إضافة إشعار تلقائي في لوحة التحديثات السحابية
-                    await addUpdateLog(`✨ تمت إضافة منتج جديد: ${name} (رمز: ${code})`);
-
                     alert('تم حفظ المنتج بنجاح بررمز: ' + code);
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    // دالة تحديث صور المنتج الموجود برمزه
+    window.updateProductImageByCode = async function() {
+        let code = document.getElementById('updateProdCode').value.trim().toUpperCase();
+        const filesInput = document.getElementById('updateProdImages');
+
+        if(!code) return alert('الرجاء إدخال كود المنتج');
+        if(filesInput.files.length === 0) return alert('الرجاء اختيار الصور الجديدة');
+
+        // التحقق إن كان المنتج موجوداً في قاعدة البيانات أولاً
+        const prodRef = doc(db, "products", code);
+        const prodSnap = await getDoc(prodRef);
+
+        if (!prodSnap.exists()) {
+            return alert('عذراً، كود المنتج غير موجود في قاعدة البيانات!');
+        }
+
+        let imagesArray = [];
+        let filesProcessed = 0;
+
+        for (let i = 0; i < filesInput.files.length; i++) {
+            compressImage(filesInput.files[i], async function(compressedData) {
+                imagesArray.push(compressedData);
+                filesProcessed++;
+                if (filesProcessed === filesInput.files.length) {
+                    // تحديث الصور فقط مع دمجها وباقي بيانات المنتج القديمة ثابتة
+                    await setDoc(prodRef, {
+                        images: imagesArray
+                    }, { merge: true });
+
+                    alert('تم تحديث صور المنتج (' + code + ') بنجاح!');
                     location.reload();
                 }
             });
@@ -273,10 +314,6 @@
         if(!code) return alert('الرجاء إدخال كود المنتج المراد حذفه');
         
         await deleteDoc(doc(db, "products", code));
-        
-        // إضافة إشعار تلقائي بالحذف
-        await addUpdateLog(`🗑️ المنتج برمز (${code}) لم يعد متوفراً حالياً.`);
-
         alert('تم حذف المنتج بنجاح!');
         location.reload();
     }
