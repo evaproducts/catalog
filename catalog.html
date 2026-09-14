@@ -485,7 +485,6 @@
                 let categoriesHtml = '';
 
                 categories.forEach(cat => {
-                    // إذا لم تكن صورة القسم متوفرة، نستخدم لوغو المعرض كصورة افتراضية
                     let catImg = cat.image ? cat.image : (globalLogoUrl || 'https://via.placeholder.com/70');
 
                     categoriesHtml += `
@@ -497,12 +496,12 @@
                 });
                 categoriesGrid.innerHTML = categoriesHtml;
 
-                // بناء تفاصيل الأقسام ومحتواها (تكون مخفية حتى يتم الضغط على القسم)
+                // بناء تفاصيل الأقسام ومحتواها (تطابق المنتجات مع الـ id أو الـ name للقسم)
                 const sectionsContainer = document.getElementById('sectionsContainer');
                 let secHtml = '';
 
                 categories.forEach((cat) => {
-                    const catProducts = products.filter(p => p.category === cat.id);
+                    const catProducts = products.filter(p => p.category === cat.id || p.category === cat.name);
                     
                     let productsContent = '';
                     if(catProducts.length === 0) {
