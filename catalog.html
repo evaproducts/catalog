@@ -98,31 +98,59 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
-        /* تصغير حجم أزرار الأقسام والتبويبات لتصبح أنيق ومناسب للهاتف */
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .nav-link-btn {
-            background: #fff;
-            border: 1px solid #f8bbd0;
-            color: #ad1457;
-            padding: 7px 15px;
-            border-radius: 15px;
-            cursor: pointer;
+        /* زر العودة للقائمة الرئيسية */
+        .back-to-categories {
+            background: #880e4f;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
             font-size: 13px;
             font-weight: bold;
-            white-space: nowrap;
+            cursor: pointer;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
-        .nav-link-btn.active {
+        .back-to-categories:hover {
             background: #ad1457;
-            color: #fff;
+        }
+
+        /* شبكة عرض الأقسام الرئيسية عند فتح الموقع */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .category-card {
+            background: #fff;
+            border: 1px solid #f8bbd0;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.15);
             border-color: #ad1457;
-            box-shadow: 0 2px 8px rgba(173, 20, 87, 0.2);
+        }
+        .category-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
+            margin-bottom: 8px;
+            background-color: #fafafa;
+        }
+        .category-card h3 {
+            font-size: 14px;
+            color: #880e4f;
+            margin: 5px 0 0 0;
         }
 
         .section { display: none; }
@@ -175,7 +203,6 @@
             border-color: #ad1457;
         }
 
-        /* تعديل عرض الصورة الرئيسية لتظهر كاملة وغير مقصوصة بشكل أنيق */
         .main-product-img {
             width: 100%;
             height: 180px;
@@ -362,7 +389,13 @@
             <strong>📢 رسالة الإدارة:</strong> <span id="adminNoticeText"></span>
         </div>
 
-        <div id="navContainer" class="nav-tabs"></div>
+        <!-- واجهة عرض شبكة الأقسام الرئيسية عند فتح الرابط أولاً -->
+        <div id="categoriesHomeView">
+            <h2 style="font-size: 18px; color: #880e4f; margin-bottom: 15px; border-bottom: 2px solid #f8bbd0; padding-bottom: 8px;">✨ أقسام المعرض</h2>
+            <div id="categoriesGrid" class="categories-grid"></div>
+        </div>
+
+        <!-- حاوية الأقسام والمنتجات التي تفتح عند النقر -->
         <div id="sectionsContainer"></div>
 
         <div class="footer-visitor-box">
@@ -416,13 +449,16 @@
         localStorage.setItem('eva_visits', visits);
         document.getElementById('visitCount').innerText = visits;
 
+        let globalLogoUrl = "";
+
         async function loadCatalogData() {
             try {
-                // 1. جلب اللوغو وإرسالية الإدارة من إعدادات السحابة
+                // 1. جلب اللوغو وإرسالية الإدارة
                 const logoDoc = await getDoc(doc(db, "settings", "logo"));
                 if (logoDoc.exists() && logoDoc.data().img) {
+                    globalLogoUrl = logoDoc.data().img;
                     const logoEl = document.getElementById('display-logo');
-                    logoEl.src = logoDoc.data().img;
+                    logoEl.src = globalLogoUrl;
                     logoEl.style.display = 'block';
                 }
 
@@ -432,30 +468,40 @@
                     document.getElementById('adminNoticeBox').style.display = 'block';
                 }
 
-                // 2. جلب الأقسام من السحابة
+                // 2. جلب الأقسام
                 const catSnapshot = await getDocs(collection(db, "categories"));
                 let categories = [];
                 catSnapshot.forEach(docItem => categories.push({ id: docItem.id, ...docItem.data() }));
 
-                // 3. جلب المنتجات من السحابة
+                // 3. جلب المنتجات
                 const prodSnapshot = await getDocs(collection(db, "products"));
                 let products = [];
                 prodSnapshot.forEach(docItem => products.push(docItem.data()));
 
                 const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
 
-                const navContainer = document.getElementById('navContainer');
-                const sectionsContainer = document.getElementById('sectionsContainer');
+                // بناء شبكة الأقسام الرئيسية التي تظهر عند فتح الرابط
+                const categoriesGrid = document.getElementById('categoriesGrid');
+                let categoriesHtml = '';
 
-                let navHtml = '';
+                categories.forEach(cat => {
+                    // إذا لم تكن صورة القسم متوفرة، نستخدم لوغو المعرض كصورة افتراضية
+                    let catImg = cat.image ? cat.image : (globalLogoUrl || 'https://via.placeholder.com/70');
+
+                    categoriesHtml += `
+                        <div class="category-card" onclick="openCategory('${cat.id}')">
+                            <img src="${catImg}" class="category-img" alt="${cat.name}">
+                            <h3>${cat.name}</h3>
+                        </div>
+                    `;
+                });
+                categoriesGrid.innerHTML = categoriesHtml;
+
+                // بناء تفاصيل الأقسام ومحتواها (تكون مخفية حتى يتم الضغط على القسم)
+                const sectionsContainer = document.getElementById('sectionsContainer');
                 let secHtml = '';
 
-                categories.forEach((cat, index) => {
-                    const isActive = index === 0 ? 'active' : '';
-                    const isSecActive = index === 0 ? 'active-section' : '';
-
-                    navHtml += `<button class="nav-link-btn ${isActive}" onclick="switchTab('${cat.id}', this)">${cat.name} (${cat.id})</button>`;
-
+                categories.forEach((cat) => {
                     const catProducts = products.filter(p => p.category === cat.id);
                     
                     let productsContent = '';
@@ -495,19 +541,37 @@
                     }
 
                     secHtml += `
-                        <div id="${cat.id}" class="section ${isSecActive}">
-                            <h2>✨ ${cat.name} (قسم ${cat.id})</h2>
+                        <div id="section-${cat.id}" class="section">
+                            <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
+                            <h2>✨ ${cat.name}</h2>
                             ${productsContent}
                         </div>
                     `;
                 });
 
-                navContainer.innerHTML = navHtml;
                 sectionsContainer.innerHTML = secHtml;
 
             } catch (error) {
                 console.error("Error loading catalog data from Firebase:", error);
             }
+        }
+
+        // دالة الانتقال للقسم عند النقر عليه
+        window.openCategory = function(catId) {
+            document.getElementById('categoriesHomeView').style.display = 'none';
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            const targetSec = document.getElementById(`section-${catId}`);
+            if(targetSec) {
+                targetSec.classList.add('active-section');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // دالة العودة لواجهة الأقسام الرئيسية
+        window.backToHome = function() {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById('categoriesHomeView').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.checkAgentSession = async function() {
@@ -560,13 +624,6 @@
             alert('تم تسجيل الخروج بنجاح.');
             loadCatalogData();
             checkAgentSession();
-        }
-
-        window.switchTab = function(id, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active-section');
-            btn.classList.add('active');
         }
 
         window.changeMainImage = function(thumbElement, code) {
