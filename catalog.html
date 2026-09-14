@@ -439,7 +439,7 @@
         </div>
     </div>
 
-    <!-- ربط Firebase وجلب البيانات للكتالوج مع عداد الزيارات المركزي -->
+    <!-- ربط Firebase وجلب البيانات للكتالوج مع عداد الزيارات التزايدي المركزي -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -456,28 +456,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // دالة تحديث وجلب عداد الزيارات المركزي من السحابة
+        // دالة عداد الزيارات التي تزيد الرقم في السحابة مع كل تحديث أو فتح للصفحة
         async function setupVisitorCounter() {
             try {
                 const statsRef = doc(db, "settings", "stats");
                 const statsDoc = await getDoc(statsRef);
                 
-                let totalVisits = 50; // القيمة الافتراضية للبداية
+                let totalVisits = 50;
                 if (statsDoc.exists()) {
                     totalVisits = statsDoc.data().visits || 50;
                 } else {
-                    // إنشاء المستند تلقائياً إذا لم يكن موجوداً
                     await setDoc(statsRef, { visits: 50 });
                 }
 
-                // التحقق إذا كان الزائر قد زار الموقع في هذه الجلسة لمنع التكرار الوهمي
-                if (!sessionStorage.getItem('eva_global_counted')) {
-                    sessionStorage.setItem('eva_global_counted', 'true');
-                    await updateDoc(statsRef, {
-                        visits: increment(1)
-                    });
-                    totalVisits += 1;
-                }
+                // زيادة العداد في السحابة مع كل عملية فتح أو تحديث للصفحة
+                await updateDoc(statsRef, {
+                    visits: increment(1)
+                });
+                totalVisits += 1;
 
                 document.getElementById('visitCount').innerText = totalVisits;
             } catch (error) {
@@ -490,7 +486,6 @@
 
         async function loadCatalogData() {
             try {
-                // تشغيل عداد الزيارات بالتزامن مع تحميل البيانات
                 setupVisitorCounter();
 
                 // 1. جلب اللوغو وإرسالية الإدارة
@@ -520,7 +515,7 @@
 
                 const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
 
-                // بناء شبكة الأقسام الرئيسية التي تظهر عند فتح الرابط
+                // بناء شبكة الأقسام الرئيسية
                 const categoriesGrid = document.getElementById('categoriesGrid');
                 let categoriesHtml = '';
 
@@ -597,7 +592,6 @@
             }
         }
 
-        // دالة الانتقال للقسم عند النقر عليه
         window.openCategory = function(catId) {
             document.getElementById('categoriesHomeView').style.display = 'none';
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
@@ -608,7 +602,6 @@
             }
         }
 
-        // دالة العودة لواجهة الأقسام الرئيسية
         window.backToHome = function() {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById('categoriesHomeView').style.display = 'block';
