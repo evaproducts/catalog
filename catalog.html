@@ -163,7 +163,7 @@
             padding-bottom: 8px;
         }
 
-        /* شبكة عرض المنتجات: عمودين بجانب بعضهما بشكل أنيق واحترافي */
+        /* شبكة عرض المنتجات: عمودين بجانب بعضهما */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -203,7 +203,7 @@
         .product-images img {
             width: 35px;
             height: 35px;
-            object-fit: contain;
+            object-fit: cover;
             background-color: #fafafa;
             border-radius: 4px;
             cursor: pointer;
@@ -214,10 +214,11 @@
             border-color: #ad1457;
         }
 
+        /* تعديل حاوية الصورة الرئيسية لتكون مربعة تماماً وتملأ المساحة باحترافية وبدون فراغات */
         .main-product-img {
             width: 100%;
-            height: 140px;
-            object-fit: contain;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
             background-color: #fafafa;
             border-radius: 8px;
             margin-bottom: 8px;
