@@ -214,7 +214,7 @@
             border-color: #ad1457;
         }
 
-        /* تعديل حاوية الصورة الرئيسية لتكون مربعة تماماً وتملأ المساحة باحترافية وبدون فراغات */
+        /* حاوية الصورة الرئيسية مربعة تملأ المساحة باحترافية */
         .main-product-img {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -411,7 +411,7 @@
         <div id="sectionsContainer"></div>
 
         <div class="footer-visitor-box">
-            الزيارات: <span id="visitCount">35</span>
+            الزيارات: <span id="visitCount">...</span>
         </div>
 
         <div class="footer-link">
@@ -439,10 +439,10 @@
         </div>
     </div>
 
-    <!-- ربط Firebase وجلب البيانات للكتالوج -->
+    <!-- ربط Firebase وجلب البيانات للكتالوج مع عداد الزيارات المركزي -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
@@ -456,15 +456,43 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let visits = localStorage.getItem('eva_visits');
-        visits = visits ? parseInt(visits) + 1 : 35;
-        localStorage.setItem('eva_visits', visits);
-        document.getElementById('visitCount').innerText = visits;
+        // دالة تحديث وجلب عداد الزيارات المركزي من السحابة
+        async function setupVisitorCounter() {
+            try {
+                const statsRef = doc(db, "settings", "stats");
+                const statsDoc = await getDoc(statsRef);
+                
+                let totalVisits = 50; // القيمة الافتراضية للبداية
+                if (statsDoc.exists()) {
+                    totalVisits = statsDoc.data().visits || 50;
+                } else {
+                    // إنشاء المستند تلقائياً إذا لم يكن موجوداً
+                    await setDoc(statsRef, { visits: 50 });
+                }
+
+                // التحقق إذا كان الزائر قد زار الموقع في هذه الجلسة لمنع التكرار الوهمي
+                if (!sessionStorage.getItem('eva_global_counted')) {
+                    sessionStorage.setItem('eva_global_counted', 'true');
+                    await updateDoc(statsRef, {
+                        visits: increment(1)
+                    });
+                    totalVisits += 1;
+                }
+
+                document.getElementById('visitCount').innerText = totalVisits;
+            } catch (error) {
+                console.error("Error with visitor counter:", error);
+                document.getElementById('visitCount').innerText = "50";
+            }
+        }
 
         let globalLogoUrl = "";
 
         async function loadCatalogData() {
             try {
+                // تشغيل عداد الزيارات بالتزامن مع تحميل البيانات
+                setupVisitorCounter();
+
                 // 1. جلب اللوغو وإرسالية الإدارة
                 const logoDoc = await getDoc(doc(db, "settings", "logo"));
                 if (logoDoc.exists() && logoDoc.data().img) {
