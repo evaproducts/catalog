@@ -98,29 +98,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
-        .updates-box {
-            background: #fff0f5;
-            border: 2px dashed #d81b60;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #ad1457;
-            box-shadow: 0 2px 8px rgba(216, 27, 96, 0.05);
-        }
-        .updates-box h4 {
-            margin: 0 0 8px 0;
-            font-size: 15px;
-            color: #880e4f;
-        }
-        .updates-box ul {
-            margin: 0;
-            padding-right: 20px;
-        }
-        .updates-box li {
-            margin-bottom: 5px;
-        }
-
         .nav-tabs {
             display: flex;
             gap: 10px;
@@ -378,13 +355,6 @@
             <strong>📢 رسالة الإدارة:</strong> <span id="adminNoticeText"></span>
         </div>
 
-        <div id="updatesBoxContainer" class="updates-box">
-            <h4>🔔 آخر التحديثات والإشعارات:</h4>
-            <ul id="updatesList">
-                <li>✨ أهلاً بكُنَّ وسيطات إيفا براند! تم إطلاق الكتالوج المحدث[cite: 2].</li>
-            </ul>
-        </div>
-
         <div id="navContainer" class="nav-tabs"></div>
         <div id="sectionsContainer"></div>
 
@@ -398,7 +368,7 @@
     </div>
 
     <footer>
-        جميع الحقوق محفوظة © معرض إيفا براند 2026[cite: 2]
+        جميع الحقوق محفوظة © معرض إيفا براند 2026
     </footer>
 
     <div id="imageModal" class="modal" onclick="closeModal()">
@@ -455,19 +425,12 @@
                     document.getElementById('adminNoticeBox').style.display = 'block';
                 }
 
-                // 2. جلب التحديثات والإشعارات من السحابة
-                const updatesDoc = await getDoc(doc(db, "settings", "updates"));
-                if (updatesDoc.exists() && updatesDoc.data().list) {
-                    const updatesListEl = document.getElementById('updatesList');
-                    updatesListEl.innerHTML = updatesDoc.data().list.map(u => `<li>${u}</li>`).join('');
-                }
-
-                // 3. جلب الأقسام من السحابة
+                // 2. جلب الأقسام من السحابة
                 const catSnapshot = await getDocs(collection(db, "categories"));
                 let categories = [];
                 catSnapshot.forEach(docItem => categories.push({ id: docItem.id, ...docItem.data() }));
 
-                // 4. جلب المنتجات من السحابة
+                // 3. جلب المنتجات من السحابة
                 const prodSnapshot = await getDocs(collection(db, "products"));
                 let products = [];
                 prodSnapshot.forEach(docItem => products.push(docItem.data()));
