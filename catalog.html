@@ -116,7 +116,7 @@
             background: #ad1457;
         }
 
-        /* شبكة عرض الأقسام الرئيسية عند فتح الموقع */
+        /* شبكة عرض الأقسام الرئيسية */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -163,19 +163,30 @@
             padding-bottom: 8px;
         }
 
+        /* شبكة عرض المنتجات: عمودين بجانب بعضهما بشكل أنيق واحترافي */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
+        @media (min-width: 600px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+        }
+
         .product-card {
             background: #fff;
             border: 1px solid #f8bbd0;
             border-radius: 12px;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             box-shadow: 0 3px 10px rgba(0,0,0,0.03);
             transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .product-card:hover {
             transform: translateY(-3px);
@@ -184,17 +195,17 @@
 
         .product-images {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             overflow-x: auto;
             margin-bottom: 8px;
             padding-bottom: 3px;
         }
         .product-images img {
-            width: 45px;
-            height: 45px;
+            width: 35px;
+            height: 35px;
             object-fit: contain;
             background-color: #fafafa;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             border: 1px solid #f8bbd0;
             transition: 0.2s;
@@ -205,59 +216,59 @@
 
         .main-product-img {
             width: 100%;
-            height: 180px;
+            height: 140px;
             object-fit: contain;
             background-color: #fafafa;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             cursor: pointer;
             border: 1px solid #fce4ec;
         }
 
         .product-card h3 {
-            font-size: 15px;
-            margin: 5px 0;
+            font-size: 13px;
+            margin: 4px 0;
             color: #333;
         }
         .prices {
-            font-size: 13px;
+            font-size: 12px;
             color: #555;
-            margin: 8px 0;
+            margin: 6px 0;
             background: #fff0f5;
-            padding: 8px;
+            padding: 6px;
             border-radius: 6px;
             border: 1px solid #f8bbd0;
         }
         .price-ex {
             color: #333;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             display: block;
         }
         .price-agent {
             color: #ad1457;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             display: block;
-            margin-top: 4px;
+            margin-top: 3px;
             border-top: 1px dashed #f8bbd0;
-            padding-top: 4px;
+            padding-top: 3px;
         }
         .product-code {
             color: #b8860b;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             display: block;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .whatsapp-btn {
             background: #25d366;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 7px 10px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             text-decoration: none;
             display: block;
@@ -496,7 +507,7 @@
                 });
                 categoriesGrid.innerHTML = categoriesHtml;
 
-                // بناء تفاصيل الأقسام ومحتواها (تطابق المنتجات مع الـ id أو الـ name للقسم)
+                // بناء تفاصيل الأقسام ومحتواها
                 const sectionsContainer = document.getElementById('sectionsContainer');
                 let secHtml = '';
 
@@ -526,12 +537,14 @@
 
                             return `
                                 <div class="product-card">
-                                    ${mainImg ? `<img src="${mainImg}" class="main-product-img" id="main-img-${p.code}" onclick="openModal('${mainImg}')">` : ''}
-                                    ${thumbsHtml}
-                                    <h3>${p.name}</h3>
-                                    <div class="prices">
-                                        ${priceHtml}
-                                        <span class="product-code">رمز المنتج: ${p.code}</span>
+                                    <div>
+                                        ${mainImg ? `<img src="${mainImg}" class="main-product-img" id="main-img-${p.code}" onclick="openModal('${mainImg}')">` : ''}
+                                        ${thumbsHtml}
+                                        <h3>${p.name}</h3>
+                                        <div class="prices">
+                                            ${priceHtml}
+                                            <span class="product-code">رمز المنتج: ${p.code}</span>
+                                        </div>
                                     </div>
                                     <a href="https://wa.me/970597180456?text=أود طلب المنتج بررمز ${p.code}" target="_blank" class="whatsapp-btn">اطلب واتساب</a>
                                 </div>
