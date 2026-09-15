@@ -150,7 +150,13 @@
         .category-card h3 {
             font-size: 14px;
             color: #880e4f;
-            margin: 5px 0 0 0;
+            margin: 5px 0 2px 0;
+        }
+        /* تنسيق حرف القسم ليظهر بشكل واضح تحت الاسم */
+        .category-code-tag {
+            font-size: 12px;
+            color: #b8860b;
+            font-weight: bold;
         }
 
         .section { display: none; }
@@ -381,7 +387,7 @@
 <body>
 
     <div class="top-alert-bar">
-        ⚠️ المنتج الذي تقوم ببيعه احجزه فوراً لضمان توفره (فترة الحجز أسبوع واحد).
+        🚚 التوصيل متاح لكافة مناطق الضفة والداخل والقدس | ⚠️ المنتج الذي تقوم ببيعه احجزه فوراً لضمان توفره (فترة الحجز أسبوع واحد).
     </div>
 
     <div class="agent-login-bar" id="agentLoginBar">
@@ -469,7 +475,6 @@
                     await setDoc(statsRef, { visits: 50 });
                 }
 
-                // زيادة العداد في السحابة مع كل عملية فتح أو تحديث للصفحة
                 await updateDoc(statsRef, {
                     visits: increment(1)
                 });
@@ -515,7 +520,7 @@
 
                 const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
 
-                // بناء شبكة الأقسام الرئيسية
+                // بناء شبكة الأقسام الرئيسية مع إظهار حرف القسم تحت الاسم
                 const categoriesGrid = document.getElementById('categoriesGrid');
                 let categoriesHtml = '';
 
@@ -526,6 +531,7 @@
                         <div class="category-card" onclick="openCategory('${cat.id}')">
                             <img src="${catImg}" class="category-img" alt="${cat.name}">
                             <h3>${cat.name}</h3>
+                            <span class="category-code-tag">(${cat.id})</span>
                         </div>
                     `;
                 });
@@ -579,7 +585,7 @@
                     secHtml += `
                         <div id="section-${cat.id}" class="section">
                             <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
-                            <h2>✨ ${cat.name}</h2>
+                            <h2>✨ ${cat.name} (${cat.id})</h2>
                             ${productsContent}
                         </div>
                     `;
