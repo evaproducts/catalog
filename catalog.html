@@ -304,7 +304,6 @@
             margin-bottom: 25px;
         }
 
-        /* نافذة تكبير الصورة (Modal) بخلفية بيضاء نقية ونظيفة */
         .modal {
             display: none;
             position: fixed;
@@ -314,7 +313,6 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.95);
-            display: none;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -401,13 +399,13 @@
             <strong>📢 رسالة الإدارة:</strong> <span id="adminNoticeText"></span>
         </div>
 
-        <!-- واجهة عرض شبكة الأقسام الرئيسية عند فتح الرابط أولاً -->
+        <!-- واجهة عرض شبكة الأقسام الرئيسية (تفتح فوراً) -->
         <div id="categoriesHomeView">
             <h2 style="font-size: 18px; color: #880e4f; margin-bottom: 15px; border-bottom: 2px solid #f8bbd0; padding-bottom: 8px;">✨ أقسام المعرض</h2>
-            <div id="categoriesGrid" class="categories-grid"></div>
+            <div id="categoriesGrid" class="categories-grid">جاري تحميل الأقسام...</div>
         </div>
 
-        <!-- حاوية الأقسام والمنتجات التي تفتح عند النقر -->
+        <!-- حاوية الأقسام والمنتجات -->
         <div id="sectionsContainer"></div>
 
         <div class="footer-visitor-box">
@@ -439,10 +437,10 @@
         </div>
     </div>
 
-    <!-- ربط Firebase وجلب البيانات للكتالوج مع عداد الزيارات التزايدي المركزي -->
+    <!-- كود التحميل السريع الفوري -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
@@ -456,39 +454,35 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // دالة عداد الزيارات التي تزيد الرقم في السحابة مع كل تحديث أو فتح للصفحة
+        let globalLogoUrl = "";
+        let loadedCategories = [];
+
+        // عداد الزيارات الفوري في الخلفية
         async function setupVisitorCounter() {
             try {
                 const statsRef = doc(db, "settings", "stats");
                 const statsDoc = await getDoc(statsRef);
-                
-                let totalVisits = 50;
-                if (statsDoc.exists()) {
-                    totalVisits = statsDoc.data().visits || 50;
-                } else {
-                    await setDoc(statsRef, { visits: 50 });
-                }
-
-                await updateDoc(statsRef, {
-                    visits: increment(1)
-                });
-                totalVisits += 1;
-
-                document.getElementById('visitCount').innerText = totalVisits;
+                let totalVisits = statsDoc.exists() ? (statsDoc.data().visits || 50) : 50;
+                await updateDoc(statsRef, { visits: increment(1) });
+                document.getElementById('visitCount').innerText = totalVisits + 1;
             } catch (error) {
-                console.error("Error with visitor counter:", error);
                 document.getElementById('visitCount').innerText = "50";
             }
         }
 
-        let globalLogoUrl = "";
+        // تحميل الصفحة الأولية (فقط اللوغو، الإرسالية، والأقسام لتظهر خلال أقل من ثانية)
+        async function initCatalogFast() {
+            setupVisitorCounter();
+            checkAgentSession();
 
-        async function loadCatalogData() {
             try {
-                setupVisitorCounter();
+                // جلب اللوغو والإرسالية والأقسام بالتوازي لضمان السرعة القصوى
+                const [logoDoc, noticeDoc, catSnapshot] = await Promise.all([
+                    getDoc(doc(db, "settings", "logo")),
+                    getDoc(doc(db, "settings", "notice")),
+                    getDocs(collection(db, "categories"))
+                ]);
 
-                // 1. جلب اللوغو وإرسالية الإدارة
-                const logoDoc = await getDoc(doc(db, "settings", "logo"));
                 if (logoDoc.exists() && logoDoc.data().img) {
                     globalLogoUrl = logoDoc.data().img;
                     const logoEl = document.getElementById('display-logo');
@@ -496,33 +490,21 @@
                     logoEl.style.display = 'block';
                 }
 
-                const noticeDoc = await getDoc(doc(db, "settings", "notice"));
                 if (noticeDoc.exists() && noticeDoc.data().text) {
                     document.getElementById('adminNoticeText').innerText = noticeDoc.data().text;
                     document.getElementById('adminNoticeBox').style.display = 'block';
                 }
 
-                // 2. جلب الأقسام
-                const catSnapshot = await getDocs(collection(db, "categories"));
-                let categories = [];
-                catSnapshot.forEach(docItem => categories.push({ id: docItem.id, ...docItem.data() }));
+                loadedCategories = [];
+                catSnapshot.forEach(docItem => loadedCategories.push({ id: docItem.id, ...docItem.data() }));
 
-                // 3. جلب المنتجات
-                const prodSnapshot = await getDocs(collection(db, "products"));
-                let products = [];
-                prodSnapshot.forEach(docItem => products.push(docItem.data()));
-
-                const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
-
-                // بناء شبكة الأقسام الرئيسية مع إظهار حرف القسم تحت الاسم
                 const categoriesGrid = document.getElementById('categoriesGrid');
                 let categoriesHtml = '';
 
-                categories.forEach(cat => {
+                loadedCategories.forEach(cat => {
                     let catImg = cat.image ? cat.image : (globalLogoUrl || 'https://via.placeholder.com/70');
-
                     categoriesHtml += `
-                        <div class="category-card" onclick="openCategory('${cat.id}')">
+                        <div class="category-card" onclick="openCategory('${cat.id}', '${cat.name}')">
                             <img src="${catImg}" class="category-img" alt="${cat.name}">
                             <h3>${cat.name}</h3>
                             <span class="category-code-tag">(${cat.id})</span>
@@ -531,15 +513,40 @@
                 });
                 categoriesGrid.innerHTML = categoriesHtml;
 
-                // بناء تفاصيل الأقسام ومحتواها
-                const sectionsContainer = document.getElementById('sectionsContainer');
-                let secHtml = '';
+            } catch (error) {
+                console.error("Error loading fast catalog data:", error);
+            }
+        }
 
-                categories.forEach((cat) => {
-                    const catProducts = products.filter(p => p.category === cat.id || p.category === cat.name);
+        // فتح القسم وجلب منتجاته الخاصة به فقط (تحميل فوري وسريع عند النقر)
+        window.openCategory = async function(catId, catName) {
+            document.getElementById('categoriesHomeView').style.display = 'none';
+            
+            let targetSec = document.getElementById(`section-${catId}`);
+            if (!targetSec) {
+                targetSec = document.createElement('div');
+                targetSec.id = `section-${catId}`;
+                targetSec.className = 'section active-section';
+                targetSec.innerHTML = `
+                    <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
+                    <h2>✨ ${catName} (${catId})</h2>
+                    <p style="text-align:center; color:#880e4f; padding:20px;">جاري تحميل منتجات القسم...</p>
+                `;
+                document.getElementById('sectionsContainer').appendChild(targetSec);
+
+                try {
+                    // جلب منتجات هذا القسم المحدد فقط من السحابة بناءً على الid أو الـ name
+                    const prodRef = collection(db, "products");
+                    const q = query(prodRef, where("category", "in", [catId, catName]));
+                    const prodSnap = await getDocs(q);
                     
+                    let catProducts = [];
+                    prodSnap.forEach(d => catProducts.push(d.data()));
+
+                    const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
+
                     let productsContent = '';
-                    if(catProducts.length === 0) {
+                    if (catProducts.length === 0) {
                         productsContent = '<p style="color:#888; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
                     } else {
                         productsContent = `<div class="products-grid">` + catProducts.map(p => {
@@ -576,30 +583,22 @@
                         }).join('') + `</div>`;
                     }
 
-                    secHtml += `
-                        <div id="section-${cat.id}" class="section">
-                            <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
-                            <h2>✨ ${cat.name} (${cat.id})</h2>
-                            ${productsContent}
-                        </div>
+                    targetSec.innerHTML = `
+                        <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
+                        <h2>✨ ${catName} (${catId})</h2>
+                        ${productsContent}
                     `;
-                });
 
-                sectionsContainer.innerHTML = secHtml;
-
-            } catch (error) {
-                console.error("Error loading catalog data from Firebase:", error);
-            }
-        }
-
-        window.openCategory = function(catId) {
-            document.getElementById('categoriesHomeView').style.display = 'none';
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            const targetSec = document.getElementById(`section-${catId}`);
-            if(targetSec) {
+                } catch (e) {
+                    console.error("Error loading products for category:", e);
+                    targetSec.innerHTML = `<button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button><p style="text-align:center; color:red;">حدث خطأ في تحميل المنتجات.</p>`;
+                }
+            } else {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
                 targetSec.classList.add('active-section');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.backToHome = function() {
@@ -608,7 +607,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        window.checkAgentSession = async function() {
+        window.checkAgentSession = function() {
             let loggedAgent = localStorage.getItem('eva_logged_agent');
             let statusText = document.getElementById('loginStatusText');
             let loginBtnUI = document.getElementById('loginBtnUI');
@@ -632,22 +631,18 @@
         window.handleAgentLogin = async function() {
             let u = document.getElementById('loginUser').value.trim();
             let p = document.getElementById('loginPass').value.trim();
-            
             const agentsSnap = await getDocs(collection(db, "agents"));
             let found = null;
             agentsSnap.forEach(docItem => {
                 let data = docItem.data();
-                if(data.username === u && data.password === p) {
-                    found = data;
-                }
+                if(data.username === u && data.password === p) found = data;
             });
 
             if(found) {
                 localStorage.setItem('eva_logged_agent', found.name);
                 closeLoginModal();
                 alert(`أهلاً بكِ ${found.name}! تم تسجيل الدخول بنجاح.`);
-                loadCatalogData();
-                checkAgentSession();
+                location.reload();
             } else {
                 alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
@@ -656,8 +651,7 @@
         window.logoutAgent = function() {
             localStorage.removeItem('eva_logged_agent');
             alert('تم تسجيل الخروج بنجاح.');
-            loadCatalogData();
-            checkAgentSession();
+            location.reload();
         }
 
         window.changeMainImage = function(thumbElement, code) {
@@ -675,8 +669,7 @@
             document.getElementById('imageModal').style.display = 'none'; 
         }
 
-        loadCatalogData();
-        checkAgentSession();
+        initCatalogFast();
     </script>
 </body>
 </html>
