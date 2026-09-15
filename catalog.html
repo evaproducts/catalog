@@ -15,16 +15,6 @@
             min-height: 100vh;
         }
         
-        .top-alert-bar {
-            background: #b8860b;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
         header {
             background: #fff;
             padding: 25px 20px;
@@ -314,7 +304,7 @@
             margin-bottom: 25px;
         }
 
-        /* نافذة تكبير الصورة (Modal) المصممة لتملأ الشاشة بوضوح وفخامة */
+        /* نافذة تكبير الصورة (Modal) بخلفية بيضاء نقية ونظيفة */
         .modal {
             display: none;
             position: fixed;
@@ -323,7 +313,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(255, 255, 255, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
@@ -337,10 +327,10 @@
             height: auto;
             object-fit: contain;
             border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
         }
         .close-modal {
-            color: #fff;
+            color: #ad1457;
             font-size: 40px;
             position: absolute;
             top: 15px;
@@ -393,10 +383,6 @@
     </style>
 </head>
 <body>
-
-    <div class="top-alert-bar">
-        🚚 التوصيل متاح لكافة مناطق الضفة والداخل والقدس | ⚠️ المنتج الذي تقوم ببيعه احجزه فوراً لضمان توفره (فترة الحجز أسبوع واحد).
-    </div>
 
     <div class="agent-login-bar" id="agentLoginBar">
         <span id="loginStatusText">خاص بالوسيطات المعتمدات:</span>
