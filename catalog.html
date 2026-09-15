@@ -152,7 +152,6 @@
             color: #880e4f;
             margin: 5px 0 2px 0;
         }
-        /* تنسيق حرف القسم ليظهر بشكل واضح تحت الاسم */
         .category-code-tag {
             font-size: 12px;
             color: #b8860b;
@@ -315,6 +314,7 @@
             margin-bottom: 25px;
         }
 
+        /* نافذة تكبير الصورة (Modal) المصممة لتملأ الشاشة بوضوح وفخامة */
         .modal {
             display: none;
             position: fixed;
@@ -323,23 +323,31 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
-            text-align: center;
-            padding-top: 50px;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .modal img {
-            max-width: 90%;
-            max-height: 80vh;
-            border-radius: 8px;
+            max-width: 95%;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
             object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         }
         .close-modal {
             color: #fff;
-            font-size: 35px;
+            font-size: 40px;
             position: absolute;
-            top: 20px;
-            left: 30px;
+            top: 15px;
+            left: 25px;
             cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
         }
 
         .login-modal {
@@ -387,7 +395,7 @@
 <body>
 
     <div class="top-alert-bar">
-        🚚 التوصيل متاح لكافة مناطق الضفة والداخل والقدس
+        🚚 التوصيل متاح لكافة مناطق الضفة والداخل والقدس | ⚠️ المنتج الذي تقوم ببيعه احجزه فوراً لضمان توفره (فترة الحجز أسبوع واحد).
     </div>
 
     <div class="agent-login-bar" id="agentLoginBar">
@@ -671,8 +679,15 @@
             if(mainImg) mainImg.src = thumbElement.src;
         }
 
-        window.openModal = function(src) { document.getElementById('imageModal').style.display='block'; document.getElementById('modalImg').src=src; }
-        window.closeModal = function() { document.getElementById('imageModal').style.display='none'; }
+        window.openModal = function(src) { 
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            modal.style.display = 'flex'; 
+            modalImg.src = src; 
+        }
+        window.closeModal = function() { 
+            document.getElementById('imageModal').style.display = 'none'; 
+        }
 
         loadCatalogData();
         checkAgentSession();
