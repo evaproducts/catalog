@@ -92,29 +92,25 @@
             background: linear-gradient(135deg, #ad1457 0%, #880e4f 100%);
         }
 
-        /* شريط الأيقونات الأربعة بحجم واحد وبدون كتابة */
-        .store-badges-bar {
+        /* شريط مربعات طرق الدفع النصية الاحترافية */
+        .store-payment-badges {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             margin: 15px auto 0 auto;
             flex-wrap: wrap;
         }
-        .badge-img {
-            width: 48px;
-            height: 34px;
-            object-fit: contain;
+        .payment-pill {
             background: #fff;
-            padding: 4px 8px;
-            border-radius: 8px;
+            color: #880e4f;
             border: 1px solid #f8bbd0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-            transition: transform 0.2s;
-        }
-        .badge-img:hover {
-            transform: scale(1.05);
-            border-color: #ad1457;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            letter-spacing: 0.5px;
         }
 
         .container {
@@ -447,12 +443,11 @@
             </a>
         </div>
 
-        <!-- الأيقونات الأربعة فقط بدون كتابة (توصيل، كاش، فيزا، إي باق) -->
-        <div class="store-badges-bar">
-            <img src="images.png" alt="Delivery" class="badge-img">
-            <img src="CASH.jpg" alt="Cash" class="badge-img">
-            <img src="VISA.JPG" alt="Visa" class="badge-img">
-            <img src="I BURAQ.png" alt="iBuraq" class="badge-img">
+        <!-- مربعات طرق الدفع النصية الاحترافية -->
+        <div class="store-payment-badges">
+            <div class="payment-pill">Cash</div>
+            <div class="payment-pill">Visa</div>
+            <div class="payment-pill">iBuraq</div>
         </div>
     </header>
 
