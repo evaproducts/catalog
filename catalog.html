@@ -501,10 +501,49 @@
             }
         }
 
+        // ✅ التحقق الأمني التلقائي من حساب الوسيطة
+        async function checkAgentSession() {
+            let loggedAgentName = localStorage.getItem('eva_logged_agent');
+            let statusText = document.getElementById('loginStatusText');
+            let loginBtnUI = document.getElementById('loginBtnUI');
+
+            if(loggedAgentName) {
+                try {
+                    const agentsSnap = await getDocs(collection(db, "agents"));
+                    let agentExists = false;
+                    agentsSnap.forEach(docItem => {
+                        if(docItem.data().name === loggedAgentName) {
+                            agentExists = true;
+                        }
+                    });
+
+                    // إذا تم حذف الوسيطة من لوحة التحكم، يتم إخراجها وإشعارها فوراً
+                    if(!agentExists) {
+                        localStorage.removeItem('eva_logged_agent');
+                        alert('عذراً، تم إلغاء صلاحية هذا الحساب من الإدارة.');
+                        location.reload();
+                        return;
+                    }
+                } catch(e) {
+                    console.error(e);
+                }
+
+                statusText.innerHTML = `👋 أهلاً بكِ، <b>${loggedAgentName}</b>`;
+                loginBtnUI.innerText = "تسجيل خروج";
+                loginBtnUI.style.background = "#e74c3c";
+                loginBtnUI.onclick = logoutAgent;
+            } else {
+                statusText.innerHTML = "خاص بالوسيطات المعتمدات:";
+                loginBtnUI.innerText = "تسجيل الدخول";
+                loginBtnUI.style.background = "#ad1457";
+                loginBtnUI.onclick = openLoginModal;
+            }
+        }
+
         // تحميل الصفحة الأولية (فقط اللوغو، الإرسالية، والأقسام لتظهر خلال أقل من ثانية)
         async function initCatalogFast() {
             setupVisitorCounter();
-            checkAgentSession();
+            await checkAgentSession();
 
             try {
                 // جلب اللوغو والإرسالية والأقسام بالتوازي لضمان السرعة القصوى
@@ -636,24 +675,6 @@
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
             document.getElementById('categoriesHomeView').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.checkAgentSession = function() {
-            let loggedAgent = localStorage.getItem('eva_logged_agent');
-            let statusText = document.getElementById('loginStatusText');
-            let loginBtnUI = document.getElementById('loginBtnUI');
-
-            if(loggedAgent) {
-                statusText.innerHTML = `👋 أهلاً بكِ، <b>${loggedAgent}</b>`;
-                loginBtnUI.innerText = "تسجيل خروج";
-                loginBtnUI.style.background = "#e74c3c";
-                loginBtnUI.onclick = logoutAgent;
-            } else {
-                statusText.innerHTML = "خاص بالوسيطات المعتمدات:";
-                loginBtnUI.innerText = "تسجيل الدخول";
-                loginBtnUI.style.background = "#ad1457";
-                loginBtnUI.onclick = openLoginModal;
-            }
         }
 
         window.openLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; }
