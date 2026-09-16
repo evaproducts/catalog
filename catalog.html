@@ -68,10 +68,10 @@
             font-weight: bold;
         }
 
-        /* تنسيق زر المتابعة في المساحة المطلوبة أسفل العنوان */
+        /* تنسيق زر المتابعة */
         .social-promo-box {
             text-align: center;
-            margin: 15px 0 5px 0;
+            margin: 15px 0 10px 0;
         }
         .social-promo-btn {
             display: inline-block;
@@ -90,6 +90,31 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(173, 20, 87, 0.4);
             background: linear-gradient(135deg, #ad1457 0%, #880e4f 100%);
+        }
+
+        /* شريط الأيقونات الأربعة بحجم واحد وبدون كتابة */
+        .store-badges-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 15px auto 0 auto;
+            flex-wrap: wrap;
+        }
+        .badge-img {
+            width: 48px;
+            height: 34px;
+            object-fit: contain;
+            background: #fff;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid #f8bbd0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+        .badge-img:hover {
+            transform: scale(1.05);
+            border-color: #ad1457;
         }
 
         .container {
@@ -233,7 +258,6 @@
             border-color: #ad1457;
         }
 
-        /* حاوية الصورة الرئيسية مربعة تملأ المساحة باحترافية */
         .main-product-img {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -414,13 +438,21 @@
     <header>
         <img id="display-logo" alt="Logo">
         <h1>معرض إيفا براند</h1>
-        <p>عالم من الهدايا الفاخرة </p>
+        <p>عالم من الهدايا الفاخرة</p>
 
-        <!-- زر متابعة السوشيال ميديا المضاف حديثاً في المكان المحدد تماماً -->
+        <!-- زر متابعة السوشيال ميديا -->
         <div class="social-promo-box">
             <a href="https://linky.ps/eva" target="_blank" class="social-promo-btn">
                 ✨ تابعوا حساباتنا وعروضنا الحصرية هنا 👈
             </a>
+        </div>
+
+        <!-- الأيقونات الأربعة فقط بدون كتابة (توصيل، كاش، فيزا، إي باق) -->
+        <div class="store-badges-bar">
+            <img src="images.png" alt="Delivery" class="badge-img">
+            <img src="CASH.jpg" alt="Cash" class="badge-img">
+            <img src="VISA.JPG" alt="Visa" class="badge-img">
+            <img src="I BURAQ.png" alt="iBuraq" class="badge-img">
         </div>
     </header>
 
@@ -430,7 +462,7 @@
             <strong>📢 </strong> <span id="adminNoticeText"></span>
         </div>
 
-        <!-- واجهة عرض شبكة الأقسام الرئيسية (تفتح فوراً) -->
+        <!-- واجهة عرض شبكة الأقسام الرئيسية -->
         <div id="categoriesHomeView">
             <h2 style="font-size: 18px; color: #880e4f; margin-bottom: 15px; border-bottom: 2px solid #f8bbd0; padding-bottom: 8px;">✨ أقسام المعرض</h2>
             <div id="categoriesGrid" class="categories-grid">جاري تحميل الأقسام...</div>
@@ -488,7 +520,6 @@
         let globalLogoUrl = "";
         let loadedCategories = [];
 
-        // عداد الزيارات الفوري في الخلفية
         async function setupVisitorCounter() {
             try {
                 const statsRef = doc(db, "settings", "stats");
@@ -501,7 +532,6 @@
             }
         }
 
-        // ✅ التحقق الأمني التلقائي من حساب الوسيطة
         async function checkAgentSession() {
             let loggedAgentName = localStorage.getItem('eva_logged_agent');
             let statusText = document.getElementById('loginStatusText');
@@ -517,7 +547,6 @@
                         }
                     });
 
-                    // إذا تم حذف الوسيطة من لوحة التحكم، يتم إخراجها وإشعارها فوراً
                     if(!agentExists) {
                         localStorage.removeItem('eva_logged_agent');
                         alert('عذراً، تم إلغاء صلاحية هذا الحساب من الإدارة.');
@@ -540,13 +569,11 @@
             }
         }
 
-        // تحميل الصفحة الأولية (فقط اللوغو، الإرسالية، والأقسام لتظهر خلال أقل من ثانية)
         async function initCatalogFast() {
             setupVisitorCounter();
             await checkAgentSession();
 
             try {
-                // جلب اللوغو والإرسالية والأقسام بالتوازي لضمان السرعة القصوى
                 const [logoDoc, noticeDoc, catSnapshot] = await Promise.all([
                     getDoc(doc(db, "settings", "logo")),
                     getDoc(doc(db, "settings", "notice")),
@@ -588,7 +615,6 @@
             }
         }
 
-        // فتح القسم وجلب منتجاته الخاصة به فقط (تحميل فوري وسريع عند النقر)
         window.openCategory = async function(catId, catName) {
             document.getElementById('categoriesHomeView').style.display = 'none';
             
@@ -605,7 +631,6 @@
                 document.getElementById('sectionsContainer').appendChild(targetSec);
 
                 try {
-                    // جلب منتجات هذا القسم المحدد فقط من السحابة بناءً على الid أو الـ name
                     const prodRef = collection(db, "products");
                     const q = query(prodRef, where("category", "in", [catId, catName]));
                     const prodSnap = await getDocs(q);
