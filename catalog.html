@@ -68,6 +68,30 @@
             font-weight: bold;
         }
 
+        /* تنسيق زر المتابعة في المساحة المطلوبة أسفل العنوان */
+        .social-promo-box {
+            text-align: center;
+            margin: 15px 0 5px 0;
+        }
+        .social-promo-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 9px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(173, 20, 87, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #d4af37;
+        }
+        .social-promo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(173, 20, 87, 0.4);
+            background: linear-gradient(135deg, #ad1457 0%, #880e4f 100%);
+        }
+
         .container {
             max-width: 900px;
             margin: 20px auto;
@@ -384,13 +408,20 @@
 
     <div class="agent-login-bar" id="agentLoginBar">
         <span id="loginStatusText">خاص بالوسيطات المعتمدات:</span>
-        <button class="agent-login-btn" onclick="openLoginModal()" id="loginBtnUI">دخول الوسيطات</button>
+        <button class="agent-login-btn" onclick="openLoginModal()" id="loginBtnUI">تسجيل الدخول</button>
     </div>
 
     <header>
         <img id="display-logo" alt="Logo">
         <h1>معرض إيفا براند</h1>
         <p>عالم من الهدايا الفاخرة </p>
+
+        <!-- زر متابعة السوشيال ميديا المضاف حديثاً في المكان المحدد تماماً -->
+        <div class="social-promo-box">
+            <a href="https://linky.ps/eva" target="_blank" class="social-promo-btn">
+                ✨ تابعوا حساباتنا وعروضنا الحصرية هنا 👈
+            </a>
+        </div>
     </header>
 
     <div class="container">
