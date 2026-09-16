@@ -136,8 +136,18 @@
     window.updateProductCodePreview = function() {
         const selectedCat = document.getElementById('pCategory').value;
         if (!selectedCat) return;
+        
         const catProducts = allProducts.filter(p => p.category === selectedCat);
-        let nextNum = catProducts.length + 1;
+        
+        let maxNum = 0;
+        catProducts.filter(p => p.code).forEach(p => {
+            let numericPart = parseInt(p.code.replace(selectedCat, ''));
+            if (!isNaN(numericPart) && numericPart > maxNum) {
+                maxNum = numericPart;
+            }
+        });
+
+        let nextNum = maxNum + 1;
         document.getElementById('pCode').value = selectedCat + nextNum;
     }
 
@@ -282,7 +292,6 @@
         }
     }
 
-    // دالة تحديث صور المنتج الموجود برمزه
     window.updateProductImageByCode = async function() {
         let code = document.getElementById('updateProdCode').value.trim().toUpperCase();
         const filesInput = document.getElementById('updateProdImages');
@@ -316,7 +325,6 @@
         }
     }
 
-    // دالة تحديث أسعار المنتج برمزه (للعروض والتخفيضات)
     window.updateProductPricesByCode = async function() {
         let code = document.getElementById('updatePriceCode').value.trim().toUpperCase();
         let newPrice = document.getElementById('newPrice').value.trim();
