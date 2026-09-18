@@ -76,17 +76,21 @@
             font-weight: bold;
         }
 
-        /* تنسيق زر المتابعة */
+        /* تنسيق الأزرار الثلاثة المجتمعة */
         .social-promo-box {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
             margin: 15px 0 10px 0;
+            flex-wrap: wrap;
         }
         .social-promo-btn {
             display: inline-block;
             background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%);
             color: #fff;
             text-decoration: none;
-            padding: 9px 18px;
+            padding: 9px 16px;
             border-radius: 25px;
             font-size: 13px;
             font-weight: bold;
@@ -453,10 +457,16 @@
         <h1>معرض إيفا براند</h1>
         <p>عالم من الهدايا الفاخرة</p>
 
-        <!-- زر متابعة السوشيال ميديا -->
+        <!-- الأزرار الثلاثة بدقة -->
         <div class="social-promo-box">
             <a href="https://linky.ps/eva" target="_blank" class="social-promo-btn">
-                ✨ تابعوا حساباتنا وعروضنا الحصرية هنا 👈
+                ✨ تابعونا
+            </a>
+            <a href="https://www.google.com/maps?q=32.1273809,35.1433041&z=17&hl=en" target="_blank" class="social-promo-btn">
+                📍 موقعنا
+            </a>
+            <a href="https://evaproducts.github.io/catalog/" target="_blank" class="social-promo-btn">
+                💼 فريق المسوقين
             </a>
         </div>
 
@@ -467,7 +477,7 @@
             <div class="payment-pill">iBuraq</div>
         </div>
 
-        <!-- عبارة التوصيل المضافة -->
+        <!-- عبارة التوصيل -->
         <div class="delivery-notice-bar">
             🚚 متوفر التوصيل لكافة مناطق الضفة، القدس، والداخل 📍
         </div>
