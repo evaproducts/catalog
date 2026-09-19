@@ -23,11 +23,13 @@
         .stat-value { font-size: 13px; font-weight: 700; color: #4CAF50; }
         .stat-value.suppliers { color: #ff9800; }
         .stat-value.customers { color: #03a9f4; }
+        .stat-value.orders { color: #ffeb3b; }
 
         .actions-section, .sections-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
         .btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; color: #fff; }
         .btn-input { background-color: #2196F3; }
         .btn-view { background-color: #333; border: 1px solid #555; }
+        .btn-orders { background-color: #ff9800; color: #121212; font-weight: 700; }
         
         .section-btn { width: 100%; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: #282828; color: #fff; border: 1px solid #3a3a3a; }
         .section-btn.suppliers { border-right: 5px solid #ff9800; }
@@ -66,6 +68,15 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; width: 100%; max-width: 380px; border: 1px solid #444; text-align: right; }
         .close-modal { background: #444; color: #fff; margin-top: 10px; border: none; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; }
+
+        /* تنسيقات شاشة الطلبيات الخاصة */
+        .top-stats-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
+        .top-stat-box { flex: 1; background: #252525; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
+        .top-stat-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
+        .top-stat-value { font-size: 14px; font-weight: 700; color: #ff9800; }
+        .header-main-box { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .header-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; background: #252525; padding: 15px; border-radius: 12px; border: 1px solid #444; }
+        .search-section { display: flex; gap: 10px; margin-bottom: 15px; background: #2a2a2a; padding: 10px; border-radius: 8px; align-items: center; }
     </style>
 </head>
 <body>
@@ -81,25 +92,27 @@
         </form>
     </div>
 
-    <!-- 1. الرئيسية -->
+    <!-- 1. الرئيسية (حسب طلبك: قسم الإدخال، تحته عرض التقارير، تحته قسم الطلبيات) -->
     <div id="screen-home" class="screen center-box">
         <div class="header-section">
             <h1>دير ستيل</h1>
-            <div class="subtitle">نظام إدارة الحسابات والموردين</div>
+            <div class="subtitle">نظام إدارة الحسابات والموردين والطلبيات</div>
         </div>
         <div class="dashboard-stats">
             <div class="stat-card"><div class="stat-title">الصندوق</div><div class="stat-value" id="homeCash">0.00</div></div>
             <div class="stat-card"><div class="stat-title">الموردين</div><div class="stat-value suppliers" id="homeSuppliers">0.00</div></div>
             <div class="stat-card"><div class="stat-title">الذمم المدينة</div><div class="stat-value customers" id="homeCustomers">0.00</div></div>
+            <div class="stat-card"><div class="stat-title">الطلبيات</div><div class="stat-value orders" id="homeOrdersCount">0</div></div>
         </div>
         <div class="actions-section">
-            <button class="btn btn-input" onclick="showScreen('screen-input-menu')">➕ إدخال حركة جديدة</button>
-            <button class="btn btn-view" onclick="showScreen('screen-view-menu'); loadReports();">📊 عرض التقارير والحسابات</button>
+            <button class="btn btn-input" onclick="showScreen('screen-input-menu')">➕ قسم الإدخال</button>
+            <button class="btn btn-view" onclick="showScreen('screen-view-menu'); loadReports();">📊 قسم عرض التقارير</button>
+            <button class="btn btn-orders" onclick="showScreen('screen-customer-orders'); clearForm(); loadSearchDropdown();">📦 قسم الطلبيات</button>
         </div>
         <button class="back-btn" onclick="logout()" style="color:#ff5252; border-color:#ff5252;">🔒 إقفال وتسجيل الخروج</button>
     </div>
 
-    <!-- 2. قائمة الإدخال -->
+    <!-- 2. قائمة الإدخال (النظام الأساسي) -->
     <div id="screen-input-menu" class="screen center-box">
         <h2>شاشة الإدخال</h2>
         <div class="sections-container">
@@ -110,7 +123,7 @@
         <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
-    <!-- 3. قائمة العرض -->
+    <!-- 3. قائمة العرض (النظام الأساسي) -->
     <div id="screen-view-menu" class="screen center-box">
         <h2>شاشة عرض التقارير</h2>
         <div class="sections-container">
@@ -121,7 +134,66 @@
         <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
-    <!-- 4. إدخال الموردين -->
+    <!-- شاشة الطلبيات المستقلة والجديدة -->
+    <div id="screen-customer-orders" class="screen" style="max-width: 1050px;">
+        <div class="header-main-box">
+            <div class="top-stat-box">
+                <div class="top-stat-title">عدد الطلبيات المضافة</div>
+                <div class="top-stat-value" id="totalOrdersCount">0</div>
+            </div>
+            <h2 style="flex: 2; border: none; margin: 0; padding: 0; color: #ffeb3b;">شاشة إدارة طلبيات الزبائن</h2>
+            <div class="top-stat-box">
+                <div class="top-stat-title">مجموع سعر الطلبيات</div>
+                <div class="top-stat-value" id="totalOrdersSum" style="color: #4CAF50;">0.00 شيكل</div>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;"><label>بحث وعرض طلبية (حسب اسم الزبون)</label><select id="searchCustSelect" onchange="loadOrderByCustomer()"><option value="">-- اختر الزبون لعرض طلبيته --</option></select></div>
+            <button class="btn btn-delete" onclick="deleteCurrentOrder()" style="height: 40px; margin-top: 17px; background: #f44336; width: auto; padding: 0 15px;">🗑️ حذف الطلبية الحالية</button>
+        </div>
+
+        <div class="header-controls">
+            <div class="form-group">
+                <label>رقم الطلبية (مسلسل)</label>
+                <input type="text" id="orderNumber" readonly placeholder="تلقائي" style="background:#1a1a1a; color:#ff9800; font-weight:bold;">
+            </div>
+            <div class="form-group">
+                <label>اسم الزبون</label>
+                <input type="text" id="customerName" placeholder="أدخل اسم الزبون">
+            </div>
+            <div class="form-group">
+                <label>تكلفة الطلبية الإجمالية</label>
+                <input type="text" id="orderCost" readonly placeholder="0.00" style="background:#1a1a1a; color:#4CAF50; font-weight:bold;">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الصنف</th>
+                        <th>الكمية</th>
+                        <th>سعر القطعة</th>
+                        <th>المجموع (تلقائي)</th>
+                        <th>ملاحظات</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsTableBody"></tbody>
+            </table>
+        </div>
+
+        <button class="btn" style="background-color: #333; border: 1px dashed #777; font-size: 12px; padding: 6px 12px; margin-top: 10px; width: auto;" onclick="addRow()">➕ إضافة صنف جديد للطلبية</button>
+
+        <div class="actions-section" style="flex-direction: row; margin-top: 15px;">
+            <button class="save-btn" onclick="saveOrder()" style="background-color: #4CAF50; color: #fff;">💾 حفظ الطلبية</button>
+            <button class="save-btn" onclick="clearForm()" style="background-color: #2196F3; color: #fff;">🔄 طلبية جديدة (فراغ)</button>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للقائمة الرئيسية</button>
+    </div>
+
+    <!-- 4. إدخال الموردين (النظام الأساسي) -->
     <div id="screen-input-suppliers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #ff9800;">قسم الموردين - إدخال وتعديل حركة</h2>
         <div class="top-actions">
@@ -142,7 +214,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 5. إدخال الزبائن -->
+    <!-- 5. إدخال الزبائن (النظام الأساسي) -->
     <div id="screen-input-customers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #03a9f4;">قسم الذمم المدينة - إدخال وتعديل حركة</h2>
         <div class="top-actions">
@@ -163,7 +235,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 6. إدخال الصندوق -->
+    <!-- 6. إدخال الصندوق (النظام الأساسي) -->
     <div id="screen-input-cash" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #4CAF50;">قسم الصندوق - حركة نقدية وتعديل</h2>
         <div class="top-actions" style="margin-bottom: 12px;">
@@ -180,7 +252,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 7. تقارير الموردين -->
+    <!-- 7. تقارير الموردين (النظام الأساسي) -->
     <div id="screen-report-suppliers" class="screen">
         <h2 style="color: #ff9800;">تقارير الموردين</h2>
         <div class="search-box">
@@ -203,7 +275,7 @@
         <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 8. تقارير الزبائن -->
+    <!-- 8. تقارير الزبائن (النظام الأساسي) -->
     <div id="screen-report-customers" class="screen">
         <h2 style="color: #03a9f4;">تقارير الذمم المدينة (الزبائن)</h2>
         <div class="search-box">
@@ -226,7 +298,7 @@
         <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 9. تقارير الصندوق -->
+    <!-- 9. تقارير الصندوق (النظام الأساسي) -->
     <div id="screen-report-cash" class="screen">
         <h2 style="color: #4CAF50;">تقارير وحركات الصندوق</h2>
         <div class="search-box">
@@ -270,7 +342,7 @@
         <div class="modal-content">
             <h3 style="color:#ff9800;">تعديل حركة مورد برقمها</h3>
             <div class="form-group"><label>أدخل رقم الحركة</label><input type="number" id="inputEditSupId" placeholder="مثال: 1"></div>
-            <button class="save-btn" style="background:#ff9800; color:#121212; margin-top:10px;" onclick="fetchSupForEdit()">استرجاع للحدمة والتعديل</button>
+            <button class="save-btn" style="background:#ff9800; color:#121212; margin-top:10px;" onclick="fetchSupForEdit()">استرجاع للخدمة والتعديل</button>
             <button class="close-modal" onclick="closeModal('editSupModal')">إلغاء</button>
         </div>
     </div>
@@ -297,7 +369,7 @@
         <div class="modal-content">
             <h3 style="color:#03a9f4;">تعديل حركة زبون برقمها</h3>
             <div class="form-group"><label>أدخل رقم الحركة</label><input type="number" id="inputEditCustId" placeholder="مثال: 1"></div>
-            <button class="save-btn" style="background:#03a9f4; color:#121212; margin-top:10px;" onclick="fetchCustForEdit()">استرجاع للحدمة والتعديل</button>
+            <button class="save-btn" style="background:#03a9f4; color:#121212; margin-top:10px;" onclick="fetchCustForEdit()">استرجاع للخدمة والتعديل</button>
             <button class="close-modal" onclick="closeModal('editCustModal')">إلغاء</button>
         </div>
     </div>
@@ -306,12 +378,12 @@
         <div class="modal-content">
             <h3 style="color:#4CAF50;">تعديل حركة صندوق برقمها</h3>
             <div class="form-group"><label>أدخل رقم الحركة</label><input type="number" id="inputEditCashId" placeholder="مثال: 1"></div>
-            <button class="save-btn" style="background:#4CAF50; color:#121212; margin-top:10px;" onclick="fetchCashForEdit()">استرجاع للحدمة والتعديل</button>
+            <button class="save-btn" style="background:#4CAF50; color:#121212; margin-top:10px;" onclick="fetchCashForEdit()">استرجاع للخدمة والتعديل</button>
             <button class="close-modal" onclick="closeModal('editCashModal')">إلغاء</button>
         </div>
     </div>
 
-    <!-- كود الجافاسكريبت المحدث والمدعوم بأرقام الحركات والتعديل -->
+    <!-- كود الجافاسكريبت الموحد والكامل -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -372,15 +444,178 @@
             document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
+        // دوال قسم الطلبيات
+        let currentDocId = null;
+
+        window.addRow = function(item = {}) {
+            let tbody = document.getElementById('itemsTableBody');
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="item-name" value="${item.name || ''}" placeholder="اسم الصنف"></td>
+                <td><input type="number" class="item-qty" value="${item.qty || 1}" step="any" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="item-price" value="${item.price || 0}" step="any" oninput="calculateRow(this)"></td>
+                <td><input type="text" class="item-total" value="${item.total || 0}" readonly style="background:#1a1a1a; color:#4CAF50; font-weight:bold;"></td>
+                <td><input type="text" class="item-notes" value="${item.notes || ''}" placeholder="ملاحظات"></td>
+                <td><button type="button" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;" onclick="this.closest('tr').remove(); calculateGrandTotal();">❌</button></td>
+            `;
+            tbody.appendChild(row);
+            calculateGrandTotal();
+        }
+
+        window.calculateRow = function(input) {
+            let row = input.closest('tr');
+            let qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            let price = parseFloat(row.querySelector('.item-price').value) || 0;
+            let total = qty * price;
+            row.querySelector('.item-total').value = total.toFixed(2);
+            calculateGrandTotal();
+        }
+
+        window.calculateGrandTotal = function() {
+            let totals = document.querySelectorAll('.item-total');
+            let grandTotal = 0;
+            totals.forEach(t => { grandTotal += parseFloat(t.value) || 0; });
+            document.getElementById('orderCost').value = grandTotal.toFixed(2);
+        }
+
+        window.clearForm = async function() {
+            currentDocId = null;
+            document.getElementById('customerName').value = '';
+            document.getElementById('orderCost').value = '0.00';
+            document.getElementById('itemsTableBody').innerHTML = '';
+            addRow();
+            loadSearchDropdown();
+            updateTopStats();
+        }
+
+        window.saveOrder = async function() {
+            let customerName = document.getElementById('customerName').value.trim();
+            if(!customerName) return alert('الرجاء إدخال اسم الزبون');
+
+            let items = [];
+            document.querySelectorAll('#itemsTableBody tr').forEach(row => {
+                items.push({
+                    name: row.querySelector('.item-name').value,
+                    qty: row.querySelector('.item-qty').value,
+                    price: row.querySelector('.item-price').value,
+                    total: row.querySelector('.item-total').value,
+                    notes: row.querySelector('.item-notes').value
+                });
+            });
+
+            if(items.length === 0) return alert('الرجاء إضافة صنف واحد على الأقل للطلبية');
+
+            let orderData = {
+                customerName: customerName,
+                totalCost: document.getElementById('orderCost').value,
+                items: items,
+                timestamp: Date.now()
+            };
+
+            try {
+                if(currentDocId) {
+                    await updateDoc(doc(db, "customer_orders", currentDocId), orderData);
+                    alert('تم تحديث الطلبية بنجاح!');
+                } else {
+                    let docRef = await addDoc(collection(db, "customer_orders"), orderData);
+                    currentDocId = docRef.id;
+                    alert('تم حفظ الطلبية بنجاح!');
+                }
+                loadSearchDropdown();
+                updateTopStats();
+            } catch(e) { alert('خطأ في الحفظ: ' + e.message); }
+        }
+
+        async function loadSearchDropdown() {
+            let select = document.getElementById('searchCustSelect');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- اختر الزبون لعرض طلبيته --</option>';
+            try {
+                let snap = await getDocs(collection(db, "customer_orders"));
+                let rows = [];
+                snap.forEach(d => { rows.push({ id: d.id, ...d.data() }); });
+                rows.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+                rows.forEach((d, index) => {
+                    let orderNum = index + 1;
+                    let opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = d.customerName + " (رقم الطلب: " + orderNum + ")";
+                    select.appendChild(opt);
+                });
+                document.getElementById('orderNumber').value = rows.length + 1;
+            } catch(e) { console.log(e); }
+        }
+
+        async function updateTopStats() {
+            try {
+                let snap = await getDocs(collection(db, "customer_orders"));
+                let totalCount = snap.size;
+                let sumCost = 0;
+                snap.forEach(d => {
+                    sumCost += parseFloat(d.data().totalCost) || 0;
+                });
+                if(document.getElementById('totalOrdersCount')) {
+                    document.getElementById('totalOrdersCount').innerText = totalCount;
+                    document.getElementById('totalOrdersSum').innerText = sumCost.toFixed(2) + " شيكل";
+                }
+            } catch(e) { console.log(e); }
+        }
+
+        window.loadOrderByCustomer = async function() {
+            let docId = document.getElementById('searchCustSelect').value;
+            if(!docId) return clearForm();
+
+            try {
+                let snap = await getDocs(collection(db, "customer_orders"));
+                let rows = [];
+                snap.forEach(d => { rows.push({ id: d.id, ...d.data() }); });
+                rows.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+                let foundIndex = -1;
+                let foundData = null;
+                for(let i = 0; i < rows.length; i++) {
+                    if(rows[i].id === docId) {
+                        foundIndex = i + 1;
+                        foundData = rows[i];
+                        break;
+                    }
+                }
+
+                if(foundData) {
+                    currentDocId = foundData.id;
+                    document.getElementById('orderNumber').value = foundIndex;
+                    document.getElementById('customerName').value = foundData.customerName;
+                    document.getElementById('orderCost').value = foundData.totalCost;
+                    
+                    let tbody = document.getElementById('itemsTableBody');
+                    tbody.innerHTML = '';
+                    foundData.items.forEach(item => addRow(item));
+                }
+            } catch(e) { console.log(e); }
+        }
+
+        window.deleteCurrentOrder = async function() {
+            if(!currentDocId) return alert('الرجاء اختيار طلبية لعرضها ثم حذفها');
+            if(confirm('هل أنت متأكد من حذف هذه الطلبية نهائياً (إخراج/تسليم الطلبية)؟')) {
+                try {
+                    await deleteDoc(doc(db, "customer_orders", currentDocId));
+                    alert('تم حذف الطلبية بنجاح!');
+                    clearForm();
+                    loadSearchDropdown();
+                    updateTopStats();
+                } catch(e) { alert('خطأ في الحذف: ' + e.message); }
+            }
+        }
+
+        // دوال الموردين والزبائن والصندوق الأصلية
         window.addNewSupplier = async function() {
             let name = document.getElementById('newSupName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم المورد');
             try {
                 let q = query(collection(db, "suppliers_list"), where("name", "==", name));
                 let snap = await getDocs(q);
-                if(!snap.empty) {
-                    return alert('هذا المورد موجود مسبقاً في القائمة!');
-                }
+                if(!snap.empty) return alert('هذا المورد موجود مسبقاً في القائمة!');
 
                 await addDoc(collection(db, "suppliers_list"), { name: name });
                 alert('تم حفظ المورد بنجاح');
@@ -392,6 +627,7 @@
 
         window.loadSuppliersDropdown = async function(elementId) {
             let select = document.getElementById(elementId);
+            if(!select) return;
             let currentVal = select.value;
             select.innerHTML = '<option value="">-- عرض كافة الموردين --</option>';
             try {
@@ -413,6 +649,7 @@
 
         window.loadDeleteSuppliersDropdown = async function() {
             let select = document.getElementById('delSupSelect');
+            if(!select) return;
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "suppliers_list"));
@@ -450,7 +687,6 @@
             }
         }
 
-        // جلب حركة المورد للتعديل برقم الحركة
         window.fetchSupForEdit = async function() {
             let targetId = parseInt(document.getElementById('inputEditSupId').value);
             if(!targetId) return alert('الرجاء إدخال رقم حركة صحيح');
@@ -520,9 +756,7 @@
             try {
                 let q = query(collection(db, "customers_list"), where("name", "==", name));
                 let snap = await getDocs(q);
-                if(!snap.empty) {
-                    return alert('هذا الزبون موجود مسبقاً في القائمة!');
-                }
+                if(!snap.empty) return alert('هذا الزبون موجود مسبقاً في القائمة!');
 
                 await addDoc(collection(db, "customers_list"), { name: name });
                 alert('تم حفظ الزبون بنجاح');
@@ -534,6 +768,7 @@
 
         window.loadCustomersDropdown = async function(elementId) {
             let select = document.getElementById(elementId);
+            if(!select) return;
             let currentVal = select.value;
             select.innerHTML = '<option value="">-- عرض كافة الزبائن --</option>';
             try {
@@ -555,6 +790,7 @@
 
         window.loadDeleteCustomersDropdown = async function() {
             let select = document.getElementById('delCustSelect');
+            if(!select) return;
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "customers_list"));
@@ -592,7 +828,6 @@
             }
         }
 
-        // جلب حركة الزبون للتعديل برقم الحركة
         window.fetchCustForEdit = async function() {
             let targetId = parseInt(document.getElementById('inputEditCustId').value);
             if(!targetId) return alert('الرجاء إدخال رقم حركة صحيح');
@@ -656,7 +891,6 @@
             } catch(err) { alert('خطأ: ' + err.message); }
         });
 
-        // جلب حركة الصندوق للتعديل برقم الحركة
         window.fetchCashForEdit = async function() {
             let targetId = parseInt(document.getElementById('inputEditCashId').value);
             if(!targetId) return alert('الرجاء إدخال رقم حركة صحيح');
@@ -736,6 +970,9 @@
                     else totalCash -= d.amount;
                 });
                 document.getElementById('homeCash').innerText = totalCash.toFixed(2);
+
+                let ordersSnap = await getDocs(collection(db, "customer_orders"));
+                document.getElementById('homeOrdersCount').innerText = ordersSnap.size;
             } catch(e) { console.log(e); }
         }
 
@@ -763,7 +1000,6 @@
                 let allRows = [];
                 snap.forEach(doc => { allRows.push(doc.data()); });
                 
-                // الترتيب الزمني العام لتحديد رقم الحركة بدقة
                 allRows.sort((a, b) => (a.date === b.date) ? ((a.timestamp || 0) - (b.timestamp || 0)) : (a.date.localeCompare(b.date)));
 
                 let runningBalance = 0;
@@ -856,7 +1092,6 @@
             loadCashReport();
         }
 
-        // تقرير الصندوق مع رقم الحركة والرصيد المتراكم لكل حركة
         window.loadCashReport = async function() {
             let startDate = document.getElementById('cashStartDate').value;
             let endDate = document.getElementById('cashEndDate').value;
@@ -886,7 +1121,7 @@
                     tableRows.push(`<tr><td>#${moveNum}</td><td>${d.date}</td><td style="color:${d.type==='قبض'?'#4CAF50':'#ff5252'}">${d.type}</td><td>${d.amount}</td><td style="font-weight:bold; color:#4CAF50;">${runningCash.toFixed(2)}</td><td>${d.notes || '-'}</td></tr>`);
                 });
 
-                tbody.innerHTML = tableRows.reverse().join(''); // عرض الأحدث في الأعلى أو حسب رغبتك
+                tbody.innerHTML = tableRows.reverse().join('');
                 document.getElementById('totalCashBalance').innerText = totalNet.toFixed(2) + " شيكل";
             } catch(e) { console.log(e); }
         }
