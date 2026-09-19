@@ -15,10 +15,8 @@
         h1, h2 { color: #ffffff; text-align: center; margin-bottom: 15px; font-weight: 700; font-size: 20px; }
         .subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 15px; }
         
-        /* شاشة تسجيل الدخول */
         #screen-login { background: #1e1e1e; border: 2px solid #ff9800; }
         
-        /* الشاشة الرئيسية */
         .dashboard-stats { display: flex; gap: 8px; margin-bottom: 20px; }
         .stat-card { flex: 1; background: #282828; border: 1px solid #3a3a3a; border-radius: 10px; padding: 10px 5px; text-align: center; }
         .stat-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
@@ -31,13 +29,11 @@
         .btn-input { background-color: #2196F3; }
         .btn-view { background-color: #333; border: 1px solid #555; }
         
-        /* أزرار الأقسام */
         .section-btn { width: 100%; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: #282828; color: #fff; border: 1px solid #3a3a3a; }
         .section-btn.suppliers { border-right: 5px solid #ff9800; }
         .section-btn.customers { border-right: 5px solid #03a9f4; }
         .section-btn.cashbox { border-right: 5px solid #4CAF50; }
 
-        /* نماذج الإدخال */
         .top-actions { display: flex; gap: 6px; margin-bottom: 15px; }
         .action-btn { flex: 1; padding: 8px 4px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; text-align: center; }
         .form-group { margin-bottom: 12px; text-align: right; }
@@ -46,11 +42,12 @@
         .calc-box { background: #252525; padding: 10px; border-radius: 8px; border: 1px dashed #555; margin-bottom: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #4CAF50; }
         .save-btn { width: 100%; padding: 12px; color: #121212; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
         
-        /* التقارير والجداول */
         .balances-container { display: flex; gap: 10px; margin-bottom: 15px; }
         .balance-card { flex: 1; background: #252525; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
         .balance-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
         .balance-value { font-size: 15px; font-weight: 700; }
+        
+        .search-box { background: #252525; padding: 10px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; }
         
         .table-responsive { width: 100%; overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #333; }
         table { width: 100%; border-collapse: collapse; background: #252525; min-width: 600px; }
@@ -68,45 +65,28 @@
 </head>
 <body>
 
-    <!-- 0. شاشة تسجيل الدخول -->
+    <!-- 0. تسجيل الدخول -->
     <div id="screen-login" class="screen active center-box">
         <h2>دير ستيل</h2>
         <div class="subtitle">يرجى تسجيل الدخول للوصول للنظام</div>
         <form onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label>اسم المستخدم</label>
-                <input type="text" id="loginUser" required placeholder="أدخل اسم المستخدم">
-            </div>
-            <div class="form-group">
-                <label>كلمة المرور</label>
-                <input type="password" id="loginPass" required placeholder="أدخل كلمة المرور">
-            </div>
+            <div class="form-group"><label>اسم المستخدم</label><input type="text" id="loginUser" required placeholder="أدخل اسم المستخدم"></div>
+            <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPass" required placeholder="أدخل كلمة المرور"></div>
             <button type="submit" class="save-btn" style="background:#ff9800; margin-top:10px;">تسجيل الدخول</button>
         </form>
     </div>
 
-    <!-- 1. الشاشة الرئيسية -->
+    <!-- 1. الرئيسية -->
     <div id="screen-home" class="screen center-box">
         <div class="header-section">
             <h1>دير ستيل</h1>
-            <div class="subtitle">نظام إدارة الحسابات والموردين (محمي بكلمة مرور)</div>
+            <div class="subtitle">نظام إدارة الحسابات والموردين</div>
         </div>
-
         <div class="dashboard-stats">
-            <div class="stat-card">
-                <div class="stat-title">الصندوق</div>
-                <div class="stat-value" id="homeCash">0.00</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">الموردين</div>
-                <div class="stat-value suppliers" id="homeSuppliers">0.00</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">الذمم المدينة</div>
-                <div class="stat-value customers" id="homeCustomers">0.00</div>
-            </div>
+            <div class="stat-card"><div class="stat-title">الصندوق</div><div class="stat-value" id="homeCash">0.00</div></div>
+            <div class="stat-card"><div class="stat-title">الموردين</div><div class="stat-value suppliers" id="homeSuppliers">0.00</div></div>
+            <div class="stat-card"><div class="stat-title">الذمم المدينة</div><div class="stat-value customers" id="homeCustomers">0.00</div></div>
         </div>
-
         <div class="actions-section">
             <button class="btn btn-input" onclick="showScreen('screen-input-menu')">➕ إدخال حركة جديدة</button>
             <button class="btn btn-view" onclick="showScreen('screen-view-menu'); loadReports();">📊 عرض التقارير والحسابات</button>
@@ -114,36 +94,32 @@
         <button class="back-btn" onclick="logout()" style="color:#ff5252; border-color:#ff5252;">🔒 إقفال وتسجيل الخروج</button>
     </div>
 
-    <!-- 2. قائمة شاشة الإدخال -->
+    <!-- 2. قائمة الإدخال -->
     <div id="screen-input-menu" class="screen center-box">
         <h2>شاشة الإدخال</h2>
-        <div class="subtitle">اختر القسم لإضافة الحركة المالية</div>
         <div class="sections-container">
-            <button class="section-btn suppliers" onclick="showScreen('screen-input-suppliers'); loadSuppliersDropdown();"><span>➕ قسم الموردين</span><span>🏭</span></button>
-            <button class="section-btn customers" onclick="showScreen('screen-input-customers'); loadCustomersDropdown();"><span>➕ قسم الذمم المدينة</span><span>👥</span></button>
+            <button class="section-btn suppliers" onclick="showScreen('screen-input-suppliers'); loadSuppliersDropdown('supNameSelect');"><span>➕ قسم الموردين</span><span>🏭</span></button>
+            <button class="section-btn customers" onclick="showScreen('screen-input-customers'); loadCustomersDropdown('custNameSelect');"><span>➕ قسم الذمم المدينة</span><span>👥</span></button>
             <button class="section-btn cashbox" onclick="showScreen('screen-input-cash')"><span>➕ حركة الصندوق</span><span>💰</span></button>
         </div>
-        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للشاشة الرئيسية</button>
+        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
-    <!-- 3. قائمة شاشة العرض والتقارير -->
+    <!-- 3. قائمة العرض -->
     <div id="screen-view-menu" class="screen center-box">
         <h2>شاشة عرض التقارير</h2>
-        <div class="subtitle">اختر القسم لعرض السجل التراكمي</div>
         <div class="sections-container">
-            <button class="section-btn suppliers" onclick="showScreen('screen-report-suppliers'); loadSupplierReport();"><span>📊 تقارير الموردين</span><span>🏭</span></button>
-            <button class="section-btn customers" onclick="showScreen('screen-report-customers'); loadCustomerReport();"><span>📊 تقارير الذمم المدينة</span><span>👥</span></button>
+            <button class="section-btn suppliers" onclick="showScreen('screen-report-suppliers'); initSupplierReport();"><span>📊 تقارير الموردين</span><span>🏭</span></button>
+            <button class="section-btn customers" onclick="showScreen('screen-report-customers'); initCustomerReport();"><span>📊 تقارير الذمم المدينة</span><span>👥</span></button>
             <button class="section-btn cashbox" onclick="showScreen('screen-report-cash'); loadCashReport();"><span>📊 تقارير الصندوق</span><span>💰</span></button>
         </div>
-        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للشاشة الرئيسية</button>
+        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
     <!-- 4. إدخال الموردين -->
     <div id="screen-input-suppliers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #ff9800;">قسم الموردين - إدخال حركة</h2>
-        <div class="top-actions">
-            <button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button>
-        </div>
+        <div class="top-actions"><button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button></div>
         <form id="supplierForm">
             <div class="form-group"><label>اختر المورد</label><select id="supNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="supDate" required></div>
@@ -156,12 +132,10 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 5. إدخال الذمم المدينة -->
+    <!-- 5. إدخال الزبائن -->
     <div id="screen-input-customers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #03a9f4;">قسم الذمم المدينة - إدخال حركة</h2>
-        <div class="top-actions">
-            <button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button>
-        </div>
+        <div class="top-actions"><button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button></div>
         <form id="customerForm">
             <div class="form-group"><label>اسم الزبون</label><select id="custNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="custDate" required></div>
@@ -190,8 +164,15 @@
     <!-- 7. تقارير الموردين -->
     <div id="screen-report-suppliers" class="screen">
         <h2 style="color: #ff9800;">تقارير الموردين</h2>
+        <div class="search-box">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>تصفية حسب المورد:</label>
+                <select id="reportSupSelect" onchange="loadSupplierReport()"><option value="">-- عرض الكل --</option></select>
+            </div>
+        </div>
         <div class="balances-container">
-            <div class="balance-card"><div class="balance-title">إجمالي ذمم كافة الموردين</div><div class="balance-value" id="totalSupBalance" style="color:#ff9800;">0.00</div></div>
+            <div class="balance-card"><div class="balance-title" id="selectedSupTitle">رصيد المورد المحدد</div><div class="balance-value" id="selectedSupBalance" style="color:#ff9800;">0.00</div></div>
+            <div class="balance-card" style="border-color:#ff9800;"><div class="balance-title">إجمالي ذمم كافة الموردين</div><div class="balance-value" id="totalSupBalance" style="color:#ff9800;">0.00</div></div>
         </div>
         <div class="table-responsive">
             <table>
@@ -199,14 +180,21 @@
                 <tbody id="supReportTable"></tbody>
             </table>
         </div>
-        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 8. تقارير الذمم المدينة -->
+    <!-- 8. تقارير الزبائن -->
     <div id="screen-report-customers" class="screen">
         <h2 style="color: #03a9f4;">تقارير الذمم المدينة (الزبائن)</h2>
+        <div class="search-box">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>تصفية حسب الزبون:</label>
+                <select id="reportCustSelect" onchange="loadCustomerReport()"><option value="">-- عرض الكل --</option></select>
+            </div>
+        </div>
         <div class="balances-container">
-            <div class="balance-card"><div class="balance-title">إجمالي ذمم كافة الزبائن</div><div class="balance-value" id="totalCustBalance" style="color:#03a9f4;">0.00</div></div>
+            <div class="balance-card"><div class="balance-title" id="selectedCustTitle">رصيد الزبون المحدد</div><div class="balance-value" id="selectedCustBalance" style="color:#03a9f4;">0.00</div></div>
+            <div class="balance-card" style="border-color:#03a9f4;"><div class="balance-title">إجمالي ذمم كافة الزبائن</div><div class="balance-value" id="totalCustBalance" style="color:#03a9f4;">0.00</div></div>
         </div>
         <div class="table-responsive">
             <table>
@@ -214,7 +202,7 @@
                 <tbody id="custReportTable"></tbody>
             </table>
         </div>
-        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
     <!-- 9. تقارير الصندوق -->
@@ -229,10 +217,10 @@
                 <tbody id="cashReportTable"></tbody>
             </table>
         </div>
-        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- نافذة إدخال مورد جديد -->
+    <!-- النوافذ المنبثقة -->
     <div id="addSupplierModal" class="modal">
         <div class="modal-content">
             <h3>إدخال مورد جديد</h3>
@@ -242,7 +230,6 @@
         </div>
     </div>
 
-    <!-- نافذة إدخال زبون جديد -->
     <div id="addCustomerModal" class="modal">
         <div class="modal-content">
             <h3>إدخال زبون جديد</h3>
@@ -252,7 +239,7 @@
         </div>
     </div>
 
-    <!-- مكتبات وتشغيل فايربيس -->
+    <!-- كود الجافاسكريبت المحدث -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -269,7 +256,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // نظام تسجيل الدخول البسيط
         window.handleLogin = function(e) {
             e.preventDefault();
             let u = document.getElementById('loginUser').value.trim();
@@ -305,15 +291,13 @@
         window.calcSupBalance = function() {
             let goods = parseFloat(document.getElementById('supGoods').value) || 0;
             let paid = parseFloat(document.getElementById('supPaid').value) || 0;
-            let res = goods - paid;
-            document.getElementById('supCalcBox').innerText = "الرصيد الناتج: " + res.toFixed(2) + " شيكل";
+            document.getElementById('supCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
         window.calcCustBalance = function() {
             let goods = parseFloat(document.getElementById('custGoods').value) || 0;
             let paid = parseFloat(document.getElementById('custPaid').value) || 0;
-            let res = goods - paid;
-            document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + res.toFixed(2) + " شيكل";
+            document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
         window.addNewSupplier = async function() {
@@ -324,12 +308,11 @@
                 alert('تم حفظ المورد بنجاح');
                 closeModal('addSupplierModal');
                 document.getElementById('newSupName').value = '';
-                loadSuppliersDropdown();
-            } catch(e) { alert('خطأ في الحفظ: ' + e.message); }
+            } catch(e) { alert('خطأ: ' + e.message); }
         }
 
-        window.loadSuppliersDropdown = async function() {
-            let select = document.getElementById('supNameSelect');
+        window.loadSuppliersDropdown = async function(elementId) {
+            let select = document.getElementById(elementId);
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "suppliers_list"));
@@ -370,12 +353,11 @@
                 alert('تم حفظ الزبون بنجاح');
                 closeModal('addCustomerModal');
                 document.getElementById('newCustName').value = '';
-                loadCustomersDropdown();
-            } catch(e) { alert('خطأ في الحفظ: ' + e.message); }
+            } catch(e) { alert('خطأ: ' + e.message); }
         }
 
-        window.loadCustomersDropdown = async function() {
-            let select = document.getElementById('custNameSelect');
+        window.loadCustomersDropdown = async function(elementId) {
+            let select = document.getElementById(elementId);
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "customers_list"));
@@ -452,33 +434,79 @@
 
         window.loadReports = function() { updateDashboardStats(); }
 
+        // تهيئة تقارير الموردين مع جلب القائمة
+        window.initSupplierReport = async function() {
+            await loadSuppliersDropdown('reportSupSelect');
+            document.getElementById('reportSupSelect').value = "";
+            loadSupplierReport();
+        }
+
         window.loadSupplierReport = async function() {
+            let selectedSup = document.getElementById('reportSupSelect').value;
             let tbody = document.getElementById('supReportTable');
             tbody.innerHTML = '';
-            let total = 0;
+            let totalAll = 0;
+            let totalSelected = 0;
+
             try {
                 let snap = await getDocs(collection(db, "suppliers_movements"));
                 snap.forEach(doc => {
                     let d = doc.data();
-                    total += (d.goods - d.paid);
-                    tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td>${d.goods}</td><td>${d.paid}</td><td>${d.notes || '-'}</td></tr>`;
+                    let balance = (d.goods - d.paid);
+                    totalAll += balance;
+
+                    if (!selectedSup || d.name === selectedSup) {
+                        if (selectedSup) totalSelected += balance;
+                        tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td>${d.goods}</td><td>${d.paid}</td><td>${d.notes || '-'}</td></tr>`;
+                    }
                 });
-                document.getElementById('totalSupBalance').innerText = total.toFixed(2);
+
+                document.getElementById('totalSupBalance').innerText = totalAll.toFixed(2);
+                if (selectedSup) {
+                    document.getElementById('selectedSupTitle').innerText = "رصيد المورد: " + selectedSup;
+                    document.getElementById('selectedSupBalance').innerText = totalSelected.toFixed(2);
+                } else {
+                    document.getElementById('selectedSupTitle').innerText = "اختر مورداً لعرض رصيده";
+                    document.getElementById('selectedSupBalance').innerText = "0.00";
+                }
             } catch(e) { console.log(e); }
         }
 
+        // تهيئة تقارير الزبائن مع جلب القائمة
+        window.initCustomerReport = async function() {
+            await loadCustomersDropdown('reportCustSelect');
+            document.getElementById('reportCustSelect').value = "";
+            loadCustomerReport();
+        }
+
         window.loadCustomerReport = async function() {
+            let selectedCust = document.getElementById('reportCustSelect').value;
             let tbody = document.getElementById('custReportTable');
             tbody.innerHTML = '';
-            let total = 0;
+            let totalAll = 0;
+            let totalSelected = 0;
+
             try {
                 let snap = await getDocs(collection(db, "customers_movements"));
                 snap.forEach(doc => {
                     let d = doc.data();
-                    total += (d.goods - d.paid);
-                    tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td>${d.goods}</td><td>${d.paid}</td><td>${d.notes || '-'}</td></tr>`;
+                    let balance = (d.goods - d.paid);
+                    totalAll += balance;
+
+                    if (!selectedCust || d.name === selectedCust) {
+                        if (selectedCust) totalSelected += balance;
+                        tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td>${d.goods}</td><td>${d.paid}</td><td>${d.notes || '-'}</td></tr>`;
+                    }
                 });
-                document.getElementById('totalCustBalance').innerText = total.toFixed(2);
+
+                document.getElementById('totalCustBalance').innerText = totalAll.toFixed(2);
+                if (selectedCust) {
+                    document.getElementById('selectedCustTitle').innerText = "رصيد الزبون: " + selectedCust;
+                    document.getElementById('selectedCustBalance').innerText = totalSelected.toFixed(2);
+                } else {
+                    document.getElementById('selectedCustTitle').innerText = "اختر زبوناً لعرض رصيده";
+                    document.getElementById('selectedCustBalance').innerText = "0.00";
+                }
             } catch(e) { console.log(e); }
         }
 
