@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دير ستيل - نظام إدارة الحسابات والموردين</title>
+    <title>دير ستيل - تسجيل الدخول</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
@@ -14,6 +14,9 @@
         
         h1, h2 { color: #ffffff; text-align: center; margin-bottom: 15px; font-weight: 700; font-size: 20px; }
         .subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 15px; }
+        
+        /* شاشة تسجيل الدخول */
+        #screen-login { background: #1e1e1e; border: 2px solid #ff9800; }
         
         /* الشاشة الرئيسية */
         .dashboard-stats { display: flex; gap: 8px; margin-bottom: 20px; }
@@ -37,7 +40,7 @@
         /* نماذج الإدخال */
         .top-actions { display: flex; gap: 6px; margin-bottom: 15px; }
         .action-btn { flex: 1; padding: 8px 4px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; text-align: center; }
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 12px; text-align: right; }
         label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; }
         input, select, textarea { width: 100%; padding: 10px; background: #282828; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 13px; }
         .calc-box { background: #252525; padding: 10px; border-radius: 8px; border: 1px dashed #555; margin-bottom: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #4CAF50; }
@@ -59,17 +62,34 @@
         .back-btn:hover { color: #fff; border-color: #777; }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; width: 100%; max-width: 380px; border: 1px solid #444; }
+        .modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; width: 100%; max-width: 380px; border: 1px solid #444; text-align: right; }
         .close-modal { background: #444; color: #fff; margin-top: 10px; border: none; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
+    <!-- 0. شاشة تسجيل الدخول -->
+    <div id="screen-login" class="screen active center-box">
+        <h2>دير ستيل</h2>
+        <div class="subtitle">يرجى تسجيل الدخول للوصول للنظام</div>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="loginUser" required placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="loginPass" required placeholder="أدخل كلمة المرور">
+            </div>
+            <button type="submit" class="save-btn" style="background:#ff9800; margin-top:10px;">تسجيل الدخول</button>
+        </form>
+    </div>
+
     <!-- 1. الشاشة الرئيسية -->
-    <div id="screen-home" class="screen active center-box">
+    <div id="screen-home" class="screen center-box">
         <div class="header-section">
             <h1>دير ستيل</h1>
-            <div class="subtitle">نظام إدارة الحسابات والموردين (متصل بقاعدة البيانات)</div>
+            <div class="subtitle">نظام إدارة الحسابات والموردين (محمي بكلمة مرور)</div>
         </div>
 
         <div class="dashboard-stats">
@@ -91,6 +111,7 @@
             <button class="btn btn-input" onclick="showScreen('screen-input-menu')">➕ إدخال حركة جديدة</button>
             <button class="btn btn-view" onclick="showScreen('screen-view-menu'); loadReports();">📊 عرض التقارير والحسابات</button>
         </div>
+        <button class="back-btn" onclick="logout()" style="color:#ff5252; border-color:#ff5252;">🔒 إقفال وتسجيل الخروج</button>
     </div>
 
     <!-- 2. قائمة شاشة الإدخال -->
@@ -216,7 +237,7 @@
         <div class="modal-content">
             <h3>إدخال مورد جديد</h3>
             <div class="form-group"><label>اسم المورد</label><input type="text" id="newSupName"></div>
-            <button class="save-btn" style="background:#ff9800;" onclick="addNewSupplier()">حفظ المورد</button>
+            <button class="save-btn" style="background:#ff9800; margin-top:10px;" onclick="addNewSupplier()">حفظ المورد</button>
             <button class="close-modal" onclick="closeModal('addSupplierModal')">إلغاء</button>
         </div>
     </div>
@@ -226,7 +247,7 @@
         <div class="modal-content">
             <h3>إدخال زبون جديد</h3>
             <div class="form-group"><label>اسم الزبون</label><input type="text" id="newCustName"></div>
-            <button class="save-btn" style="background:#03a9f4; color:#121212;" onclick="addNewCustomer()">حفظ الزبون</button>
+            <button class="save-btn" style="background:#03a9f4; color:#121212; margin-top:10px;" onclick="addNewCustomer()">حفظ الزبون</button>
             <button class="close-modal" onclick="closeModal('addCustomerModal')">إلغاء</button>
         </div>
     </div>
@@ -247,6 +268,25 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // نظام تسجيل الدخول البسيط
+        window.handleLogin = function(e) {
+            e.preventDefault();
+            let u = document.getElementById('loginUser').value.trim();
+            let p = document.getElementById('loginPass').value.trim();
+            if(u === 'steel' && p === '12345') {
+                showScreen('screen-home');
+                updateDashboardStats();
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+            }
+        }
+
+        window.logout = function() {
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            showScreen('screen-login');
+        }
 
         const todayStr = new Date().toISOString().split('T')[0];
         document.getElementById('supDate').value = todayStr;
@@ -456,8 +496,6 @@
                 document.getElementById('totalCashBalance').innerText = total.toFixed(2) + " شيكل";
             } catch(e) { console.log(e); }
         }
-
-        updateDashboardStats();
     </script>
 </body>
 </html>
