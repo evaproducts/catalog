@@ -36,6 +36,8 @@
 
         .top-actions { display: flex; gap: 6px; margin-bottom: 15px; }
         .action-btn { flex: 1; padding: 8px 4px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; text-align: center; }
+        .action-btn.del { background: #5c2222; border-color: #ff5252; color: #ff8a8a; }
+        
         .form-group { margin-bottom: 12px; text-align: right; }
         label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; }
         input, select, textarea { width: 100%; padding: 10px; background: #282828; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 13px; }
@@ -121,7 +123,10 @@
     <!-- 4. إدخال الموردين -->
     <div id="screen-input-suppliers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #ff9800;">قسم الموردين - إدخال حركة</h2>
-        <div class="top-actions"><button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button></div>
+        <div class="top-actions">
+            <button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button>
+            <button class="action-btn del" onclick="openModal('deleteSupplierModal'); loadDeleteSuppliersDropdown();">🗑️ حذف مورد</button>
+        </div>
         <form id="supplierForm">
             <div class="form-group"><label>اختر المورد</label><select id="supNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="supDate" required></div>
@@ -137,7 +142,10 @@
     <!-- 5. إدخال الزبائن -->
     <div id="screen-input-customers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #03a9f4;">قسم الذمم المدينة - إدخال حركة</h2>
-        <div class="top-actions"><button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button></div>
+        <div class="top-actions">
+            <button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button>
+            <button class="action-btn del" onclick="openModal('deleteCustomerModal'); loadDeleteCustomersDropdown();">🗑️ حذف زبون</button>
+        </div>
         <form id="customerForm">
             <div class="form-group"><label>اسم الزبون</label><select id="custNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="custDate" required></div>
@@ -243,6 +251,15 @@
         </div>
     </div>
 
+    <div id="deleteSupplierModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:#ff5252;">حذف مورد</h3>
+            <div class="form-group"><label>اختر المورد للحذف</label><select id="delSupSelect"><option value="">-- اختر --</option></select></div>
+            <button class="save-btn" style="background:#ff5252; color:#fff; margin-top:10px;" onclick="deleteSupplier()">حذف نهائي</button>
+            <button class="close-modal" onclick="closeModal('deleteSupplierModal')">إلغاء</button>
+        </div>
+    </div>
+
     <div id="addCustomerModal" class="modal">
         <div class="modal-content">
             <h3>إدخال زبون جديد</h3>
@@ -252,10 +269,19 @@
         </div>
     </div>
 
-    <!-- كود الجافاسكريبت -->
+    <div id="deleteCustomerModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:#ff5252;">حذف زبون</h3>
+            <div class="form-group"><label>اختر الزبون للحذف</label><select id="delCustSelect"><option value="">-- اختر --</option></select></div>
+            <button class="save-btn" style="background:#ff5252; color:#fff; margin-top:10px;" onclick="deleteCustomer()">حذف نهائي</button>
+            <button class="close-modal" onclick="closeModal('deleteCustomerModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- كود الجافاسكريبت المحدث -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAwEo6ExsJlw9Vtyns81JAH7qDTxclvRSQ",
@@ -313,10 +339,18 @@
             document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
+        // إضافة مورد مع التحقق من عدم التكرار
         window.addNewSupplier = async function() {
             let name = document.getElementById('newSupName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم المورد');
             try {
+                // فحص هل المورد موجود مسبقاً
+                let q = query(collection(db, "suppliers_list"), where("name", "==", name));
+                let snap = await getDocs(q);
+                if(!snap.empty) {
+                    return alert('هذا المورد موجود مسبقاً في القائمة!');
+                }
+
                 await addDoc(collection(db, "suppliers_list"), { name: name });
                 alert('تم حفظ المورد بنجاح');
                 closeModal('addSupplierModal');
@@ -330,14 +364,40 @@
             select.innerHTML = '<option value="">-- عرض كافة الموردين --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "suppliers_list"));
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach((docItem) => {
                     let opt = document.createElement('option');
-                    opt.value = doc.data().name;
-                    opt.textContent = doc.data().name;
+                    opt.value = docItem.data().name;
+                    opt.textContent = docItem.data().name;
                     select.appendChild(opt);
                 });
                 select.value = currentVal;
             } catch(e) { console.log(e); }
+        }
+
+        window.loadDeleteSuppliersDropdown = async function() {
+            let select = document.getElementById('delSupSelect');
+            select.innerHTML = '<option value="">-- اختر --</option>';
+            try {
+                let querySnapshot = await getDocs(collection(db, "suppliers_list"));
+                querySnapshot.forEach((docItem) => {
+                    let opt = document.createElement('option');
+                    opt.value = docItem.id; // نحفظ الـ ID لحذفه
+                    opt.textContent = docItem.data().name;
+                    select.appendChild(opt);
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        window.deleteSupplier = async function() {
+            let docId = document.getElementById('delSupSelect').value;
+            if(!docId) return alert('الرجاء اختيار المورد المراد حذفه');
+            if(confirm('هل أنت متأكد من حذف هذا المورد؟')) {
+                try {
+                    await deleteDoc(doc(db, "suppliers_list", docId));
+                    alert('تم حذف المورد بنجاح');
+                    closeModal('deleteSupplierModal');
+                } catch(e) { alert('خطأ: ' + e.message); }
+            }
         }
 
         document.getElementById('supplierForm').addEventListener('submit', async function(e) {
@@ -360,10 +420,17 @@
             } catch(err) { alert('خطأ: ' + err.message); }
         });
 
+        // إضافة زبون مع التحقق من عدم التكرار
         window.addNewCustomer = async function() {
             let name = document.getElementById('newCustName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم الزبون');
             try {
+                let q = query(collection(db, "customers_list"), where("name", "==", name));
+                let snap = await getDocs(q);
+                if(!snap.empty) {
+                    return alert('هذا الزبون موجود مسبقاً في القائمة!');
+                }
+
                 await addDoc(collection(db, "customers_list"), { name: name });
                 alert('تم حفظ الزبون بنجاح');
                 closeModal('addCustomerModal');
@@ -377,14 +444,40 @@
             select.innerHTML = '<option value="">-- عرض كافة الزبائن --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "customers_list"));
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach((docItem) => {
                     let opt = document.createElement('option');
-                    opt.value = doc.data().name;
-                    opt.textContent = doc.data().name;
+                    opt.value = docItem.data().name;
+                    opt.textContent = docItem.data().name;
                     select.appendChild(opt);
                 });
                 select.value = currentVal;
             } catch(e) { console.log(e); }
+        }
+
+        window.loadDeleteCustomersDropdown = async function() {
+            let select = document.getElementById('delCustSelect');
+            select.innerHTML = '<option value="">-- اختر --</option>';
+            try {
+                let querySnapshot = await getDocs(collection(db, "customers_list"));
+                querySnapshot.forEach((docItem) => {
+                    let opt = document.createElement('option');
+                    opt.value = docItem.id;
+                    opt.textContent = docItem.data().name;
+                    select.appendChild(opt);
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        window.deleteCustomer = async function() {
+            let docId = document.getElementById('delCustSelect').value;
+            if(!docId) return alert('الرجاء اختيار الزبون المراد حذفه');
+            if(confirm('هل أنت متأكد من حذف هذا الزبون؟')) {
+                try {
+                    await deleteDoc(doc(db, "customers_list", docId));
+                    alert('تم حذف الزبون بنجاح');
+                    closeModal('deleteCustomerModal');
+                } catch(e) { alert('خطأ: ' + e.message); }
+            }
         }
 
         document.getElementById('customerForm').addEventListener('submit', async function(e) {
@@ -451,7 +544,6 @@
 
         window.loadReports = function() { updateDashboardStats(); }
 
-        // تقارير الموردين
         window.initSupplierReport = async function() {
             await loadSuppliersDropdown('reportSupSelect');
             document.getElementById('reportSupSelect').value = "";
@@ -486,7 +578,6 @@
                     rows.push(d);
                 });
 
-                // ترتيب الحركات تنازلياً حسب الوقت أو التاريخ وعرض آخر 10 كافتراضي إذا لم يتم اختيار فترة
                 rows.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 if (!startDate && !endDate && rows.length > 10) {
                     rows = rows.slice(0, 10);
@@ -507,7 +598,6 @@
             } catch(e) { console.log(e); }
         }
 
-        // تقارير الزبائن
         window.initCustomerReport = async function() {
             await loadCustomersDropdown('reportCustSelect');
             document.getElementById('reportCustSelect').value = "";
@@ -562,7 +652,6 @@
             } catch(e) { console.log(e); }
         }
 
-        // تقارير الصندوق
         window.initCashReport = function() {
             document.getElementById('cashStartDate').value = "";
             document.getElementById('cashEndDate').value = "";
