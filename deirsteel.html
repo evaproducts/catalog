@@ -278,7 +278,7 @@
         </div>
     </div>
 
-    <!-- كود الجافاسكريبت المحدث -->
+    <!-- كود الجافاسكريبت المحدث والمحسن -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -339,12 +339,11 @@
             document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
-        // إضافة مورد مع التحقق من عدم التكرار
+        // إضافة مورد مع منع التكرار تماماً
         window.addNewSupplier = async function() {
             let name = document.getElementById('newSupName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم المورد');
             try {
-                // فحص هل المورد موجود مسبقاً
                 let q = query(collection(db, "suppliers_list"), where("name", "==", name));
                 let snap = await getDocs(q);
                 if(!snap.empty) {
@@ -355,20 +354,27 @@
                 alert('تم حفظ المورد بنجاح');
                 closeModal('addSupplierModal');
                 document.getElementById('newSupName').value = '';
+                loadSuppliersDropdown('supNameSelect');
             } catch(e) { alert('خطأ: ' + e.message); }
         }
 
+        // دالة جلب الموردين مع منع تكرار الأسماء في القائمة
         window.loadSuppliersDropdown = async function(elementId) {
             let select = document.getElementById(elementId);
             let currentVal = select.value;
             select.innerHTML = '<option value="">-- عرض كافة الموردين --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "suppliers_list"));
+                let uniqueNames = new Set();
                 querySnapshot.forEach((docItem) => {
-                    let opt = document.createElement('option');
-                    opt.value = docItem.data().name;
-                    opt.textContent = docItem.data().name;
-                    select.appendChild(opt);
+                    let name = docItem.data().name;
+                    if (name && !uniqueNames.has(name)) {
+                        uniqueNames.add(name);
+                        let opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        select.appendChild(opt);
+                    }
                 });
                 select.value = currentVal;
             } catch(e) { console.log(e); }
@@ -379,11 +385,16 @@
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "suppliers_list"));
+                let uniqueNames = new Set();
                 querySnapshot.forEach((docItem) => {
-                    let opt = document.createElement('option');
-                    opt.value = docItem.id; // نحفظ الـ ID لحذفه
-                    opt.textContent = docItem.data().name;
-                    select.appendChild(opt);
+                    let name = docItem.data().name;
+                    if (name && !uniqueNames.has(name)) {
+                        uniqueNames.add(name);
+                        let opt = document.createElement('option');
+                        opt.value = docItem.id; // نخفظ الـ ID للحذف
+                        opt.textContent = name;
+                        select.appendChild(opt);
+                    }
                 });
             } catch(e) { console.log(e); }
         }
@@ -396,6 +407,8 @@
                     await deleteDoc(doc(db, "suppliers_list", docId));
                     alert('تم حذف المورد بنجاح');
                     closeModal('deleteSupplierModal');
+                    loadSuppliersDropdown('supNameSelect');
+                    loadSuppliersDropdown('reportSupSelect');
                 } catch(e) { alert('خطأ: ' + e.message); }
             }
         }
@@ -420,7 +433,7 @@
             } catch(err) { alert('خطأ: ' + err.message); }
         });
 
-        // إضافة زبون مع التحقق من عدم التكرار
+        // إضافة زبون مع منع التكرار تماماً
         window.addNewCustomer = async function() {
             let name = document.getElementById('newCustName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم الزبون');
@@ -435,20 +448,27 @@
                 alert('تم حفظ الزبون بنجاح');
                 closeModal('addCustomerModal');
                 document.getElementById('newCustName').value = '';
+                loadCustomersDropdown('custNameSelect');
             } catch(e) { alert('خطأ: ' + e.message); }
         }
 
+        // دالة جلب الزبائن مع منع تكرار الأسماء في القائمة
         window.loadCustomersDropdown = async function(elementId) {
             let select = document.getElementById(elementId);
             let currentVal = select.value;
             select.innerHTML = '<option value="">-- عرض كافة الزبائن --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "customers_list"));
+                let uniqueNames = new Set();
                 querySnapshot.forEach((docItem) => {
-                    let opt = document.createElement('option');
-                    opt.value = docItem.data().name;
-                    opt.textContent = docItem.data().name;
-                    select.appendChild(opt);
+                    let name = docItem.data().name;
+                    if (name && !uniqueNames.has(name)) {
+                        uniqueNames.add(name);
+                        let opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        select.appendChild(opt);
+                    }
                 });
                 select.value = currentVal;
             } catch(e) { console.log(e); }
@@ -459,11 +479,16 @@
             select.innerHTML = '<option value="">-- اختر --</option>';
             try {
                 let querySnapshot = await getDocs(collection(db, "customers_list"));
+                let uniqueNames = new Set();
                 querySnapshot.forEach((docItem) => {
-                    let opt = document.createElement('option');
-                    opt.value = docItem.id;
-                    opt.textContent = docItem.data().name;
-                    select.appendChild(opt);
+                    let name = docItem.data().name;
+                    if (name && !uniqueNames.has(name)) {
+                        uniqueNames.add(name);
+                        let opt = document.createElement('option');
+                        opt.value = docItem.id;
+                        opt.textContent = name;
+                        select.appendChild(opt);
+                    }
                 });
             } catch(e) { console.log(e); }
         }
@@ -476,6 +501,8 @@
                     await deleteDoc(doc(db, "customers_list", docId));
                     alert('تم حذف الزبون بنجاح');
                     closeModal('deleteCustomerModal');
+                    loadCustomersDropdown('custNameSelect');
+                    loadCustomersDropdown('reportCustSelect');
                 } catch(e) { alert('خطأ: ' + e.message); }
             }
         }
