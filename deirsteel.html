@@ -42,17 +42,12 @@
         input, select, textarea { width: 100%; padding: 10px; background: #282828; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 13px; }
         .calc-box { background: #252525; padding: 10px; border-radius: 8px; border: 1px dashed #555; margin-bottom: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #4CAF50; }
         .save-btn { width: 100%; padding: 12px; color: #121212; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-        .serial-tag { text-align: left; font-size: 11px; color: #888; margin-bottom: 10px; }
-
+        
         /* التقارير والجداول */
         .balances-container { display: flex; gap: 10px; margin-bottom: 15px; }
         .balance-card { flex: 1; background: #252525; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
         .balance-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
         .balance-value { font-size: 15px; font-weight: 700; }
-        
-        .search-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: #252525; padding: 12px; border-radius: 10px; border: 1px solid #444; }
-        .search-group { width: 100%; }
-        .search-group label { font-size: 11px; }
         
         .table-responsive { width: 100%; overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #333; }
         table { width: 100%; border-collapse: collapse; background: #252525; min-width: 600px; }
@@ -128,7 +123,7 @@
         <div class="top-actions">
             <button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button>
         </div>
-        <form id="supplierForm" onsubmit="saveSupplierMovement(event)">
+        <form id="supplierForm">
             <div class="form-group"><label>اختر المورد</label><select id="supNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="supDate" required></div>
             <div class="form-group"><label>قيمة البضاعة</label><input type="number" id="supGoods" value="0" step="any" oninput="calcSupBalance()"></div>
@@ -146,7 +141,7 @@
         <div class="top-actions">
             <button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button>
         </div>
-        <form id="customerForm" onsubmit="saveCustomerMovement(event)">
+        <form id="customerForm">
             <div class="form-group"><label>اسم الزبون</label><select id="custNameSelect" required><option value="">-- اختر --</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="custDate" required></div>
             <div class="form-group"><label>ثمن البضاعة</label><input type="number" id="custGoods" value="0" step="any" oninput="calcCustBalance()"></div>
@@ -161,7 +156,7 @@
     <!-- 6. إدخال الصندوق -->
     <div id="screen-input-cash" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #4CAF50;">قسم الصندوق - حركة نقدية</h2>
-        <form id="cashForm" onsubmit="saveCashMovement(event)">
+        <form id="cashForm">
             <div class="form-group"><label>نوع الحركة</label><select id="cashType"><option value="قبض">قبض (وارد +)</option><option value="صرف">صرف (صادر -)</option></select></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="cashDate" required></div>
             <div class="form-group"><label>المبلغ</label><input type="number" id="cashAmount" value="0" step="any" required></div>
@@ -236,11 +231,9 @@
         </div>
     </div>
 
-    <!-- مكتبات فايربيس -->
+    <!-- مكتبات وتشغيل فايربيس -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addapp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        // تم دمج الكود الخاص بك بأمان هنا
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -255,7 +248,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ضبط تاريخ اليوم افتراضياً
         const todayStr = new Date().toISOString().split('T')[0];
         document.getElementById('supDate').value = todayStr;
         document.getElementById('custDate').value = todayStr;
@@ -284,7 +276,6 @@
             document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + res.toFixed(2) + " شيكل";
         }
 
-        // إضافة مورد جديد
         window.addNewSupplier = async function() {
             let name = document.getElementById('newSupName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم المورد');
@@ -297,7 +288,6 @@
             } catch(e) { alert('خطأ في الحفظ: ' + e.message); }
         }
 
-        // تحميل قائمة الموردين للقائمة المنسدلة
         window.loadSuppliersDropdown = async function() {
             let select = document.getElementById('supNameSelect');
             select.innerHTML = '<option value="">-- اختر --</option>';
@@ -312,8 +302,7 @@
             } catch(e) { console.log(e); }
         }
 
-        // حفظ حركة مورد
-        window.saveSupplierMovement = async function(e) {
+        document.getElementById('supplierForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             let data = {
                 name: document.getElementById('supNameSelect').value,
@@ -331,9 +320,8 @@
                 showScreen('screen-home');
                 updateDashboardStats();
             } catch(err) { alert('خطأ: ' + err.message); }
-        }
+        });
 
-        // إضافة زبون جديد
         window.addNewCustomer = async function() {
             let name = document.getElementById('newCustName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم الزبون');
@@ -343,10 +331,9 @@
                 closeModal('addCustomerModal');
                 document.getElementById('newCustName').value = '';
                 loadCustomersDropdown();
-            } catch(e) { alert('خطأ: ' + e.message); }
+            } catch(e) { alert('خطأ في الحفظ: ' + e.message); }
         }
 
-        // تحميل قائمة الزبائن للقائمة المنسدلة
         window.loadCustomersDropdown = async function() {
             let select = document.getElementById('custNameSelect');
             select.innerHTML = '<option value="">-- اختر --</option>';
@@ -361,8 +348,7 @@
             } catch(e) { console.log(e); }
         }
 
-        // حفظ حركة زبون
-        window.saveCustomerMovement = async function(e) {
+        document.getElementById('customerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             let data = {
                 name: document.getElementById('custNameSelect').value,
@@ -380,10 +366,9 @@
                 showScreen('screen-home');
                 updateDashboardStats();
             } catch(err) { alert('خطأ: ' + err.message); }
-        }
+        });
 
-        // حفظ حركة الصندوق
-        window.saveCashMovement = async function(e) {
+        document.getElementById('cashForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             let data = {
                 type: document.getElementById('cashType').value,
@@ -400,9 +385,8 @@
                 showScreen('screen-home');
                 updateDashboardStats();
             } catch(err) { alert('خطأ: ' + err.message); }
-        }
+        });
 
-        // تحديث الواجهة الرئيسية والأرصدة
         window.updateDashboardStats = async function() {
             try {
                 let supSnap = await getDocs(collection(db, "suppliers_movements"));
@@ -428,7 +412,6 @@
 
         window.loadReports = function() { updateDashboardStats(); }
 
-        // تحميل تقارير الموردين
         window.loadSupplierReport = async function() {
             let tbody = document.getElementById('supReportTable');
             tbody.innerHTML = '';
@@ -444,7 +427,6 @@
             } catch(e) { console.log(e); }
         }
 
-        // تحميل تقارير الزبائن
         window.loadCustomerReport = async function() {
             let tbody = document.getElementById('custReportTable');
             tbody.innerHTML = '';
@@ -460,7 +442,6 @@
             } catch(e) { console.log(e); }
         }
 
-        // تحميل تقارير الصندوق
         window.loadCashReport = async function() {
             let tbody = document.getElementById('cashReportTable');
             tbody.innerHTML = '';
@@ -476,7 +457,6 @@
             } catch(e) { console.log(e); }
         }
 
-        // تشغيل التحديث عند فتح الصفحة
         updateDashboardStats();
     </script>
 </body>
