@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دير ستيل - نظام إدارة الحسابات والموردين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
+        .screen { display: none; width: 100%; max-width: 950px; background: #1e1e1e; border: 2px solid #333; border-radius: 16px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .screen.active { display: block; }
+        .center-box { max-width: 480px; text-align: center; margin: 0 auto; }
+        
+        h1, h2 { color: #ffffff; text-align: center; margin-bottom: 15px; font-weight: 700; font-size: 20px; }
+        .subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 15px; }
+        
+        /* الشاشة الرئيسية */
+        .dashboard-stats { display: flex; gap: 8px; margin-bottom: 20px; }
+        .stat-card { flex: 1; background: #282828; border: 1px solid #3a3a3a; border-radius: 10px; padding: 10px 5px; text-align: center; }
+        .stat-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
+        .stat-value { font-size: 13px; font-weight: 700; color: #4CAF50; }
+        .stat-value.suppliers { color: #ff9800; }
+        .stat-value.customers { color: #03a9f4; }
+
+        .actions-section, .sections-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; color: #fff; }
+        .btn-input { background-color: #2196F3; }
+        .btn-view { background-color: #333; border: 1px solid #555; }
+        
+        /* أزرار الأقسام */
+        .section-btn { width: 100%; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: #282828; color: #fff; border: 1px solid #3a3a3a; }
+        .section-btn.suppliers { border-right: 5px solid #ff9800; }
+        .section-btn.customers { border-right: 5px solid #03a9f4; }
+        .section-btn.cashbox { border-right: 5px solid #4CAF50; }
+
+        /* نماذج الإدخال */
+        .top-actions { display: flex; gap: 6px; margin-bottom: 15px; }
+        .action-btn { flex: 1; padding: 8px 4px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; text-align: center; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; }
+        input, select, textarea { width: 100%; padding: 10px; background: #282828; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 13px; }
+        .calc-box { background: #252525; padding: 10px; border-radius: 8px; border: 1px dashed #555; margin-bottom: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #4CAF50; }
+        .save-btn { width: 100%; padding: 12px; color: #121212; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
+        .serial-tag { text-align: left; font-size: 11px; color: #888; margin-bottom: 10px; }
+
+        /* التقارير والجداول المتوافقة مع الموبايل */
+        .balances-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .balance-card { flex: 1; background: #252525; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
+        .balance-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
+        .balance-value { font-size: 15px; font-weight: 700; }
+        
+        .search-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: #252525; padding: 12px; border-radius: 10px; border: 1px solid #444; }
+        .search-group { width: 100%; }
+        .search-group label { font-size: 11px; }
+        
+        /* ضبط الجدول ليصبح قابلاً للتمرير الأفقي بسلاسة تامة على الشاشات الصغيرة بدون تداخل */
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #333; }
+        table { width: 100%; border-collapse: collapse; background: #252525; min-width: 600px; }
+        th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #333; font-size: 12px; white-space: nowrap; }
+        th { background: #2a2a2a; color: #aaa; font-weight: 600; }
+        tr:hover { background: #2d2d2d; }
+        
+        .back-btn { margin-top: 15px; background: transparent; color: #888; border: 1px dashed #444; width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        .back-btn:hover { color: #fff; border-color: #777; }
+        
+        /* النوافذ المنبثقة */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; width: 100%; max-width: 380px; border: 1px solid #444; }
+        .close-modal { background: #444; color: #fff; margin-top: 10px; border: none; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. الشاشة الرئيسية -->
+    <div id="screen-home" class="screen active center-box">
+        <div class="header-section">
+            <h1>دير ستيل</h1>
+            <div class="subtitle">نظام إدارة الحسابات والموردين</div>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-title">الصندوق</div>
+                <div class="stat-value" id="homeCash">12,500</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">الموردين</div>
+                <div class="stat-value suppliers" id="homeSuppliers">3,000</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">الذمم المدينة</div>
+                <div class="stat-value customers" id="homeCustomers">1,500</div>
+            </div>
+        </div>
+
+        <div class="actions-section">
+            <button class="btn btn-input" onclick="showScreen('screen-input-menu')">➕ إدخال حركة جديدة</button>
+            <button class="btn btn-view" onclick="showScreen('screen-view-menu')">📊 عرض التقارير والحسابات</button>
+        </div>
+    </div>
+
+    <!-- 2. قائمة شاشة الإدخال -->
+    <div id="screen-input-menu" class="screen center-box">
+        <h2>شاشة الإدخال</h2>
+        <div class="subtitle">اختر القسم لإضافة الحركة المالية</div>
+        <div class="sections-container">
+            <button class="section-btn suppliers" onclick="showScreen('screen-input-suppliers')"><span>➕ قسم الموردين</span><span>🏭</span></button>
+            <button class="section-btn customers" onclick="showScreen('screen-input-customers')"><span>➕ قسم الذمم المدينة</span><span>👥</span></button>
+            <button class="section-btn cashbox" onclick="showScreen('screen-input-cash')"><span>➕ حركة الصندوق</span><span>💰</span></button>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للشاشة الرئيسية</button>
+    </div>
+
+    <!-- 3. قائمة شاشة العرض والتقارير -->
+    <div id="screen-view-menu" class="screen center-box">
+        <h2>شاشة عرض التقارير</h2>
+        <div class="subtitle">اختر القسم لعرض السجل التراكمي</div>
+        <div class="sections-container">
+            <button class="section-btn suppliers" onclick="showScreen('screen-report-suppliers')"><span>📊 تقارير الموردين</span><span>🏭</span></button>
+            <button class="section-btn customers" onclick="showScreen('screen-report-customers')"><span>📊 تقارير الذمم المدينة</span><span>👥</span></button>
+            <button class="section-btn cashbox" onclick="showScreen('screen-report-cash')"><span>📊 تقارير الصندوق</span><span>💰</span></button>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للشاشة الرئيسية</button>
+    </div>
+
+    <!-- 4. إدخال الموردين -->
+    <div id="screen-input-suppliers" class="screen center-box" style="max-width: 500px;">
+        <h2 style="color: #ff9800;">قسم الموردين - إدخال حركة</h2>
+        <div class="top-actions">
+            <button class="action-btn" onclick="openModal('addSupplierModal')">➕ إدخال مورد</button>
+            <button class="action-btn" onclick="openModal('editSupMovementModal')">✏️ تعديل حركة</button>
+            <button class="action-btn" style="color: #ff5252;" onclick="alert('حذف مورد')">🗑️ حذف</button>
+        </div>
+        <div class="serial-tag">رقم الحركة: <span style="color:#ff9800; font-weight:bold;">A1</span></div>
+        <form onsubmit="event.preventDefault(); alert('تم حفظ حركة المورد بنجاح!');">
+            <div class="form-group"><label>اختر المورد</label><select required><option value="">-- اختر --</option><option>بال ستيل</option><option>دير ستيل</option></select></div>
+            <div class="form-group"><label>التاريخ</label><input type="text" value="2026-09-19" readonly style="color:#888;"></div>
+            <div class="form-group"><label>قيمة البضاعة</label><input type="number" value="0"></div>
+            <div class="form-group"><label>المبلغ المدفوع</label><input type="number" value="0"></div>
+            <div class="calc-box" style="color:#ff9800;">الرصيد الناتج: 0.00 شيكل</div>
+            <div class="form-group"><label>ملاحظات</label><textarea rows="2"></textarea></div>
+            <button type="submit" class="save-btn" style="background:#ff9800;">حفظ الحركة</button>
+        </form>
+        <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
+    </div>
+
+    <!-- 5. إدخال الذمم المدينة -->
+    <div id="screen-input-customers" class="screen center-box" style="max-width: 500px;">
+        <h2 style="color: #03a9f4;">قسم الذمم المدينة - إدخال حركة</h2>
+        <div class="top-actions">
+            <button class="action-btn" onclick="openModal('addCustomerModal')">➕ إدخال زبون</button>
+            <button class="action-btn" onclick="openModal('editCustMovementModal')">✏️ تعديل حركة</button>
+            <button class="action-btn" style="color: #ff5252;" onclick="alert('حذف زبون')">🗑️ حذف</button>
+        </div>
+        <div class="serial-tag">رقم الحركة: <span style="color:#03a9f4; font-weight:bold;">C1</span></div>
+        <form onsubmit="event.preventDefault(); alert('تم حفظ حركة الزبون بنجاح!');">
+            <div class="form-group"><label>اسم الزبون</label><select required><option value="">-- اختر --</option><option>محمد أحمد</option><option>شركة المقاولات</option></select></div>
+            <div class="form-group"><label>التاريخ</label><input type="text" value="2026-09-19" readonly style="color:#888;"></div>
+            <div class="form-group"><label>ثمن البضاعة</label><input type="number" value="0"></div>
+            <div class="form-group"><label>المبلغ المدفوع</label><input type="number" value="0"></div>
+            <div class="calc-box" style="color:#03a9f4;">الرصيد الناتج: 0.00 شيكل</div>
+            <div class="form-group"><label>ملاحظات</label><textarea rows="2"></textarea></div>
+            <button type="submit" class="save-btn" style="background:#03a9f4;">حفظ الحركة</button>
+        </form>
+        <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
+    </div>
+
+    <!-- 6. إدخال الصندوق -->
+    <div id="screen-input-cash" class="screen center-box" style="max-width: 500px;">
+        <h2 style="color: #4CAF50;">قسم الصندوق - حركة نقدية</h2>
+        <div class="top-actions">
+            <button class="action-btn" onclick="openModal('editCashMovementModal')">✏️ تعديل حركة صندوق</button>
+        </div>
+        <div class="serial-tag">رقم الحركة: <span style="color:#4CAF50; font-weight:bold;">B1</span></div>
+        <form onsubmit="event.preventDefault(); alert('تم حفظ حركة الصندوق بنجاح!');">
+            <div class="form-group"><label>نوع الحركة</label><select><option>قبض (وارد +)</option><option>صرف (صادر -)</option></select></div>
+            <div class="form-group"><label>التاريخ</label><input type="text" value="2026-09-19" readonly style="color:#888;"></div>
+            <div class="form-group"><label>المبلغ</label><input type="number" value="0" required></div>
+            <div class="calc-box">رصيد الصندوق: 0.00 شيكل</div>
+            <div class="form-group"><label>ملاحظات</label><textarea rows="2"></textarea></div>
+            <button type="submit" class="save-btn" style="background:#4CAF50;">حفظ الحركة</button>
+        </form>
+        <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
+    </div>
+
+    <!-- 7. تقارير الموردين -->
+    <div id="screen-report-suppliers" class="screen">
+        <h2 style="color: #ff9800;">تقارير الموردين (عرض تراكمي)</h2>
+        <div class="balances-container">
+            <div class="balance-card"><div class="balance-title">رصيد المورد المحدد</div><div class="balance-value" style="color:#ff9800;">3,000.00</div></div>
+            <div class="balance-card" style="border-color:#ff9800;"><div class="balance-title">إجمالي ذمم كافة الموردين</div><div class="balance-value" style="color:#ff9800;">8,500.00</div></div>
+        </div>
+        <div class="search-box">
+            <div class="search-group"><label>المورد</label><select><option>-- الكل --</option><option>بال ستيل</option></select></div>
+            <div class="search-group"><label>من تاريخ</label><input type="date"></div>
+            <div class="search-group"><label>إلى تاريخ</label><input type="date"></div>
+            <button onclick="alert('فلترة التقرير')" style="background:#ff9800; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width:100%; margin-top:5px;">بحث</button>
+        </div>
+        <div style="text-align:center; font-size:11px; color:#888; margin-bottom:8px;">يتم عرض آخر 10 حركات مسجلة كافتراضي</div>
+        <div class="table-responsive">
+            <table>
+                <thead><tr><th>الرقم</th><th>التاريخ</th><th>المورد</th><th>البضاعة</th><th>المدفوع</th><th>الرصيد</th><th>ملاحظات</th></tr></thead>
+                <tbody><tr><td style="color:#ff9800; font-weight:bold;">A10</td><td>2026-09-19</td><td>بال ستيل</td><td>5000</td><td>2000</td><td style="color:#4CAF50; font-weight:bold;">3000</td><td>شراء حديد</td></tr></tbody>
+            </table>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+    </div>
+
+    <!-- 8. تقارير الذمم المدينة -->
+    <div id="screen-report-customers" class="screen">
+        <h2 style="color: #03a9f4;">تقارير الذمم المدينة (الزبائن)</h2>
+        <div class="balances-container">
+            <div class="balance-card"><div class="balance-title">رصيد الزبون المحدد</div><div class="balance-value" style="color:#03a9f4;">1,500.00</div></div>
+            <div class="balance-card" style="border-color:#03a9f4;"><div class="balance-title">إجمالي ذمم كافة الزبائن</div><div class="balance-value" style="color:#03a9f4;">14,200.00</div></div>
+        </div>
+        <div class="search-box">
+            <div class="search-group"><label>الزبون</label><select><option>-- الكل --</option><option>محمد أحمد</option></select></div>
+            <div class="search-group"><label>من تاريخ</label><input type="date"></div>
+            <div class="search-group"><label>إلى تاريخ</label><input type="date"></div>
+            <button onclick="alert('فلترة التقرير')" style="background:#03a9f4; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width:100%; margin-top:5px;">بحث</button>
+        </div>
+        <div style="text-align:center; font-size:11px; color:#888; margin-bottom:8px;">يتم عرض آخر 10 حركات مسجلة كافتراضي</div>
+        <div class="table-responsive">
+            <table>
+                <thead><tr><th>الرقم</th><th>التاريخ</th><th>الزبون</th><th>البضاعة</th><th>الدفعات</th><th>الرصيد</th><th>ملاحظات</th></tr></thead>
+                <tbody><tr><td style="color:#03a9f4; font-weight:bold;">C10</td><td>2026-09-19</td><td>محمد أحمد</td><td>2000</td><td>500</td><td style="color:#03a9f4; font-weight:bold;">1500</td><td>فاتورة بضاعة</td></tr></tbody>
+            </table>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+    </div>
+
+    <!-- 9. تقارير الصندوق -->
+    <div id="screen-report-cash" class="screen">
+        <h2 style="color: #4CAF50;">تقارير وحركات الصندوق</h2>
+        <div class="balances-container" style="justify-content:center;">
+            <div class="balance-card" style="max-width:100%; border-color:#4CAF50;"><div class="balance-title">صافي رصيد الصندوق الحالي</div><div class="balance-value" style="color:#4CAF50;">12,500.00 شيكل</div></div>
+        </div>
+        <div class="search-box">
+            <div class="search-group"><label>من تاريخ</label><input type="date"></div>
+            <div class="search-group"><label>إلى تاريخ</label><input type="date"></div>
+            <button onclick="alert('فلترة التقرير')" style="background:#4CAF50; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; width:100%; color:#121212; margin-top:5px;">بحث</button>
+        </div>
+        <div style="text-align:center; font-size:11px; color:#888; margin-bottom:8px;">يتم عرض آخر 10 حركات نقدية كافتراضي</div>
+        <div class="table-responsive">
+            <table>
+                <thead><tr><th>الرقم</th><th>التاريخ</th><th>الحركة</th><th>المبلغ</th><th>الرصيد</th><th>البيان</th></tr></thead>
+                <tbody><tr><td style="color:#4CAF50; font-weight:bold;">B10</td><td>2026-09-19</td><td>قبض</td><td>1500</td><td style="color:#4CAF50; font-weight:bold;">12500</td><td>دفعة نقدية</td></tr></tbody>
+            </table>
+        </div>
+        <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة لشاشة التقارير</button>
+    </div>
+
+    <!-- نافذة إدخال مورد جديد -->
+    <div id="addSupplierModal" class="modal">
+        <div class="modal-content">
+            <h3>إدخال مورد جديد</h3>
+            <div class="form-group"><label>اسم المورد</label><input type="text"></div>
+            <div class="form-group"><label>العنوان</label><input type="text"></div>
+            <div class="form-group"><label>رقم الهاتف</label><input type="text"></div>
+            <button class="save-btn" style="background:#ff9800;" onclick="alert('تم الحفظ'); closeModal('addSupplierModal');">حفظ المورد</button>
+            <button class="close-modal" onclick="closeModal('addSupplierModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- نافذة إدخال زبون جديد -->
+    <div id="addCustomerModal" class="modal">
+        <div class="modal-content">
+            <h3>إدخال زبون جديد</h3>
+            <div class="form-group"><label>اسم الزبون</label><input type="text"></div>
+            <div class="form-group"><label>العنوان</label><input type="text"></div>
+            <div class="form-group"><label>رقم الهاتف</label><input type="text"></div>
+            <button class="save-btn" style="background:#03a9f4; color:#121212;" onclick="alert('تم الحفظ'); closeModal('addCustomerModal');">حفظ الزبون</button>
+            <button class="close-modal" onclick="closeModal('addCustomerModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- نوافذ تعديل الحركات برقمها التسلسلي -->
+    <div id="editSupMovementModal" class="modal"><div class="modal-content"><h3>تعديل حركة مورد</h3><div class="form-group"><label>رقم الحركة (مثل A1)</label><input type="text"></div><button class="save-btn" style="background:#ff9800;" onclick="alert('جلب الحركة'); closeModal('editSupMovementModal');">بحث وتعديل</button><button class="close-modal" onclick="closeModal('editSupMovementModal')">إلغاء</button></div></div>
+    <div id="editCustMovementModal" class="modal"><div class="modal-content"><h3>تعديل حركة زبون</h3><div class="form-group"><label>رقم الحركة (مثل C1)</label><input type="text"></div><button class="save-btn" style="background:#03a9f4; color:#121212;" onclick="alert('جلب الحركة'); closeModal('editCustMovementModal');">بحث وتعديل</button><button class="close-modal" onclick="closeModal('editCustMovementModal')">إلغاء</button></div></div>
+    <div id="editCashMovementModal" class="modal"><div class="modal-content"><h3>تعديل حركة صندوق</h3><div class="form-group"><label>رقم الحركة (مثل B1)</label><input type="text"></div><button class="save-btn" style="background:#4CAF50;" onclick="alert('جلب الحركة'); closeModal('editCashMovementModal');">بحث وتعديل</button><button class="close-modal" onclick="closeModal('editCashMovementModal')">إلغاء</button></div></div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
