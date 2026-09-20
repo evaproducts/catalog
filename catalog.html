@@ -56,6 +56,67 @@
             background: #880e4f;
         }
 
+        /* تنسيق شريط أو زر تثبيت التطبيق الذكي داخل الصفحة */
+        #installAppBanner {
+            display: none;
+            background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(136, 14, 79, 0.3);
+            border-bottom: 2px solid #d4af37;
+            animation: slideDown 0.5s ease-in-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .install-banner-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .install-text {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .install-action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        #installAppBtn {
+            background: #fff;
+            color: #880e4f;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.2s;
+        }
+        #installAppBtn:hover {
+            background: #fce4ec;
+        }
+        #dismissInstallBtn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.6);
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
         #display-logo {
             width: 90px;
             height: 90px;
@@ -451,6 +512,17 @@
 </head>
 <body>
 
+    <!-- شريط التثبيت التلقائي الذي يظهر للزبون -->
+    <div id="installAppBanner">
+        <div class="install-banner-content">
+            <p class="install-text">📱 ثبت تطبيق معرض إيفا لسهولة وسرعة التصفح!</p>
+            <div class="install-action-btns">
+                <button id="installAppBtn">تثبيت التطبيق</button>
+                <button id="dismissInstallBtn" onclick="document.getElementById('installAppBanner').style.display='none'">لاحقاً</button>
+            </div>
+        </div>
+    </div>
+
     <div class="agent-login-bar" id="agentLoginBar">
         <span id="loginStatusText">خاص بالوسيطات المعتمدات:</span>
         <button class="agent-login-btn" onclick="openLoginModal()" id="loginBtnUI">تسجيل الدخول</button>
@@ -531,8 +603,34 @@
         </div>
     </div>
 
-    <!-- تفعيل خدمة التطبيق (Service Worker Registration) -->
+    <!-- برمجة ظهور زر التثبيت وتفعيل خدمة التطبيق -->
     <script>
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // إظهار الشريط الفخم للزبون
+        const installBanner = document.getElementById('installAppBanner');
+        if (installBanner) {
+            installBanner.style.display = 'block';
+        }
+      });
+
+      const installBtn = document.getElementById('installAppBtn');
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            document.getElementById('installAppBanner').style.display = 'none';
+          }
+        });
+      }
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js')
