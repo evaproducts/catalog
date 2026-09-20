@@ -575,7 +575,7 @@
         <div id="sectionsContainer"></div>
 
         <div class="footer-visitor-box">
-            الزيارات: <span id="visitCount">...</span> | 📱 تثبيات التطبيق: <span id="installsCount">...</span>
+            الزيارات: <span id="visitCount">...</span>
         </div>
 
         <div class="footer-link">
@@ -603,10 +603,10 @@
         </div>
     </div>
 
-    <!-- برمجة ظهور زر التثبيت وتفعيل خدمة التطبيق وعداد التثبيتات -->
+    <!-- برمجة ظهور زر التثبيت وتنسيق الزيارات -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
       const firebaseConfig = {
           apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
@@ -638,13 +638,6 @@
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
               console.log('User accepted the install prompt');
-              // زيادة عداد التثبيتات في فايربيز تلقائياً عند قبول التثبيت
-              try {
-                  const statsRef = doc(db, "settings", "stats");
-                  await updateDoc(statsRef, { installs: increment(1) });
-              } catch(err) {
-                  console.error("Error updating installs count:", err);
-              }
             }
             deferredPrompt = null;
             document.getElementById('installAppBanner').style.display = 'none';
@@ -663,21 +656,18 @@
       let globalLogoUrl = "";
       let loadedCategories = [];
 
-      async function setupVisitorAndInstallsCounters() {
+      async function setupVisitorCounter() {
           try {
               const statsRef = doc(db, "settings", "stats");
               const statsDoc = await getDoc(statsRef);
               
               let totalVisits = statsDoc.exists() ? (statsDoc.data().visits || 50) : 50;
-              let totalInstalls = statsDoc.exists() ? (statsDoc.data().installs || 0) : 0;
 
               await updateDoc(statsRef, { visits: increment(1) });
               
               document.getElementById('visitCount').innerText = totalVisits + 1;
-              document.getElementById('installsCount').innerText = totalInstalls;
           } catch (error) {
               document.getElementById('visitCount').innerText = "50";
-              document.getElementById('installsCount').innerText = "0";
           }
       }
 
@@ -719,7 +709,7 @@
       }
 
       async function initCatalogFast() {
-          setupVisitorAndInstallsCounters();
+          setupVisitorCounter();
           await checkAgentSession();
 
           try {
