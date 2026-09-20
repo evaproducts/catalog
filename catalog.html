@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كتالوج المنتجات | إيفا براند</title>
 
+    <!-- إعدادات تطبيق الويب (PWA Manifest) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#880e4f">
+
     <!-- وسوم المعاينة الاحترافية لفيسبوك (Open Graph Tags) -->
     <meta property="og:title" content="كتالوج المنتجات ">
     <meta property="og:description" content="التوصيل متوفر لكافة مناطق الضفة والداخل.">
@@ -527,6 +531,17 @@
         </div>
     </div>
 
+    <!-- تفعيل خدمة التطبيق (Service Worker Registration) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker registered! Scope:', reg.scope))
+            .catch(err => console.log('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
     <!-- كود التحميل السريع الفوري -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -669,7 +684,7 @@
 
                     let productsContent = '';
                     if (catProducts.length === 0) {
-                        productsContent = '<p style="color:#888; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
+                        productsContent = '<p style="color:#880e4f; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
                     } else {
                         productsContent = `<div class="products-grid">` + catProducts.map(p => {
                             let images = p.images && p.images.length > 0 ? p.images : [];
