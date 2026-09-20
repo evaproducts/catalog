@@ -575,7 +575,7 @@
         <div id="sectionsContainer"></div>
 
         <div class="footer-visitor-box">
-            الزيارات: <span id="visitCount">...</span>
+            الزيارات: <span id="visitCount">...</span> | 📱 تثبيات التطبيق: <span id="installsCount">...</span>
         </div>
 
         <div class="footer-link">
@@ -603,13 +603,27 @@
         </div>
     </div>
 
-    <!-- برمجة ظهور زر التثبيت وتفعيل خدمة التطبيق -->
-    <script>
+    <!-- برمجة ظهور زر التثبيت وتفعيل خدمة التطبيق وعداد التثبيتات -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+          apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
+          authDomain: "evabrandcatalog.firebaseapp.com",
+          projectId: "evabrandcatalog",
+          storageBucket: "evabrandcatalog.firebasestorage.app",
+          messagingSenderId: "795421907629",
+          appId: "1:795421907629:web:e75bc5be8c4556ab660424"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
       let deferredPrompt;
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // إظهار الشريط الفخم للزبون
         const installBanner = document.getElementById('installAppBanner');
         if (installBanner) {
             installBanner.style.display = 'block';
@@ -624,6 +638,13 @@
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
               console.log('User accepted the install prompt');
+              // زيادة عداد التثبيتات في فايربيز تلقائياً عند قبول التثبيت
+              try {
+                  const statsRef = doc(db, "settings", "stats");
+                  await updateDoc(statsRef, { installs: increment(1) });
+              } catch(err) {
+                  console.error("Error updating installs count:", err);
+              }
             }
             deferredPrompt = null;
             document.getElementById('installAppBanner').style.display = 'none';
@@ -638,255 +659,243 @@
             .catch(err => console.log('Service Worker registration failed:', err));
         });
       }
-    </script>
 
-    <!-- كود التحميل السريع الفوري -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      let globalLogoUrl = "";
+      let loadedCategories = [];
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGvv11z5ysUxYp6MscdetAUmJtfmCuXZ4",
-            authDomain: "evabrandcatalog.firebaseapp.com",
-            projectId: "evabrandcatalog",
-            storageBucket: "evabrandcatalog.firebasestorage.app",
-            messagingSenderId: "795421907629",
-            appId: "1:795421907629:web:e75bc5be8c4556ab660424"
-        };
+      async function setupVisitorAndInstallsCounters() {
+          try {
+              const statsRef = doc(db, "settings", "stats");
+              const statsDoc = await getDoc(statsRef);
+              
+              let totalVisits = statsDoc.exists() ? (statsDoc.data().visits || 50) : 50;
+              let totalInstalls = statsDoc.exists() ? (statsDoc.data().installs || 0) : 0;
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+              await updateDoc(statsRef, { visits: increment(1) });
+              
+              document.getElementById('visitCount').innerText = totalVisits + 1;
+              document.getElementById('installsCount').innerText = totalInstalls;
+          } catch (error) {
+              document.getElementById('visitCount').innerText = "50";
+              document.getElementById('installsCount').innerText = "0";
+          }
+      }
 
-        let globalLogoUrl = "";
-        let loadedCategories = [];
+      async function checkAgentSession() {
+          let loggedAgentName = localStorage.getItem('eva_logged_agent');
+          let statusText = document.getElementById('loginStatusText');
+          let loginBtnUI = document.getElementById('loginBtnUI');
 
-        async function setupVisitorCounter() {
-            try {
-                const statsRef = doc(db, "settings", "stats");
-                const statsDoc = await getDoc(statsRef);
-                let totalVisits = statsDoc.exists() ? (statsDoc.data().visits || 50) : 50;
-                await updateDoc(statsRef, { visits: increment(1) });
-                document.getElementById('visitCount').innerText = totalVisits + 1;
-            } catch (error) {
-                document.getElementById('visitCount').innerText = "50";
-            }
-        }
+          if(loggedAgentName) {
+              try {
+                  const agentsSnap = await getDocs(collection(db, "agents"));
+                  let agentExists = false;
+                  agentsSnap.forEach(docItem => {
+                      if(docItem.data().name === loggedAgentName) {
+                          agentExists = true;
+                      }
+                  });
 
-        async function checkAgentSession() {
-            let loggedAgentName = localStorage.getItem('eva_logged_agent');
-            let statusText = document.getElementById('loginStatusText');
-            let loginBtnUI = document.getElementById('loginBtnUI');
+                  if(!agentExists) {
+                      localStorage.removeItem('eva_logged_agent');
+                      alert('عذراً، تم إلغاء صلاحية هذا الحساب من الإدارة.');
+                      location.reload();
+                      return;
+                  }
+              } catch(e) {
+                  console.error(e);
+              }
 
-            if(loggedAgentName) {
-                try {
-                    const agentsSnap = await getDocs(collection(db, "agents"));
-                    let agentExists = false;
-                    agentsSnap.forEach(docItem => {
-                        if(docItem.data().name === loggedAgentName) {
-                            agentExists = true;
-                        }
-                    });
+              statusText.innerHTML = `👋 أهلاً بكِ، <b>${loggedAgentName}</b>`;
+              loginBtnUI.innerText = "تسجيل خروج";
+              loginBtnUI.style.background = "#e74c3c";
+              loginBtnUI.onclick = logoutAgent;
+          } else {
+              statusText.innerHTML = "خاص بالوسيطات المعتمدات:";
+              loginBtnUI.innerText = "تسجيل الدخول";
+              loginBtnUI.style.background = "#ad1457";
+              loginBtnUI.onclick = openLoginModal;
+          }
+      }
 
-                    if(!agentExists) {
-                        localStorage.removeItem('eva_logged_agent');
-                        alert('عذراً، تم إلغاء صلاحية هذا الحساب من الإدارة.');
-                        location.reload();
-                        return;
-                    }
-                } catch(e) {
-                    console.error(e);
-                }
+      async function initCatalogFast() {
+          setupVisitorAndInstallsCounters();
+          await checkAgentSession();
 
-                statusText.innerHTML = `👋 أهلاً بكِ، <b>${loggedAgentName}</b>`;
-                loginBtnUI.innerText = "تسجيل خروج";
-                loginBtnUI.style.background = "#e74c3c";
-                loginBtnUI.onclick = logoutAgent;
-            } else {
-                statusText.innerHTML = "خاص بالوسيطات المعتمدات:";
-                loginBtnUI.innerText = "تسجيل الدخول";
-                loginBtnUI.style.background = "#ad1457";
-                loginBtnUI.onclick = openLoginModal;
-            }
-        }
+          try {
+              const [logoDoc, noticeDoc, catSnapshot] = await Promise.all([
+                  getDoc(doc(db, "settings", "logo")),
+                  getDoc(doc(db, "settings", "notice")),
+                  getDocs(collection(db, "categories"))
+              ]);
 
-        async function initCatalogFast() {
-            setupVisitorCounter();
-            await checkAgentSession();
+              if (logoDoc.exists() && logoDoc.data().img) {
+                  globalLogoUrl = logoDoc.data().img;
+                  const logoEl = document.getElementById('display-logo');
+                  logoEl.src = globalLogoUrl;
+                  logoEl.style.display = 'block';
+              }
 
-            try {
-                const [logoDoc, noticeDoc, catSnapshot] = await Promise.all([
-                    getDoc(doc(db, "settings", "logo")),
-                    getDoc(doc(db, "settings", "notice")),
-                    getDocs(collection(db, "categories"))
-                ]);
+              if (noticeDoc.exists() && noticeDoc.data().text) {
+                  document.getElementById('adminNoticeText').innerText = noticeDoc.data().text;
+                  document.getElementById('adminNoticeBox').style.display = 'block';
+              }
 
-                if (logoDoc.exists() && logoDoc.data().img) {
-                    globalLogoUrl = logoDoc.data().img;
-                    const logoEl = document.getElementById('display-logo');
-                    logoEl.src = globalLogoUrl;
-                    logoEl.style.display = 'block';
-                }
+              loadedCategories = [];
+              catSnapshot.forEach(docItem => loadedCategories.push({ id: docItem.id, ...docItem.data() }));
 
-                if (noticeDoc.exists() && noticeDoc.data().text) {
-                    document.getElementById('adminNoticeText').innerText = noticeDoc.data().text;
-                    document.getElementById('adminNoticeBox').style.display = 'block';
-                }
+              const categoriesGrid = document.getElementById('categoriesGrid');
+              let categoriesHtml = '';
 
-                loadedCategories = [];
-                catSnapshot.forEach(docItem => loadedCategories.push({ id: docItem.id, ...docItem.data() }));
+              loadedCategories.forEach(cat => {
+                  let catImg = cat.image ? cat.image : (globalLogoUrl || 'https://via.placeholder.com/70');
+                  categoriesHtml += `
+                      <div class="category-card" onclick="openCategory('${cat.id}', '${cat.name}')">
+                          <img src="${catImg}" class="category-img" alt="${cat.name}">
+                          <h3>${cat.name}</h3>
+                          <span class="category-code-tag">(${cat.id})</span>
+                      </div>
+                  `;
+              });
+              categoriesGrid.innerHTML = categoriesHtml;
 
-                const categoriesGrid = document.getElementById('categoriesGrid');
-                let categoriesHtml = '';
+          } catch (error) {
+              console.error("Error loading fast catalog data:", error);
+          }
+      }
 
-                loadedCategories.forEach(cat => {
-                    let catImg = cat.image ? cat.image : (globalLogoUrl || 'https://via.placeholder.com/70');
-                    categoriesHtml += `
-                        <div class="category-card" onclick="openCategory('${cat.id}', '${cat.name}')">
-                            <img src="${catImg}" class="category-img" alt="${cat.name}">
-                            <h3>${cat.name}</h3>
-                            <span class="category-code-tag">(${cat.id})</span>
-                        </div>
-                    `;
-                });
-                categoriesGrid.innerHTML = categoriesHtml;
+      window.openCategory = async function(catId, catName) {
+          document.getElementById('categoriesHomeView').style.display = 'none';
+          
+          let targetSec = document.getElementById(`section-${catId}`);
+          if (!targetSec) {
+              targetSec = document.createElement('div');
+              targetSec.id = `section-${catId}`;
+              targetSec.className = 'section active-section';
+              targetSec.innerHTML = `
+                  <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
+                  <h2>✨ ${catName} (${catId})</h2>
+                  <p style="text-align:center; color:#880e4f; padding:20px;">جاري تحميل منتجات القسم...</p>
+              `;
+              document.getElementById('sectionsContainer').appendChild(targetSec);
 
-            } catch (error) {
-                console.error("Error loading fast catalog data:", error);
-            }
-        }
+              try {
+                  const prodRef = collection(db, "products");
+                  const q = query(prodRef, where("category", "in", [catId, catName]));
+                  const prodSnap = await getDocs(q);
+                  
+                  let catProducts = [];
+                  prodSnap.forEach(d => catProducts.push(d.data()));
 
-        window.openCategory = async function(catId, catName) {
-            document.getElementById('categoriesHomeView').style.display = 'none';
-            
-            let targetSec = document.getElementById(`section-${catId}`);
-            if (!targetSec) {
-                targetSec = document.createElement('div');
-                targetSec.id = `section-${catId}`;
-                targetSec.className = 'section active-section';
-                targetSec.innerHTML = `
-                    <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
-                    <h2>✨ ${catName} (${catId})</h2>
-                    <p style="text-align:center; color:#880e4f; padding:20px;">جاري تحميل منتجات القسم...</p>
-                `;
-                document.getElementById('sectionsContainer').appendChild(targetSec);
+                  const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
 
-                try {
-                    const prodRef = collection(db, "products");
-                    const q = query(prodRef, where("category", "in", [catId, catName]));
-                    const prodSnap = await getDocs(q);
-                    
-                    let catProducts = [];
-                    prodSnap.forEach(d => catProducts.push(d.data()));
+                  let productsContent = '';
+                  if (catProducts.length === 0) {
+                      productsContent = '<p style="color:#880e4f; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
+                  } else {
+                      productsContent = `<div class="products-grid">` + catProducts.map(p => {
+                          let images = p.images && p.images.length > 0 ? p.images : [];
+                          let mainImg = images.length > 0 ? images[0] : '';
+                          let thumbsHtml = images.length > 1 ? `
+                              <div class="product-images">
+                                  ${images.map(img => `<img src="${img}" onclick="changeMainImage(this, '${p.code}')">`).join('')}
+                              </div>
+                          ` : '';
 
-                    const isAgentLogged = localStorage.getItem('eva_logged_agent') !== null;
+                          let priceHtml = `<span class="price-ex">السعر: ${p.price} ₪</span>`;
+                          if(isAgentLogged) {
+                              priceHtml = `
+                                  <span class="price-ex">سعر المعرض: ${p.price} ₪</span>
+                                  <span class="price-agent">سعر الوسيط: ${p.agentPrice} ₪</span>
+                              `;
+                          }
 
-                    let productsContent = '';
-                    if (catProducts.length === 0) {
-                        productsContent = '<p style="color:#880e4f; text-align:center; padding:20px;">لا توجد منتجات في هذا القسم حالياً.</p>';
-                    } else {
-                        productsContent = `<div class="products-grid">` + catProducts.map(p => {
-                            let images = p.images && p.images.length > 0 ? p.images : [];
-                            let mainImg = images.length > 0 ? images[0] : '';
-                            let thumbsHtml = images.length > 1 ? `
-                                <div class="product-images">
-                                    ${images.map(img => `<img src="${img}" onclick="changeMainImage(this, '${p.code}')">`).join('')}
-                                </div>
-                            ` : '';
+                          return `
+                              <div class="product-card">
+                                  <div>
+                                      ${mainImg ? `<img src="${mainImg}" class="main-product-img" id="main-img-${p.code}" onclick="openModal('${mainImg}')">` : ''}
+                                      ${thumbsHtml}
+                                      <h3>${p.name}</h3>
+                                      <div class="prices">
+                                          ${priceHtml}
+                                          <span class="product-code">رمز المنتج: ${p.code}</span>
+                                      </div>
+                                  </div>
+                                  <a href="https://wa.me/970597180456?text=أود طلب المنتج بررمز ${p.code}" target="_blank" class="whatsapp-btn">اطلب واتساب</a>
+                              </div>
+                          `;
+                      }).join('') + `</div>`;
+                  }
 
-                            let priceHtml = `<span class="price-ex">السعر: ${p.price} ₪</span>`;
-                            if(isAgentLogged) {
-                                priceHtml = `
-                                    <span class="price-ex">سعر المعرض: ${p.price} ₪</span>
-                                    <span class="price-agent">سعر الوسيط: ${p.agentPrice} ₪</span>
-                                `;
-                            }
+                  targetSec.innerHTML = `
+                      <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
+                      <h2>✨ ${catName} (${catId})</h2>
+                      ${productsContent}
+                  `;
 
-                            return `
-                                <div class="product-card">
-                                    <div>
-                                        ${mainImg ? `<img src="${mainImg}" class="main-product-img" id="main-img-${p.code}" onclick="openModal('${mainImg}')">` : ''}
-                                        ${thumbsHtml}
-                                        <h3>${p.name}</h3>
-                                        <div class="prices">
-                                            ${priceHtml}
-                                            <span class="product-code">رمز المنتج: ${p.code}</span>
-                                        </div>
-                                    </div>
-                                    <a href="https://wa.me/970597180456?text=أود طلب المنتج بررمز ${p.code}" target="_blank" class="whatsapp-btn">اطلب واتساب</a>
-                                </div>
-                            `;
-                        }).join('') + `</div>`;
-                    }
+              } catch (e) {
+                  console.error("Error loading products for category:", e);
+                  targetSec.innerHTML = `<button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button><p style="text-align:center; color:red;">حدث خطأ في تحميل المنتجات.</p>`;
+              }
+          } else {
+              document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+              targetSec.classList.add('active-section');
+          }
 
-                    targetSec.innerHTML = `
-                        <button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button>
-                        <h2>✨ ${catName} (${catId})</h2>
-                        ${productsContent}
-                    `;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
-                } catch (e) {
-                    console.error("Error loading products for category:", e);
-                    targetSec.innerHTML = `<button class="back-to-categories" onclick="backToHome()">⬅ العودة للأقسام</button><p style="text-align:center; color:red;">حدث خطأ في تحميل المنتجات.</p>`;
-                }
-            } else {
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-                targetSec.classList.add('active-section');
-            }
+      window.backToHome = function() {
+          document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+          document.getElementById('categoriesHomeView').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      window.openLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; }
+      window.closeLoginModal = function() { document.getElementById('loginModal').style.display = 'none'; }
 
-        window.backToHome = function() {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById('categoriesHomeView').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      window.handleAgentLogin = async function() {
+          let u = document.getElementById('loginUser').value.trim();
+          let p = document.getElementById('loginPass').value.trim();
+          const agentsSnap = await getDocs(collection(db, "agents"));
+          let found = null;
+          agentsSnap.forEach(docItem => {
+              let data = docItem.data();
+              if(data.username === u && data.password === p) found = data;
+          });
 
-        window.openLoginModal = function() { document.getElementById('loginModal').style.display = 'flex'; }
-        window.closeLoginModal = function() { document.getElementById('loginModal').style.display = 'none'; }
+          if(found) {
+              localStorage.setItem('eva_logged_agent', found.name);
+              closeLoginModal();
+              alert(`أهلاً بكِ ${found.name}! تم تسجيل الدخول بنجاح.`);
+              location.reload();
+          } else {
+              alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+          }
+      }
 
-        window.handleAgentLogin = async function() {
-            let u = document.getElementById('loginUser').value.trim();
-            let p = document.getElementById('loginPass').value.trim();
-            const agentsSnap = await getDocs(collection(db, "agents"));
-            let found = null;
-            agentsSnap.forEach(docItem => {
-                let data = docItem.data();
-                if(data.username === u && data.password === p) found = data;
-            });
+      window.logoutAgent = function() {
+          localStorage.removeItem('eva_logged_agent');
+          alert('تم تسجيل الخروج بنجاح.');
+          location.reload();
+      }
 
-            if(found) {
-                localStorage.setItem('eva_logged_agent', found.name);
-                closeLoginModal();
-                alert(`أهلاً بكِ ${found.name}! تم تسجيل الدخول بنجاح.`);
-                location.reload();
-            } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
-            }
-        }
+      window.changeMainImage = function(thumbElement, code) {
+          const mainImg = document.getElementById(`main-img-${code}`);
+          if(mainImg) mainImg.src = thumbElement.src;
+      }
 
-        window.logoutAgent = function() {
-            localStorage.removeItem('eva_logged_agent');
-            alert('تم تسجيل الخروج بنجاح.');
-            location.reload();
-        }
+      window.openModal = function(src) { 
+          const modal = document.getElementById('imageModal');
+          const modalImg = document.getElementById('modalImg');
+          modal.style.display = 'flex'; 
+          modalImg.src = src; 
+      }
+      window.closeModal = function() { 
+          document.getElementById('imageModal').style.display = 'none'; 
+      }
 
-        window.changeMainImage = function(thumbElement, code) {
-            const mainImg = document.getElementById(`main-img-${code}`);
-            if(mainImg) mainImg.src = thumbElement.src;
-        }
-
-        window.openModal = function(src) { 
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImg');
-            modal.style.display = 'flex'; 
-            modalImg.src = src; 
-        }
-        window.closeModal = function() { 
-            document.getElementById('imageModal').style.display = 'none'; 
-        }
-
-        initCatalogFast();
+      initCatalogFast();
     </script>
 </body>
 </html>
