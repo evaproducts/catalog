@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دير ستيل - نظام الحسابات والموردين</title>
+    <!-- ربط ملف الـ Manifest لتفعيل التثبيت كتطبيق -->
+    <link rel="manifest" href="manifeststeel.json">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
@@ -69,7 +71,6 @@
         .modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; width: 100%; max-width: 380px; border: 1px solid #444; text-align: right; }
         .close-modal { background: #444; color: #fff; margin-top: 10px; border: none; padding: 8px; width: 100%; border-radius: 6px; cursor: pointer; }
 
-        /* تنسيقات شاشة الطلبيات الخاصة */
         .top-stats-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
         .top-stat-box { flex: 1; background: #252525; border: 1px solid #444; border-radius: 10px; padding: 10px; text-align: center; }
         .top-stat-title { font-size: 11px; color: #aaa; margin-bottom: 4px; }
@@ -92,7 +93,7 @@
         </form>
     </div>
 
-    <!-- 1. الرئيسية (حسب طلبك: قسم الإدخال، تحته عرض التقارير، تحته قسم الطلبيات) -->
+    <!-- 1. الرئيسية -->
     <div id="screen-home" class="screen center-box">
         <div class="header-section">
             <h1>دير ستيل</h1>
@@ -112,7 +113,7 @@
         <button class="back-btn" onclick="logout()" style="color:#ff5252; border-color:#ff5252;">🔒 إقفال وتسجيل الخروج</button>
     </div>
 
-    <!-- 2. قائمة الإدخال (النظام الأساسي) -->
+    <!-- 2. قائمة الإدخال -->
     <div id="screen-input-menu" class="screen center-box">
         <h2>شاشة الإدخال</h2>
         <div class="sections-container">
@@ -123,7 +124,7 @@
         <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
-    <!-- 3. قائمة العرض (النظام الأساسي) -->
+    <!-- 3. قائمة العرض -->
     <div id="screen-view-menu" class="screen center-box">
         <h2>شاشة عرض التقارير</h2>
         <div class="sections-container">
@@ -134,7 +135,7 @@
         <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة</button>
     </div>
 
-    <!-- شاشة الطلبيات المستقلة والجديدة -->
+    <!-- شاشة الطلبيات -->
     <div id="screen-customer-orders" class="screen" style="max-width: 1050px;">
         <div class="header-main-box">
             <div class="top-stat-box">
@@ -193,7 +194,7 @@
         <button class="back-btn" onclick="showScreen('screen-home')">⬅ العودة للقائمة الرئيسية</button>
     </div>
 
-    <!-- 4. إدخال الموردين (النظام الأساسي) -->
+    <!-- 4. إدخال الموردين -->
     <div id="screen-input-suppliers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #ff9800;">قسم الموردين - إدخال وتعديل حركة</h2>
         <div class="top-actions">
@@ -214,7 +215,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 5. إدخال الزبائن (النظام الأساسي) -->
+    <!-- 5. إدخال الزبائن -->
     <div id="screen-input-customers" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #03a9f4;">قسم الذمم المدينة - إدخال وتعديل حركة</h2>
         <div class="top-actions">
@@ -235,7 +236,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 6. إدخال الصندوق (النظام الأساسي) -->
+    <!-- 6. إدخال الصندوق -->
     <div id="screen-input-cash" class="screen center-box" style="max-width: 500px;">
         <h2 style="color: #4CAF50;">قسم الصندوق - حركة نقدية وتعديل</h2>
         <div class="top-actions" style="margin-bottom: 12px;">
@@ -252,7 +253,7 @@
         <button class="back-btn" onclick="showScreen('screen-input-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 7. تقارير الموردين (النظام الأساسي) -->
+    <!-- 7. تقارير الموردين -->
     <div id="screen-report-suppliers" class="screen">
         <h2 style="color: #ff9800;">تقارير الموردين</h2>
         <div class="search-box">
@@ -275,7 +276,7 @@
         <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 8. تقارير الزبائن (النظام الأساسي) -->
+    <!-- 8. تقارير الزبائن -->
     <div id="screen-report-customers" class="screen">
         <h2 style="color: #03a9f4;">تقارير الذمم المدينة (الزبائن)</h2>
         <div class="search-box">
@@ -298,7 +299,7 @@
         <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- 9. تقارير الصندوق (النظام الأساسي) -->
+    <!-- 9. تقارير الصندوق -->
     <div id="screen-report-cash" class="screen">
         <h2 style="color: #4CAF50;">تقارير وحركات الصندوق</h2>
         <div class="search-box">
@@ -319,7 +320,7 @@
         <button class="back-btn" onclick="showScreen('screen-view-menu')">⬅ العودة</button>
     </div>
 
-    <!-- النوافذ المنبثقة للإضافة والحذف والتعديل -->
+    <!-- النوافذ المنبثقة -->
     <div id="addSupplierModal" class="modal">
         <div class="modal-content">
             <h3>إدخال مورد جديد</h3>
@@ -383,7 +384,7 @@
         </div>
     </div>
 
-    <!-- كود الجافاسكريبت الموحد والكامل -->
+    <!-- كود الجافاسكريبت الموحد والكامل مع تسجيل الـ Service Worker -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -444,7 +445,6 @@
             document.getElementById('custCalcBox').innerText = "الرصيد الناتج: " + (goods - paid).toFixed(2) + " شيكل";
         }
 
-        // دوال قسم الطلبيات
         let currentDocId = null;
 
         window.addRow = function(item = {}) {
@@ -608,7 +608,6 @@
             }
         }
 
-        // دوال الموردين والزبائن والصندوق الأصلية
         window.addNewSupplier = async function() {
             let name = document.getElementById('newSupName').value.trim();
             if(!name) return alert('الرجاء إدخال اسم المورد');
@@ -1124,6 +1123,17 @@
                 tbody.innerHTML = tableRows.reverse().join('');
                 document.getElementById('totalCashBalance').innerText = totalNet.toFixed(2) + " شيكل";
             } catch(e) { console.log(e); }
+        }
+    </script>
+
+    <!-- تسجيل الـ Service Worker لتفعيل التثبيت كتطبيق PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('swsteel.js.js')
+                    .then((reg) => console.log('Service Worker registered', reg))
+                    .catch((err) => console.log('Service Worker failed', err));
+            });
         }
     </script>
 </body>
