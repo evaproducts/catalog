@@ -953,7 +953,7 @@
 
                     let baseUrl = window.location.origin + window.location.pathname.replace('partner.html', '');
                     document.getElementById('catalogLink').value = `${baseUrl}catalog.html?user=${currentActivePartnerId}`;
-                    document.getElementById('referralLink').value = `${baseUrl}join.html?ref=${currentActivePartnerId}`;
+                    document.getElementById('referralLink').value = `${baseUrl}index.html?ref=${currentActivePartnerId}`;
 
                     await loadTeamTree(currentActivePartnerId);
 
