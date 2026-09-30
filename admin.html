@@ -805,7 +805,7 @@
             let waUrl = "";
 
             if (!isCatalogReferralOrder) {
-                let partnerPortalUrl = "https://evaproducts.github.io/eva-plus-test/partner.html";
+                let partnerPortalUrl = "https://evaproducts.github.io/catalog/partner.html";
                 let welcomeMsg = `مرحباً بك ${order.clientName} 🌸\nمبروك انضمامك رسمياً لعائلة نظام "إيفا بلس"!\n\nبيانات حسابك الشريك:\n🆔 رقم الشريك: ${newPartnerId}\n🔑 كلمة المرور: ${rawPass}\n\n🔗 رابط صفحة الشركاء لدخول حسابك:\n${partnerPortalUrl}\n\nيمكنك البدء بمشاركة رابط متجرك وتحقيق الأرباح.`;
                 waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(welcomeMsg)}`;
                 alert('✅ تم تأكيد الانضمام، إنشاء حساب الشريك (' + newPartnerId + '), وتوزيع الأرباح على الشجرة بنجاح!');
