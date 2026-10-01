@@ -30,12 +30,10 @@
         .store-payment-badges { display: flex; justify-content: center; gap: 8px; margin: 10px 0; }
         .payment-pill { background: #fff; color: #880e4f; border: 1px solid #f8bbd0; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; }
 
-        /* تعديل شبكة وكروت الأقسام لتكون مربعة ونظيفة مثل المعرض الاحترافي */
         .categories-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 15px; margin-bottom: 25px; }
         .category-card { background: #fff; border: 1px solid #f8bbd0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
         .category-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(216, 27, 96, 0.15); border-color: #ad1457; }
         
-        /* حاوية الصورة المربعة النظيفة */
         .category-img-container { width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background: #fcfcfc; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
         .category-img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
         
@@ -150,6 +148,12 @@
             <h3 style="color: #880e4f; margin-top: 0; margin-bottom: 15px;">🛍️ إتمام طلب المنتج</h3>
             <p id="modalProductName" style="font-weight: bold; color: #333; margin-bottom: 15px; font-size: 14px;"></p>
             
+            <h4 style="color: #880e4f; font-size: 14px; margin: 10px 0 5px 0; border-bottom: 1px solid #f8bbd0; padding-bottom: 4px;">ادخل معلومات التوصيل</h4>
+            
+            <div style="background: #fdf2f8; border: 1px solid #f8bbd0; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: #880e4f; line-height: 1.5;">
+                <b>📦 تكلفة التوصيل:</b> 20 للضفة , 30 للقدس , 70 للداخل
+            </div>
+
             <div class="form-group">
                 <label>الاسم الكامل:</label>
                 <input type="text" id="clientName" placeholder="أدخل اسمك الكريم">
@@ -202,7 +206,7 @@
         let rawPartnerInput = (urlParams.get('ref') || urlParams.get('user') || '').trim();
         let partnerUser = null;
         let isSystemPartnerOrder = false;
-        let showAgentProfit = false; // متغير صارم للتحكم بإظهار الأرباح للشركاء فقط
+        let showAgentProfit = false;
 
         if (rawPartnerInput && rawPartnerInput.toUpperCase().startsWith('EVA-')) {
             partnerUser = rawPartnerInput.toUpperCase();
@@ -230,7 +234,7 @@
                     if (pData && pData.partnerId) {
                         partnerUser = pData.sponsor || 'EVA-001';
                         isSystemPartnerOrder = true;
-                        showAgentProfit = true; // تفعيل إظهار الأرباح فقط عند وجود بيانات شريك حقيقية
+                        showAgentProfit = true;
                         document.getElementById('clientName').value = pData.name || '';
                         document.getElementById('clientAddress').value = pData.address || '';
                         if (pData.phone) {
@@ -358,7 +362,6 @@
                 let safeName = (p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 let jsonImages = JSON.stringify(p.images || []).replace(/"/g, '&quot;');
 
-                // الأرباح تظهر حصراً إذا كان المستخدم مسجلاً كشريك عبر عملية الانضمام
                 let profitHtml = showAgentProfit ? `<div class="product-profit">ارباح إيفا بلس: ${agentPriceValue} ₪</div>` : '';
 
                 return `
