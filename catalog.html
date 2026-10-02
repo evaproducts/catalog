@@ -54,15 +54,12 @@
         .back-home-btn { background: #ad1457; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .back-home-btn:hover { background: #880e4f; }
 
-        /* تعديل شبكة المنتجات لتظهر منتجين بجانب بعضهما على الموبايل */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
         @media (min-width: 768px) {
             .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
         }
 
         .product-card { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f8bbd0; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* تعديل حاوية الصورة لتظهر كاملة بجميع تفاصيلها دون قص (contain) */
         .product-img-container { width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #fafafa; position: relative; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .product-img-container img { width: 100%; height: 100%; object-fit: contain; }
 
@@ -70,8 +67,14 @@
         .product-code { font-size: 11px; color: #b8860b; margin-bottom: 4px; font-weight: bold; }
         .product-price { font-size: 14px; font-weight: bold; color: #880e4f; margin-bottom: 4px; }
         .product-profit { font-size: 11px; font-weight: bold; color: #27ae60; margin-bottom: 8px; background: #e8f5e9; padding: 3px 6px; border-radius: 6px; display: inline-block; }
+        
         .order-btn { background: #27ae60; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px; box-shadow: 0 2px 6px rgba(39,174,96,0.3); }
         .order-btn:hover { background: #219150; }
+
+        /* زر الواتساب الخاص بقسم البوكسات */
+        .whatsapp-gift-btn { background: #25d366; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 11px; box-shadow: 0 2px 6px rgba(37,211,102,0.3); text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
+        .whatsapp-gift-btn:hover { background: #20ba5a; }
+
         .reserved-badge { background: #e74c3c; color: #fff; text-align: center; padding: 6px; border-radius: 8px; font-weight: bold; font-size: 11px; margin-top: 8px; }
         
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
@@ -361,7 +364,7 @@
                 const prodSnap = await getDocs(q);
                 
                 let catProducts = [];
-                prodSnap.forEach(d => catProducts.push({ id: d.id, ...d.data() }));
+                prodSnap.forEach(d => catProducts.push({ id: d.id, catCode: catId, ...d.data() }));
 
                 renderProducts(catProducts);
             } catch (e) {
@@ -394,25 +397,55 @@
                 let safeName = (p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 let jsonImages = JSON.stringify(p.images || []).replace(/"/g, '&quot;');
 
-                let profitHtml = showAgentProfit ? `<div class="product-profit">ارباح إيفا بلس: ${agentPriceValue} ₪</div>` : '';
+                // التحقق مما إذا كان المنتج ينتمي لقسم البوكسات (K أو يحتوي على بوكسات هدايا)
+                let isGiftBoxSection = (p.category === 'K' || (p.category && p.category.includes('بوكسات')) || (p.code && p.code.startsWith('K')));
+
+                let cardContent = '';
+                let actionButton = '';
+
+                if (isGiftBoxSection) {
+                    // تصميم خاص لقسم بوكسات الهدايا بدون سعر ثابت وبزر واتساب مخصص
+                    let storeWhatsApp = "970597180456";
+                    let waMessage = `مرحباً إيفا براند، لدي مناسبة وأريد بوكس يناسبها (بخصوص المنتج: ${p.name} - كود: ${p.code})`;
+                    let waUrl = `https://wa.me/${storeWhatsApp}?text=${encodeURIComponent(waMessage)}`;
+
+                    cardContent = `
+                        <div class="product-img-container" onclick='openImageModal(${jsonImages})'>
+                            <img src="${firstImg}" alt="${safeName}">
+                        </div>
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-code">كود المنتج: ${p.code}</div>
+                        <div style="font-size: 12px; color: #880e4f; font-weight: bold; margin-bottom: 8px;">✨ السعر حسب المناسبة والمحتوى</div>
+                    `;
+
+                    actionButton = `
+                        <a href="${waUrl}" target="_blank" class="whatsapp-gift-btn">
+                            لدي مناسبة وأريد بوكس يناسبها 💬
+                        </a>
+                    `;
+                } else {
+                    // التصميم الطبيعي لباقي الأقسام
+                    let profitHtml = showAgentProfit ? `<div class="product-profit">ارباح إيفا بلس: ${agentPriceValue} ₪</div>` : '';
+
+                    cardContent = `
+                        <div class="product-img-container" onclick='openImageModal(${jsonImages})'>
+                            <img src="${firstImg}" alt="${safeName}">
+                        </div>
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-code">كود المنتج: ${p.code}</div>
+                        <div class="product-price">${p.price} ₪</div>
+                        ${profitHtml}
+                    `;
+
+                    actionButton = isReserved ? 
+                        `<div class="reserved-badge">محجوز حالياً</div>` : 
+                        `<button class="order-btn" onclick='openOrderModal("${p.code}", "${safeName}")'>اطلب المنتج 🛍️</button>`;
+                }
 
                 return `
                     <div class="product-card">
-                        <div>
-                            <div class="product-img-container" onclick='openImageModal(${jsonImages})'>
-                                <img src="${firstImg}" alt="${safeName}">
-                            </div>
-                            <div class="product-title">${p.name}</div>
-                            <div class="product-code">كود المنتج: ${p.code}</div>
-                            <div class="product-price">${p.price} ₪</div>
-                            ${profitHtml}
-                        </div>
-                        <div>
-                            ${isReserved ? 
-                                `<div class="reserved-badge">محجوز حالياً</div>` : 
-                                `<button class="order-btn" onclick='openOrderModal("${p.code}", "${safeName}")'>اطلب المنتج 🛍️</button>`
-                            }
-                        </div>
+                        <div>${cardContent}</div>
+                        <div>${actionButton}</div>
                     </div>
                 `;
             }).join('');
