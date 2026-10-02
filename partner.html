@@ -6,7 +6,7 @@
     <title>EVA PLUS PARTNER | لوحة تحكم الشريك</title>
     <!-- ربط ملف الـ Manifest لتفعيل ميزات التطبيق (PWA) -->
     <link rel="manifest" href="manifest-partner.json">
-    <meta name="theme-color" content="#1976d2">
+    <meta name="theme-color" content="#0088cc">
     <style>
         :root {
             --primary-burgundy: #880e4f;
@@ -18,12 +18,12 @@
             --text-color: #333333;
             --linky-blue: #0088cc;
             --linky-blue-hover: #0077b3;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --bg-gradient: #f8f9fa;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #ffffff;
+            background: var(--bg-gradient);
             color: var(--text-color);
             margin: 0;
             padding: 0;
@@ -36,37 +36,42 @@
 
         .app-wrapper {
             width: 100%;
-            max-width: 480px;
+            max-width: 440px;
             margin: 0 auto;
             box-sizing: border-box;
-            padding: 20px;
+            padding: 15px;
         }
 
-        /* تصميم شاشة تسجيل الدخول المطابقة لنظام لينكي بدون لوغو */
+        /* تصميم شاشة تسجيل الدخول الاحترافية والمتناسقة تماماً */
         .linky-login-container {
             background: #ffffff;
-            padding: 30px 25px;
-            border-radius: 20px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eaeaea;
             text-align: right;
             width: 100%;
             box-sizing: border-box;
+            margin: auto;
         }
 
         .linky-welcome-heading {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: #111;
+            color: #1a1a1a;
             margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
         }
 
         .linky-welcome-sub {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 25px;
+            font-size: 13.5px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
         }
 
         .linky-form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             text-align: right;
         }
 
@@ -75,7 +80,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .linky-form-group input {
@@ -84,7 +89,7 @@
             border: 1.5px solid #e1e8ed;
             border-radius: 12px;
             box-sizing: border-box;
-            background: #ffffff;
+            background: #fafbfc;
             font-size: 14px;
             transition: all 0.2s ease;
         }
@@ -92,6 +97,7 @@
         .linky-form-group input:focus {
             outline: none;
             border-color: var(--linky-blue);
+            background: #ffffff;
             box-shadow: 0 0 0 4px rgba(0, 136, 204, 0.1);
         }
 
@@ -106,7 +112,7 @@
             font-size: 15px;
             width: 100%;
             margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.25);
+            box-shadow: 0 4px 14px rgba(0, 136, 204, 0.3);
             transition: background 0.2s, transform 0.1s;
         }
 
@@ -117,13 +123,13 @@
 
         .linky-whatsapp-btn {
             background: linear-gradient(135deg, #25d366, #20ba5a);
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
         }
 
         .linky-link-text {
             display: block;
             text-align: center;
-            margin-top: 18px;
+            margin-top: 20px;
             color: var(--linky-blue);
             text-decoration: none;
             font-weight: 600;
@@ -422,7 +428,7 @@
             <button class="btn" style="background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));" onclick="copyInfo()">📋 نسخ كافة روابط ومعلومات الحساب</button>
         </div>
 
-        <!-- النوافذ المنبثقة (الملف الشخصي، طلب الأموال، الشجرة، إلخ) -->
+        <!-- النوافذ المنبثقة -->
         <div class="modal-overlay" id="profileModal">
             <div class="modal-content">
                 <button class="modal-close-btn" onclick="closeModal('profileModal')">إغلاق ✕</button>
@@ -511,17 +517,17 @@
         <div class="modal-overlay" id="videoModal">
             <div class="modal-content" style="max-width: 520px;">
                 <button class="modal-close-btn" onclick="closeModal('videoModal')">إغلاق ✕</button>
-                <h3 style="color: var(--primary-burgundy); margin-top: 0; border-bottom: 2px solid var(--border-burgundy); padding-bottom: 8px;">▶️️ دليل الانضمام لايفا بلس</h3>
+                <h3 style="color: var(--primary-burgundy); margin-top: 0; border-bottom: 2px solid var(--border-burgundy); padding-bottom: 8px;">▶️ دليل الانضمام لايفا بلس</h3>
                 <div class="partner-video-container"><iframe src="https://www.youtube.com/embed/XlYoHwowL74" allowfullscreen></iframe></div>
             </div>
         </div>
 
         <!-- ======================================================= -->
-        <!-- شاشة تسجيل الدخول (EVA PLUS PARTNER - بدون لوغو ونفس التصميم) -->
+        <!-- شاشة تسجيل الدخول الاحترافية (بمطابقة تامة لشكل وتمركز لينكي) -->
         <!-- ======================================================= -->
         <div class="linky-login-container" id="loginContainer" style="display: none;">
-            <h1 class="linky-welcome-heading" style="font-size: 24px; color: var(--primary-burgundy); margin-bottom: 5px;">EVA PLUS PARTNER</h1>
-            <div class="linky-welcome-sub" style="margin-bottom: 20px;">سجّل الدخول برقم الشريك الخاص بك.</div>
+            <h1 class="linky-welcome-heading">EVA PLUS PARTNER</h1>
+            <div class="linky-welcome-sub">سجّل الدخول برقم الشريك الخاص بك للوصول إلى لوحة التحكم وأرباحك.</div>
 
             <div id="loginFormSection">
                 <div class="linky-form-group">
@@ -536,8 +542,8 @@
                 <span class="linky-link-text" onclick="showForgotPassword()">نسيت كلمة المرور؟</span>
             </div>
 
-            <div id="forgotSection" style="display: none; margin-top: 15px; border-top: 1px dashed #ddd; padding-top: 15px;">
-                <h4 style="color: var(--linky-blue); margin-bottom: 10px; font-size: 14px;">🔑 استعادة كلمة المرور</h4>
+            <div id="forgotSection" style="display: none; margin-top: 20px; border-top: 1px dashed #e1e8ed; padding-top: 20px;">
+                <h4 style="color: var(--linky-blue); margin-bottom: 12px; font-size: 14px;">🔑 استعادة كلمة المرور</h4>
                 <div class="linky-form-group">
                     <label>الاسم الكامل للحساب:</label>
                     <input type="text" id="forgotName" placeholder="ادخل اسمك المسجل">
@@ -547,7 +553,7 @@
                     <input type="text" id="forgotPhone" placeholder="0590000000">
                 </div>
                 <button class="linky-btn linky-whatsapp-btn" onclick="sendForgotPasswordWhatsApp()">💬 إرسال طلب الاستعادة عبر واتساب</button>
-                <span class="linky-link-text" onclick="backToLogin()" style="font-size: 12px; margin-top: 10px;">⬅️ العودة لتسجيل الدخول</span>
+                <span class="linky-link-text" onclick="backToLogin()" style="font-size: 12px; margin-top: 12px;">⬅️ العودة لتسجيل الدخول</span>
             </div>
         </div>
 
