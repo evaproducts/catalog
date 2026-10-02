@@ -438,25 +438,29 @@
             </div>
 
             <div class="partner-hook-box">
-                <h4>💡 ضاعف أرباحك الآن واجعل رصيدك يرتفع بسرعة!</h4>
+                <h4>💡 شارك وضاعف أرباحك بضغطة زر!</h4>
                 <p style="margin: 0; color: #5d4037; font-weight: bold;">
-                    كل شخص يبحث عن هدية فاخرة أو عطر مميز، ابعث له <b>رابط الكتالوج الخاص بك</b>. وإذا كان صديقك يريد العمل وزيادة دخله، شارك معه <b>رابط الاستقطاب</b> ليدخل في فريقك وتربح من نمو شبكتك بلا توقف!
+                    انقر على زر <b>مشاركة عبر الواتساب</b> أدناه لإرسال رابطك الجاهز إلى أصدقائك ومتابعيك فوراً وابدأ في بناء فريقك وأرباحك!
                 </p>
             </div>
 
+            <!-- رابط الكتالوج الخاص بالزبائن -->
             <div class="form-group">
                 <label>🔗 رابط الكتالوج الخاص بك (للمشاركة مع الزبائن):</label>
+                <input type="text" id="catalogLink" readonly style="background: #fff; font-size: 11px; margin-bottom: 6px;">
                 <div style="display: flex; gap: 6px;">
-                    <input type="text" id="catalogLink" readonly style="background: #fff; font-size: 11px;">
-                    <button class="btn blue-btn" style="margin-top:0; width: 85px; padding: 0; font-size: 12px;" onclick="copySpecificLink('catalogLink')">📋 نسخ</button>
+                    <button class="btn whatsapp-btn" style="margin-top:0; flex: 2; padding: 10px; font-size: 13px;" onclick="shareCatalogWhatsApp()">💬 مشاركة رابط الكتالوج عبر واتساب</button>
+                    <button class="btn blue-btn" style="margin-top:0; flex: 1; padding: 10px; font-size: 12px;" onclick="copySpecificLink('catalogLink')">📋 نسخ</button>
                 </div>
             </div>
 
+            <!-- رابط الاستقطاب للشراكة -->
             <div class="form-group" style="margin-bottom: 20px;">
                 <label>🌳 رابط الاستقطاب الخاص بك (لتسجيل شركاء جدد):</label>
+                <input type="text" id="referralLink" readonly style="background: #fff; font-size: 11px; margin-bottom: 6px;">
                 <div style="display: flex; gap: 6px;">
-                    <input type="text" id="referralLink" readonly style="background: #fff; font-size: 11px;">
-                    <button class="btn blue-btn" style="margin-top:0; width: 85px; padding: 0; font-size: 12px;" onclick="copySpecificLink('referralLink')">📋 نسخ</button>
+                    <button class="btn whatsapp-btn" style="margin-top:0; flex: 2; padding: 10px; font-size: 13px;" onclick="shareReferralWhatsApp()">💬 مشاركة رابط الاستقطاب عبر واتساب</button>
+                    <button class="btn blue-btn" style="margin-top:0; flex: 1; padding: 10px; font-size: 12px;" onclick="copySpecificLink('referralLink')">📋 نسخ</button>
                 </div>
             </div>
 
@@ -575,7 +579,7 @@
                 <div class="form-group">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                         <label style="margin:0;">اسم صاحب الحساب (IBURAQ):</label>
-                        <span onclick="toggleFieldEdit('iburaqNameInput')" style="cursor: pointer; font-size: 16px;" title="تعديل الحقل">✏️</span>
+                        <span onclick="toggleFieldEdit('iburaqNameInput')" style="cursor: pointer; font-size: 16px;" title="تعديل الحقل">✏️️</span>
                     </div>
                     <input type="text" id="iburaqNameInput" placeholder="الاسم الثلاثي حسب الحساب" readonly style="background: #eef2f5;">
                 </div>
@@ -704,11 +708,23 @@
         let partnerPayoutData = {};
         let partnerLastPayoutMonth = "";
 
+        // دوال المشاركة الذكية والجاهزة عبر الواتساب
+        window.shareCatalogWhatsApp = function() {
+            let catLink = document.getElementById('catalogLink').value;
+            let msg = `✨ تصفح أرقى العطور، الحقائب، والساعات الفاخرة في معرض إيفا براند عبر كاتالوجي الشخصي:\n\n${catLink}\n\n📦 التوصيل متوفر لكافة مناطق الضفة، القدس، والداخل 📍`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.shareReferralWhatsApp = function() {
+            let refLink = document.getElementById('referralLink').value;
+            let msg = `🚀 اربح من هاتفك ومن منزلك بلا رأس مال مع نظام EVA PLUS!\n\nانضم إلى فريقي وشجرتي التسويقية الآن من خلال رابط الاستقطاب الخاص بي:\n${refLink}\n\n✨ ابنِ فريقك واجعل أرباحهم مصدر دخلك المتصاعد!`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
         // دالة مركزية صارمة جداً لتنظيف أرقام الواتساب ومنع أي تكرار لأكواد الدول أو الأصفار
         window.openCleanWhatsApp = function(rawNumber, messageText = "") {
             let digits = rawNumber.toString().replace(/[^0-9]/g, '');
             
-            // إزالة أي تكرار محتمل لمفتاح 970 أو 972
             while (digits.startsWith('970970') || digits.startsWith('972972') || digits.startsWith('0097000970') || digits.startsWith('09700970')) {
                 if (digits.startsWith('970970')) digits = '970' + digits.slice(6);
                 else if (digits.startsWith('972972')) digits = '972' + digits.slice(6);
