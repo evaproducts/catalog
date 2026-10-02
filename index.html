@@ -15,7 +15,7 @@
         .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #d4af37; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        /* تنسيق الأكورديون التفاعلي (القوائم المنسدلة المريحة) */
+        /* تنسيق الأكورديون التفاعلي الشامل */
         .accordion-group { margin-bottom: 25px; }
         .accordion-item { border: 1px solid #f8bbd0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: #fffdfd; transition: all 0.3s; }
         .accordion-header { background: #fff0f5; color: #880e4f; padding: 14px 18px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
@@ -23,18 +23,17 @@
         .accordion-header::after { content: '▼'; font-size: 11px; transition: transform 0.3s; color: #ad1457; }
         .accordion-item.active .accordion-header::after { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; padding: 0 18px; font-size: 14px; color: #444; line-height: 1.8; }
-        .accordion-item.active .accordion-content { max-height: 300px; padding: 15px 18px; border-top: 1px solid #f8bbd0; }
+        .accordion-item.active .accordion-content { max-height: 400px; padding: 15px 18px; border-top: 1px solid #f8bbd0; }
+
+        /* تنسيقات مميزة داخل الأكورديون للأرباح والخطوات */
+        .accordion-content.payout-theme { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; }
+        .accordion-content.steps-theme { background: #fff0f5; color: #444; }
 
         .core-idea-box { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); color: #fff; padding: 22px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 15px rgba(136,14,79,0.15); }
         .core-idea-box h3 { margin-top: 0; font-size: 20px; color: #fff; }
         .core-idea-box p { font-size: 15px; margin-bottom: 0; line-height: 1.8; font-weight: bold; }
+        
         h2 { color: #880e4f; font-size: 18px; margin-bottom: 15px; border-right: 4px solid #ad1457; padding-right: 10px; }
-        .details-box { background: #fff0f5; padding: 20px; border-radius: 10px; border: 1px solid #f8bbd0; font-size: 14px; color: #555; margin-bottom: 25px; }
-        .details-box ul { padding-right: 20px; margin: 10px 0; }
-        .details-box li { margin-bottom: 12px; color: #444; }
-        .payout-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 2px solid #81c784; border-radius: 12px; padding: 20px; margin-bottom: 25px; color: #1b5e20; }
-        .payout-box h3 { margin-top: 0; font-size: 18px; color: #2e7d32; text-align: center; }
-        .payout-box p { font-size: 14px; line-height: 1.7; margin-bottom: 0; font-weight: bold; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 14px; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
@@ -66,13 +65,15 @@
             <iframe src="https://www.youtube.com/embed/XlYoHwowL74" title="دليل الانضمام والعمل في نظام EVA PLUS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
-        <!-- الأقسام التفاعلية المنسدلة (الهوك الجاذب حسب اهتمامات العميل) -->
+        <!-- الأقسام التفاعلية المنسدلة (الأكورديون الشامل) -->
         <div class="accordion-group">
+            
+            <!-- 1. الهوكات واهتمامات العملاء -->
             <div class="accordion-item" onclick="toggleAccordion(this)">
                 <div class="accordion-header">🛍️ هل تعملين في "شي إن" (SHEIN) وتعبتِ من دوامة الطلبات وجع رأس التوصيل؟</div>
                 <div class="accordion-content">
                     إذا كنتِ وسيطة وتتعبين في جمع الطلبات، متابعة الطرود، مشاكل التوصيل، وهامش الربح البسيط وسط تنافس الأسعار الشديد... <b>لدينا الحل الجذري!</b><br>
-                    في نظام <b>EVA PLUS</b>، لا توجد طرود ولا استلام وتسليم، أنتِ تعتمدين على <b>النشاط الرقمي وبناء الفريق فقط</b>. شاركي رابط كتالوجك الراقي أو ادعمعارفك للانضمام، وتحصلي على عمولتك المباشرة بذكاء وسهولة تامة من منزلك!
+                    في نظام <b>EVA PLUS</b>، لا توجد طرود ولا استلام وتسليم، أنتِ تعتمدين على <b>النشاط الرقمي وبناء الفريق فقط</b>. شاركي رابط كتالوجك الراقي أو ادع معارفك للانضمام، وتحصلي على عمولتك المباشرة بذكاء وسهولة تامة من منزلك!
                 </div>
             </div>
 
@@ -100,9 +101,31 @@
             <div class="accordion-item" onclick="toggleAccordion(this)">
                 <div class="accordion-header">💻 هل أنت مهتم بالتجارة الإلكترونية وترغب في دخول السوق بذكاء؟</div>
                 <div class="accordion-content">
-                    إذا كنت مهتماً بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
+                    إذا كنت مهتمًأ بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
                 </div>
             </div>
+
+            <!-- 2. قسم الأرباح والعمولات -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header" style="background: #e8f5e9; color: #1b5e20;">💵 كيف ومتى تحصل على أرباحك وعمولاتك؟</div>
+                <div class="accordion-content payout-theme">
+                    الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من معرض إيفا!
+                </div>
+            </div>
+
+            <!-- 3. قسم خطوات البدء الفوري -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header" style="background: #fff0f5; color: #880e4f;">📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS</div>
+                <div class="accordion-content steps-theme">
+                    <ul style="padding-right: 15px; margin: 0;">
+                        <li style="margin-bottom: 10px;"><strong>قدم طلب الانضمام أدناه:</strong> قم بتعبئة الطلب أدناه وارسل بياناتك ليتم حفظها ونقلك فوراً لاختيار منتجك الأول من الكتالوج[cite: 5].</li>
+                        <li style="margin-bottom: 10px;"><strong>اختر منتجك الأول:</strong> تصفح الكتالوج اطلب منتجك لتأكيد الطلب ودخولك في نظام EVA PLUS[cite: 5].</li>
+                        <li style="margin-bottom: 10px;"><strong>استلم روابطك الذكية:</strong> فور تأكيد الإدارة، ستقوم الإدارة بتفعيل حسابك وإرسال **رابط الصفحة الشخصية** مع بيانات الدخول الخاصة بك عبر الواتساب[cite: 5]!</li>
+                        <li style="margin-bottom: 0;"><strong>شارك واجني الأرباح:</strong> شارك رابط الكتالوج الخاص بك لتحقيق الأرباح، وشارك رابط الاستقطاب لتعريف أصدقائك بالفكرة لينضموا تحتك في الشجرة وتصبح شريكاً في العمولات[cite: 5].</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
         <div class="core-idea-box">
@@ -110,23 +133,6 @@
             <p>
                 سر النجاح الحقيقي في نظام <b>EVA PLUS</b> ليس في عرض السلع فقط، بل في دعوة معارفك وأصدقائك للانضمام إلى نظام الشراكة الذكي. حالما يختار كل شريك منتجه الأول ويدخل الشبكة، ستصبح شريكاً في أرباحهم وتتضاعف دخولكم معاً بلا توقف!
             </p>
-        </div>
-
-        <div class="payout-box">
-            <h3>💵 كيف ومتى تحصل على أرباحك وعمولاتك؟</h3>
-            <p>
-                الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من معرض إيفا!
-            </p>
-        </div>
-
-        <h2>📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS:</h2>
-        <div class="details-box">
-            <ul>
-                <li><strong>قدم طلب الانضمام أدناه:</strong> قم بتعبئة الطلب أدناه وارسل بياناتك ليتم حفظها ونقلك فوراً لاختيار منتجك الأول من الكتالوج.</li>
-                <li><strong>اختر منتجك الأول:</strong> تصفح الكتالوج اطلب منتجك لتأكيد الطلب ودخولك في نظام EVA PLUS.</li>
-                <li><strong>استلم روابطك الذكية:</strong> فور تأكيد الإدارة، ستقوم الإدارة بتفعيل حسابك وإرسال **رابط الصفحة الشخصية** مع بيانات الدخول الخاصة بك عبر الواتساب!</li>
-                <li><strong>شارك واجني الأرباح:</strong> شارك رابط الكتالوج الخاص بك لتحقيق الأرباح، وشارك رابط الاستقطاب لتعريف أصدقائك بالفكرة لينضموا تحتك في الشجرة وتصبح شريكاً في العمولات.</li>
-            </ul>
         </div>
 
         <!-- نموذج التسجيل الذاتي -->
