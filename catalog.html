@@ -35,7 +35,7 @@
         .category-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(216, 27, 96, 0.15); border-color: #ad1457; }
         
         .category-img-container { width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background: #fcfcfc; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
-        .category-img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+        .category-img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
         
         .category-card h3 { font-size: 14px; color: #333; margin: 5px 0 2px 0; font-weight: bold; }
         .category-code-tag { font-size: 12px; color: #b8860b; font-weight: bold; }
@@ -54,17 +54,25 @@
         .back-home-btn { background: #ad1457; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .back-home-btn:hover { background: #880e4f; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 10px; }
-        .product-card { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f8bbd0; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-img-container { width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: #f9f9f9; position: relative; margin-bottom: 10px; cursor: pointer; }
-        .product-img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .product-title { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .product-code { font-size: 11px; color: #b8860b; margin-bottom: 6px; font-weight: bold; }
-        .product-price { font-size: 15px; font-weight: bold; color: #880e4f; margin-bottom: 4px; }
-        .product-profit { font-size: 12px; font-weight: bold; color: #27ae60; margin-bottom: 10px; background: #e8f5e9; padding: 3px 8px; border-radius: 6px; display: inline-block; }
-        .order-btn { background: #27ae60; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; box-shadow: 0 2px 6px rgba(39,174,96,0.3); }
+        /* تعديل شبكة المنتجات لتظهر منتجين بجانب بعضهما على الموبايل */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        @media (min-width: 768px) {
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        }
+
+        .product-card { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f8bbd0; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* تعديل حاوية الصورة لتظهر كاملة بجميع تفاصيلها دون قص (contain) */
+        .product-img-container { width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #fafafa; position: relative; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .product-img-container img { width: 100%; height: 100%; object-fit: contain; }
+
+        .product-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 4px; }
+        .product-code { font-size: 11px; color: #b8860b; margin-bottom: 4px; font-weight: bold; }
+        .product-price { font-size: 14px; font-weight: bold; color: #880e4f; margin-bottom: 4px; }
+        .product-profit { font-size: 11px; font-weight: bold; color: #27ae60; margin-bottom: 8px; background: #e8f5e9; padding: 3px 6px; border-radius: 6px; display: inline-block; }
+        .order-btn { background: #27ae60; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px; box-shadow: 0 2px 6px rgba(39,174,96,0.3); }
         .order-btn:hover { background: #219150; }
-        .reserved-badge { background: #e74c3c; color: #fff; text-align: center; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 13px; margin-top: 10px; }
+        .reserved-badge { background: #e74c3c; color: #fff; text-align: center; padding: 6px; border-radius: 8px; font-weight: bold; font-size: 11px; margin-top: 8px; }
         
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
         .modal-content { background: #fff; width: 100%; max-width: 450px; border-radius: 12px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
@@ -230,7 +238,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // عداد الزيارات المركزي عبر Firebase Firestore
             try {
                 const counterRef = doc(db, "settings", "visitorCounter");
                 const counterSnap = await getDoc(counterRef);
@@ -238,11 +245,9 @@
                 let currentVisits = 954;
                 if (counterSnap.exists()) {
                     currentVisits = counterSnap.data().count || 954;
-                    // زيادة الزيارة بمقدار 1 وتحديثها في قاعدة البيانات لكل فتحة أو تحديث حقيقي للصفحة
                     await updateDoc(counterRef, { count: increment(1) });
                     currentVisits += 1;
                 } else {
-                    // إنشاء مستند العداد لأول مرة إذا لم يكن موجوداً بالقيمة الابتدائية
                     await setDoc(counterRef, { count: 955 });
                     currentVisits = 955;
                 }
@@ -317,7 +322,6 @@
 
                 catSnap.forEach(d => {
                     let catData = { id: d.id, ...d.data() };
-                    
                     let catImg = catData.image || catData.img || getDefaultCategoryImg(catData.name, catData.id, globalLogoUrl);
                     
                     gridHomeHtml += `
