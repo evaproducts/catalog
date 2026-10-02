@@ -3,195 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انضم إلى نظام EVA PLUS | اعمل من المنزل واربح معنا</title>
+    <title>معرض إيفا | الكتالوج الرقمي - EVA PLUS</title>
+
+    <link rel="manifest" href="manifest-catalog.json">
+    <meta name="theme-color" content="#880e4f">
+
+    <meta property="og:title" content="معرض إيفا براند | الكتالوج الرقمي">
+    <meta property="og:description" content="أرقى العطور، الحقائب، والساعات الفاخرة. التوصيل متوفر لكافة مناطق الضفة، القدس، والداخل.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80">
+    <meta property="og:type" content="website">
+
     <style>
-        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #fdfbfb 0%, #fce4ec 100%); color: #333; margin: 0; padding: 0; line-height: 1.8; }
-        .hero { background: linear-gradient(rgba(136,14,79,0.85), rgba(173,20,87,0.85)), url('https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; text-align: center; padding: 50px 20px; border-bottom: 4px solid #d4af37; }
-        .logo-img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #d4af37; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: #fff; }
-        .hero h1 { font-size: 28px; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
-        .hero p { font-size: 16px; color: #fffde7; max-width: 650px; margin: 0 auto; font-weight: bold; }
-        .container { max-width: 750px; margin: -30px auto 40px auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; border: 1px solid #f8bbd0; }
-        .sponsor-alert-box { background: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; font-weight: bold; text-align: center; display: none; }
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #d4af37; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #fdfbfb 0%, #fce4ec 100%); color: #333; margin: 0; padding: 15px; direction: rtl; min-height: 100vh; }
         
-        /* تنسيق الأكورديون التفاعلي الشامل */
-        .accordion-group { margin-bottom: 25px; }
-        .accordion-item { border: 1px solid #f8bbd0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: #fffdfd; transition: all 0.3s; }
-        .accordion-header { background: #fff0f5; color: #880e4f; padding: 14px 18px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
-        .accordion-header:hover { background: #ffe4ed; }
-        .accordion-header::after { content: '▼'; font-size: 11px; transition: transform 0.3s; color: #ad1457; }
-        .accordion-item.active .accordion-header::after { transform: rotate(180deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; padding: 0 18px; font-size: 14px; color: #444; line-height: 1.8; }
-        .accordion-item.active .accordion-content { max-height: 400px; padding: 15px 18px; border-top: 1px solid #f8bbd0; }
+        #installAppBanner { display: none; background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%); color: white; padding: 10px 15px; text-align: center; position: sticky; top: 0; z-index: 9999; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(136, 14, 79, 0.3); }
+        .install-banner-content { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        #installAppBtn { background: #fff; color: #880e4f; border: none; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; }
+        #dismissInstallBtn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.6); padding: 5px 10px; border-radius: 20px; font-size: 11px; cursor: pointer; }
 
-        .accordion-content.payout-theme { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; }
-        .accordion-content.steps-theme { background: #fff0f5; color: #444; }
-
-        .core-idea-box { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); color: #fff; padding: 22px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 15px rgba(136,14,79,0.15); }
-        .core-idea-box h3 { margin-top: 0; font-size: 20px; color: #fff; }
-        .core-idea-box p { font-size: 15px; margin-bottom: 0; line-height: 1.8; font-weight: bold; }
+        .header { text-align: center; padding: 20px; background: #fff; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-bottom: 3px solid #d4af37; }
+        .header img { max-height: 80px; width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid #d4af37; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .notice-bar { background: #880e4f; color: #fff; padding: 10px 15px; border-radius: 8px; text-align: center; font-size: 14px; margin-bottom: 20px; font-weight: bold; }
         
-        h2 { color: #880e4f; font-size: 18px; margin-bottom: 15px; border-right: 4px solid #ad1457; padding-right: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
-        .phone-input-group { display: flex; gap: 8px; }
-        .phone-input-group select { flex: 0 0 130px; background: #f9f9f9; font-weight: bold; color: #880e4f; }
-        .phone-input-group input { flex: 1; }
-        .register-btn { background: #ad1457; color: white; border: none; width: 100%; padding: 15px; font-size: 17px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 20px; box-shadow: 0 4px 12px rgba(173, 20, 87, 0.3); transition: 0.3s; }
-        .register-btn:hover { background: #880e4f; }
-        .support-box { background: #fce4ec; border: 1px solid #f8bbd0; padding: 15px; border-radius: 10px; text-align: center; margin-top: 25px; font-size: 14px; color: #880e4f; }
-        .support-box a { color: #ad1457; font-weight: bold; text-decoration: none; }
-        .footer-link { text-align: center; margin-top: 20px; font-size: 14px; }
+        .social-promo-box { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+        .social-promo-btn { display: inline-block; background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%); color: #fff; text-decoration: none; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid #d4af37; }
+        .store-payment-badges { display: flex; justify-content: center; gap: 8px; margin: 10px 0; }
+        .payment-pill { background: #fff; color: #880e4f; border: 1px solid #f8bbd0; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; }
+
+        .categories-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 15px; margin-bottom: 25px; }
+        .category-card { background: #fff; border: 1px solid #f8bbd0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
+        .category-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(216, 27, 96, 0.15); border-color: #ad1457; }
+        
+        .category-img-container { width: 100%; height: 130px; border-radius: 8px; overflow: hidden; background: #fcfcfc; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
+        .category-img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
+        
+        .category-card h3 { font-size: 14px; color: #333; margin: 5px 0 2px 0; font-weight: bold; }
+        .category-code-tag { font-size: 12px; color: #b8860b; font-weight: bold; }
+
+        #backHomeContainer {
+            position: sticky;
+            top: 10px;
+            z-index: 998;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            margin-bottom: 15px;
+        }
+        .back-home-btn { background: #ad1457; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .back-home-btn:hover { background: #880e4f; }
+
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        @media (min-width: 768px) {
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        }
+
+        .product-card { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f8bbd0; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-img-container { width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #fafafa; position: relative; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .product-img-container img { width: 100%; height: 100%; object-fit: contain; }
+
+        .product-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 4px; }
+        .product-code { font-size: 11px; color: #b8860b; margin-bottom: 4px; font-weight: bold; }
+        .product-price { font-size: 14px; font-weight: bold; color: #880e4f; margin-bottom: 4px; }
+        .product-profit { font-size: 11px; font-weight: bold; color: #27ae60; margin-bottom: 8px; background: #e8f5e9; padding: 3px 6px; border-radius: 6px; display: inline-block; }
+        
+        .order-btn { background: #27ae60; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px; box-shadow: 0 2px 6px rgba(39,174,96,0.3); }
+        .order-btn:hover { background: #219150; }
+
+        .whatsapp-gift-btn { background: #25d366; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 11px; box-shadow: 0 2px 6px rgba(37,211,102,0.3); text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
+        .whatsapp-gift-btn:hover { background: #20ba5a; }
+
+        .reserved-badge { background: #e74c3c; color: #fff; text-align: center; padding: 6px; border-radius: 8px; font-weight: bold; font-size: 11px; margin-top: 8px; }
+        
+        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
+        .modal-content { background: #fff; width: 100%; max-width: 450px; border-radius: 12px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; color: #555; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        .phone-group { display: flex; gap: 8px; }
+        .close-modal { float: left; font-size: 20px; font-weight: bold; color: #880e4f; cursor: pointer; }
+        
+        .image-modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .image-modal img { max-width: 90%; max-height: 75vh; border-radius: 8px; object-fit: contain; }
+        .close-img-modal { position: absolute; top: 20px; left: 25px; color: #fff; font-size: 30px; cursor: pointer; font-weight: bold; }
+        
+        .footer-link { text-align: center; margin-top: 30px; font-size: 14px; }
         .footer-link a { color: #880e4f; text-decoration: none; font-weight: bold; }
-        footer { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; margin-top: 30px; }
+        footer { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <img src="logo.jpg" alt="EVA BRAND Logo" class="logo-img" onerror="this.style.display='none'">
-        <h1>معرض إيفا براند | EVA PLUS</h1>
-        <p>✨ ابنِ فريقك.. واجعل أرباحهم مصدر دخلك المتصاعد ✨<br>اربح بلا توقف - اعمل من المنزل واربح معنا</p>
+    <div id="installAppBanner">
+        <div class="install-banner-content">
+            <span style="font-size: 13px; font-weight: bold;">📱 ثبت تطبيق معرض إيفا لسهولة التصفح!</span>
+            <div>
+                <button id="installAppBtn">تثبيت التطبيق</button>
+                <button id="dismissInstallBtn" onclick="document.getElementById('installAppBanner').style.display='none'">لاحقاً</button>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
+    <div class="header">
+        <div id="logoContainer"><h1 style="color: #880e4f; margin:0;">معرض إيفا براند</h1></div>
+        <p style="color: #ad1457; font-size: 13px; margin: 5px 0;">أرقى العطور، الحقائب، والساعات الفاخرة</p>
         
-        <div id="sponsorAlert" class="sponsor-alert-box"></div>
-
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/XlYoHwowL74" title="دليل الانضمام والعمل في نظام EVA PLUS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="social-promo-box">
+            <a href="https://linky.ps/eva" target="_blank" class="social-promo-btn">✨ تابعونا</a>
+            <a href="https://www.google.com/maps?q=32.1273809,35.1433041&z=17&hl=en" target="_blank" class="social-promo-btn">📍 موقعنا</a>
+            <a href="index.html" id="joinEvaPlusBtn" class="social-promo-btn">💼 انضم لإيفا بلس</a>
         </div>
 
-        <!-- الأقسام التفاعلية المنسدلة (الأكورديون الشامل - مخاطبة كافة الفئات) -->
-        <div class="accordion-group">
-            
-            <!-- 1. الهوكات واهتمامات العملاء -->
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">🛍️ هل تعمل/ين في "شي إن" (SHEIN) وتعبت من دوامة الطلبات وجع رأس التوصيل؟</div>
-                <div class="accordion-content">
-                    إذا كنت تعمل في مجال الوساطة التجارية وتتعب في جمع الطلبات، متابعة الطرود، مشاكل التوصيل، وهامش الربح البسيط وسط تنافس الأسعار الشديد... <b>لدينا الحل الجذري!</b><br>
-                    في نظام <b>EVA PLUS</b>، لا توجد طرود ولا استلام وتسليم، أنت تعتمد على <b>النشاط الرقمي وبناء الفريق فقط</b>. شارك رابط كتالوجك الراقي أو ادع معارفك للانضمام، واحصل على عمولتك المباشرة بذكاء وسهولة تامة من منزلك!
-                </div>
-            </div>
-
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">📱 هل لديك هاتف ذكي وإنترنت، وتقلب الفيديوهات طوال الليل بلا فائدة؟</div>
-                <div class="accordion-content">
-                    الكثير منا يقضي ساعات طويلة يومياً في تصفح مواقع التواصل الاجتماعي دون مقابل. مع نظام <b>EVA PLUS</b>، يمكنك تحويل هذه الأوقات إلى استثمار حقيقي ودخل متصاعد من خلال هاتفك فقط ومن مكانك.
-                </div>
-            </div>
-
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">👥 هل لديك أصدقاء كثر ومعارف على السوشيال ميديا أو الواقع؟</div>
-                <div class="accordion-content">
-                    شبكة معارفك هي رأس مالك الحقيقي! بدلاً من مشاركة الروابط المجانية، قم بدعوة أصدقائك ومعارفك للانضمام لشجرتك في النظام، وكل عملية بيع أو استقطاب تحدث عبر فريقك تمنحك أرباحاً وعمولات مضاعفة ومباشرة.
-                </div>
-            </div>
-
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">🎓 هل أنت طالب/ة جامعي وتبحث عن دخل مرن لا يتعارض مع دراستك؟</div>
-                <div class="accordion-content">
-                    نظامنا مصمم خصيصاً ليمنحك الحرية الكاملة؛ لا يوجد دوام مكتبي أو التزام بساعات محددة. أدر عملك المالي بحرية وبدون أي رأس مال أو مخاطرة وأنت في مقاعد الدراسة.
-                </div>
-            </div>
-
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">💻 هل أنت مهتم بالتجارة الإلكترونية وترغب في دخول السوق بذكاء؟</div>
-                <div class="accordion-content">
-                    إذا كنت مهتماً بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
-                </div>
-            </div>
-
-            <!-- 2. قسم الأرباح والعمولات -->
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header" style="background: #e8f5e9; color: #1b5e20;">💵 كيف ومتى تحصل على أرباحك وعمولاتك؟</div>
-                <div class="accordion-content payout-theme">
-                    الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من معرض إيفا!
-                </div>
-            </div>
-
-            <!-- 3. قسم خطوات البدء الفوري -->
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header" style="background: #fff0f5; color: #880e4f;">📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS</div>
-                <div class="accordion-content steps-theme">
-                    <ul style="padding-right: 15px; margin: 0;">
-                        <li style="margin-bottom: 10px;"><strong>قدم طلب الانضمام أدناه:</strong> قم بتعبئة الطلب أدناه وأرسل بياناتك ليتم حفظها ونقلك فوراً لاختيار منتجك الأول من الكتالوج[cite: 5].</li>
-                        <li style="margin-bottom: 10px;"><strong>اختر منتجك الأول:</strong> تصفح الكتالوج واطلب منتجك لتأكيد الطلب ودخولك في نظام EVA PLUS[cite: 5].</li>
-                        <li style="margin-bottom: 10px;"><strong>استلم روابطك الذكية:</strong> فور تأكيد الإدارة، ستقوم الإدارة بتفعيل حسابك وإرسال **رابط الصفحة الشخصية** مع بيانات الدخول الخاصة بك عبر الواتساب[cite: 5]!</li>
-                        <li style="margin-bottom: 0;"><strong>شارك واجني الأرباح:</strong> شارك رابط الكتالوج الخاص بك لتحقيق الأرباح، وشارك رابط الاستقطاب لتعريف أصدقائك بالفكرة لينضموا تحتك في الشجرة وتصبح شريكاً في العمولات[cite: 5].</li>
-                    </ul>
-                </div>
-            </div>
-
+        <div class="store-payment-badges">
+            <div class="payment-pill">Cash</div>
+            <div class="payment-pill">Visa</div>
+            <div class="payment-pill">iBuraq</div>
         </div>
 
-        <div class="core-idea-box">
-            <h3>💡 أنت لا تبيع منتجاً.. أنت تبيع فكرة!</h3>
-            <p>
-                سر النجاح الحقيقي في نظام <b>EVA PLUS</b> ليس في عرض السلع فقط، بل في دعوة معارفك وأصدقائك للانضمام إلى نظام الشراكة الذكي. حالما يختار كل شريك منتجه الأول ويدخل الشبكة، ستصبح شريكاً في أرباحهم وتتضاعف دخولكم معاً بلا توقف!
-            </p>
+        <div style="font-size: 12px; font-weight: bold; color: #ad1457; margin-top: 8px;">
+            🚚 التوصيل متوفر لكافة مناطق الضفة، القدس، والداخل 📍
         </div>
 
-        <!-- نموذج التسجيل الذاتي -->
-        <div id="registrationFormSection">
-            <h2>📝 املأ بياناتك الآن وانتقل لاختيار منتجك الأول</h2>
-            <div class="form-group">
-                <label>الاسم الكامل:</label>
-                <input type="text" id="fullName" placeholder="أدخل اسمك الكامل هنا">
-            </div>
-            <div class="form-group">
-                <label>عنوان التوصيل المعتمد (المدينة / المنطقة في الضفة أو القدس أو الداخل):</label>
-                <input type="text" id="address" placeholder="مثال: رام الله - المنارة">
-            </div>
-            
-            <div class="form-group">
-                <label>رقم الهاتف المعتمد (واتساب):</label>
-                <div class="phone-input-group">
-                    <select id="phonePrefix">
-                        <option value="00970">00970 (فلسطين)</option>
-                        <option value="00972">00972 (إسرائيل/الداخل)</option>
-                    </select>
-                    <input type="tel" id="phoneNumber" placeholder="590000000">
-                </div>
-            </div>
+        <div id="partnerBanner" style="display:none; margin-top: 10px; background: #fff0f5; padding: 8px; border-radius: 6px; font-size: 13px; color: #880e4f; font-weight: bold;"></div>
+    </div>
 
-            <button type="button" onclick="submitAndGoToCatalog()" class="register-btn">
-                🛍️ تسجيل والانتقال لاختيار منتجك الأول من الكتالوج
-            </button>
-        </div>
+    <div id="adminNoticeBar" class="notice-bar" style="display: none;"></div>
 
-        <div class="support-box">
-            ❓ <b>هل تحتاج إلى مساعدة أو استفسار؟</b><br>
-            تواصل معنا مباشرة عبر الواتساب: <a href="https://wa.me/00970594101632" target="_blank">00970594101632</a> | 
-            البريد الإلكتروني: <a href="mailto:majed-sahban@hotmail.com">sahbanmajed@gmail.com</a>
-        </div>
+    <div id="backHomeContainer" style="display: none;">
+        <button class="back-home-btn" onclick="showCategoriesHome()">⬅ العودة لأقسام المعرض</button>
+        <h2 id="activeCategoryTitle" style="font-size: 16px; color: #880e4f; margin: 8px 0 0 0;"></h2>
+    </div>
 
-        <div class="footer-link" style="margin-top: 30px;">
-            تصفح روابطنا الأخرى: <a href="https://linky.ps/eva" target="_blank">linky.ps/eva</a>
-        </div>
+    <div id="categoriesHomeView">
+        <h2 style="font-size: 18px; color: #880e4f; margin-bottom: 15px; border-bottom: 2px solid #f8bbd0; padding-bottom: 8px;">✨ أقسام المعرض</h2>
+        <div id="categoriesGridHome" class="categories-grid-home">جاري تحميل الأقسام...</div>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+
+    <div class="footer-link">
+        تصفح روابطنا الأخرى: <a href="https://linky.ps/eva" target="_blank">linky.ps/eva</a>
     </div>
 
     <footer>
         جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026<br>
         <a href="privacy.html" style="color: #ad1457; text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
+        <div style="margin-top: 8px; font-size: 11px; color: #555;">
+            👁️ عدد الزيارات: <span id="visitorCount" style="font-weight: bold; color: #880e4f;">954</span>
+        </div>
     </footer>
 
-    <script>
-        // دالة فتح وإغلاق البطاقات التفاعلية (الأكورديون)
-        function toggleAccordion(element) {
-            const allItems = document.querySelectorAll('.accordion-item');
-            allItems.forEach(item => {
-                if (item !== element) item.classList.remove('active');
-            });
-            element.classList.toggle('active');
-        }
-    </script>
+    <!-- نافذة الطلب -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeOrderModal()">&times;</span>
+            <h3 style="color: #880e4f; margin-top: 0; margin-bottom: 15px;">🛍️ إتمام طلب المنتج</h3>
+            <p id="modalProductName" style="font-weight: bold; color: #333; margin-bottom: 15px; font-size: 14px;"></p>
+            
+            <h4 style="color: #880e4f; font-size: 14px; margin: 10px 0 5px 0; border-bottom: 1px solid #f8bbd0; padding-bottom: 4px;">ادخل معلومات التوصيل</h4>
+            
+            <div style="background: #fdf2f8; border: 1px solid #f8bbd0; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: #880e4f; line-height: 1.5;">
+                <b>📦 تكلفة التوصيل:</b> 20 للضفة , 30 للقدس , 70 للداخل
+            </div>
+
+            <div class="form-group">
+                <label>الاسم الكامل:</label>
+                <input type="text" id="clientName" placeholder="أدخل اسمك الكريم">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف / الواتساب:</label>
+                <div class="phone-group">
+                    <select id="phonePrefix" style="width: 140px;">
+                        <option value="00970">00970 (فلسطين)</option>
+                        <option value="00972">00972 (إسرائيل)</option>
+                    </select>
+                    <input type="text" id="clientPhone" placeholder="590000000" style="flex: 1;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>العنوان (المدينة / الحي):</label>
+                <input type="text" id="clientAddress" placeholder="رام الله - المنارة">
+            </div>
+            
+            <button class="order-btn" onclick="submitOrder()" style="margin-top: 10px;">إرسال وتأكيد الطلب 🌸</button>
+        </div>
+    </div>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-img-modal" onclick="closeImageModal()">&times;</span>
+        <img id="modalFullImg" src="">
+        <div id="imgThumbsContainer" style="display: flex; gap: 8px; margin-top: 15px; overflow-x: auto; max-width: 100%;"></div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
@@ -205,78 +212,361 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const rawRef = urlParams.get('ref');
-        const refId = (rawRef && rawRef.toUpperCase().startsWith('EVA-')) ? rawRef.trim().toUpperCase() : 'EVA-001';
+        let globalLogoUrl = "";
+        let selectedProductForOrder = null;
+        let urlParams = new URLSearchParams(window.location.search);
         
-        const alertBox = document.getElementById('sponsorAlert');
+        let rawPartnerInput = (urlParams.get('ref') || urlParams.get('user') || '').trim();
+        let partnerUser = null;
+        let isSystemPartnerOrder = false;
+        let showAgentProfit = false;
 
-        if (rawRef) {
-            alertBox.style.display = 'block';
-            alertBox.innerHTML = `🤝 أنت تسجل الآن بدعوة مباشرة من الشريك في الشبكة: <b>${refId}</b>`;
-        } else {
-            alertBox.style.display = 'block';
-            alertBox.innerHTML = `🌟 أنت تسجل الآن عبر الحملة الإعلانية الرسمية لـ <b>EVA PLUS</b> (تحت إشراف الإدارة المركزية برعاية رأس الهرم EVA-001).`;
+        if (rawPartnerInput && rawPartnerInput.toUpperCase().startsWith('EVA-')) {
+            partnerUser = rawPartnerInput.toUpperCase();
+            isSystemPartnerOrder = true;
         }
 
-        window.submitAndGoToCatalog = async function() {
-            const name = document.getElementById('fullName').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const prefix = document.getElementById('phonePrefix').value;
-            const rawNumber = document.getElementById('phoneNumber').value.trim().replace(/^0/, '');
+        function getDefaultCategoryImg(catName, catId, globalLogo) {
+            if (catName.includes('ساعة') || catName.includes('ساعات') || catId === 'G' || catId === 'H') {
+                return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&auto=format&fit=crop&q=80';
+            } else if (catName.includes('حقيبة') || catName.includes('شنطة') || catName.includes('حقائب') || catId === 'J' || catId === 'K') {
+                return 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&auto=format&fit=crop&q=80';
+            } else if (catName.includes('عطر') || catName.includes('عطور') || catId === 'E' || catId === 'F') {
+                return 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=300&auto=format&fit=crop&q=80';
+            } else if (catName.includes('نظارة') || catName.includes('نظارات') || catId === 'L') {
+                return 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300&auto=format&fit=crop&q=80';
+            }
+            return globalLogo || 'https://via.placeholder.com/200';
+        }
 
-            if(!name || !address || !rawNumber) {
-                alert('الرجاء تعبئة كافة الحقول (الاسم، العنوان، ورقم الهاتف) للانتقال للكتالوج.');
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const counterRef = doc(db, "settings", "visitorCounter");
+                const counterSnap = await getDoc(counterRef);
+                
+                let currentVisits = 954;
+                if (counterSnap.exists()) {
+                    currentVisits = counterSnap.data().count || 954;
+                    await updateDoc(counterRef, { count: increment(1) });
+                    currentVisits += 1;
+                } else {
+                    await setDoc(counterRef, { count: 955 });
+                    currentVisits = 955;
+                }
+
+                let visitCounterElem = document.getElementById('visitorCount');
+                if (visitCounterElem) {
+                    visitCounterElem.innerText = currentVisits;
+                }
+            } catch (err) {
+                console.error("Error updating visitor counter:", err);
+            }
+
+            let pendingUserJson = localStorage.getItem('eva_current_user');
+            if (pendingUserJson) {
+                try {
+                    let pData = JSON.parse(pendingUserJson);
+                    if (pData && pData.partnerId) {
+                        partnerUser = pData.sponsor || 'EVA-001';
+                        isSystemPartnerOrder = true;
+                        showAgentProfit = true;
+                        document.getElementById('clientName').value = pData.name || '';
+                        document.getElementById('clientAddress').value = pData.address || '';
+                        if (pData.phone) {
+                            let phoneStr = pData.phone.toString();
+                            if (phoneStr.startsWith('00970')) {
+                                document.getElementById('phonePrefix').value = '00970';
+                                document.getElementById('clientPhone').value = phoneStr.replace('00970', '');
+                            } else if (phoneStr.startsWith('00972')) {
+                                document.getElementById('phonePrefix').value = '00972';
+                                document.getElementById('clientPhone').value = phoneStr.replace('00972', '');
+                            } else {
+                                document.getElementById('clientPhone').value = phoneStr;
+                            }
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            }
+
+            if (isSystemPartnerOrder && partnerUser) {
+                let joinBtn = document.getElementById('joinEvaPlusBtn');
+                if (joinBtn) joinBtn.style.display = 'none';
+
+                try {
+                    let pDoc = await getDoc(doc(db, "partners", partnerUser));
+                    let banner = document.getElementById('partnerBanner');
+                    if (pDoc.exists()) {
+                        banner.style.display = 'block';
+                        banner.innerHTML = `🌸 متجر برعاية الشريك المعتمد: ${pDoc.data().name} (${partnerUser})`;
+                    } else {
+                        banner.style.display = 'block';
+                        banner.innerHTML = `🌸 متجر برعاية الشريك المعتمد: (${partnerUser})`;
+                    }
+                } catch(e) { console.error(e); }
+            }
+
+            try {
+                const settingsSnap = await getDocs(collection(db, "settings"));
+                settingsSnap.forEach(d => {
+                    if(d.id === 'logo' && d.data().img) {
+                        globalLogoUrl = d.data().img;
+                        document.getElementById('logoContainer').innerHTML = `<img src="${globalLogoUrl}" alt="Logo">`;
+                    }
+                    if(d.id === 'notice' && d.data().text) {
+                        let bar = document.getElementById('adminNoticeBar');
+                        bar.style.display = 'block';
+                        bar.innerText = d.data().text;
+                    }
+                });
+
+                const catSnap = await getDocs(collection(db, "categories"));
+                let gridHomeHtml = '';
+
+                catSnap.forEach(d => {
+                    let catData = { id: d.id, ...d.data() };
+                    let catImg = catData.image || catData.img || getDefaultCategoryImg(catData.name, catData.id, globalLogoUrl);
+                    
+                    gridHomeHtml += `
+                        <div class="category-card" onclick="selectCategory('${catData.id}', '${catData.name.replace(/'/g, "\\'")}')">
+                            <div>
+                                <div class="category-img-container">
+                                    <img src="${catImg}" class="category-img" alt="${catData.name}">
+                                </div>
+                                <h3>${catData.name}</h3>
+                            </div>
+                            <div>
+                                <span class="category-code-tag">(${catData.id})</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('categoriesGridHome').innerHTML = gridHomeHtml || '<p style="text-align:center; color:#888;">لا توجد أقسام مضافة حالياً.</p>';
+
+            } catch (err) {
+                console.error("Error loading catalog categories:", err);
+                document.getElementById('categoriesGridHome').innerHTML = `<p style="text-align:center; color:red;">خطأ في تحميل الأقسام.</p>`;
+            }
+        });
+
+        window.selectCategory = async function(catId, catName) {
+            document.getElementById('categoriesHomeView').style.display = 'none';
+            document.getElementById('backHomeContainer').style.display = 'block';
+            document.getElementById('activeCategoryTitle').innerText = `${catName} (${catId})`;
+            
+            let grid = document.getElementById('productsGrid');
+            grid.innerHTML = `<p style="text-align:center; color:#880e4f; grid-column:1/-1; padding:20px;">جاري تحميل منتجات القسم...</p>`;
+
+            try {
+                const prodRef = collection(db, "products");
+                const q = query(prodRef, where("category", "in", [catId, catName]));
+                const prodSnap = await getDocs(q);
+                
+                let catProducts = [];
+                prodSnap.forEach(d => catProducts.push({ id: d.id, catCode: catId, ...d.data() }));
+
+                renderProducts(catProducts);
+            } catch (e) {
+                console.error("Error loading products for category:", e);
+                grid.innerHTML = `<p style="text-align:center; color:red; grid-column:1/-1; padding:20px;">حدث خطأ في تحميل المنتجات.</p>`;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.showCategoriesHome = function() {
+            document.getElementById('backHomeContainer').style.display = 'none';
+            document.getElementById('productsGrid').innerHTML = '';
+            document.getElementById('categoriesHomeView').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        function renderProducts(products) {
+            let grid = document.getElementById('productsGrid');
+            if (products.length === 0) {
+                grid.innerHTML = `<p style="text-align:center; color:#888; grid-column: 1/-1; padding: 20px;">لا توجد منتجات متوفرة حالياً في هذا القسم.</p>`;
                 return;
             }
 
-            const fullPhone = prefix + rawNumber;
+            grid.innerHTML = products.map(p => {
+                let firstImg = (p.images && p.images.length > 0) ? p.images[0] : '';
+                let isReserved = p.reservedUntil && new Date(p.reservedUntil) > new Date();
+                let agentPriceValue = p.agentPrice || p.profit || p.evaProfit || 0;
+                
+                let safeName = (p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                let jsonImages = JSON.stringify(p.images || []).replace(/"/g, '&quot;');
 
-            try {
-                const partnersSnap = await getDocs(collection(db, "partners"));
-                const ordersSnap = await getDocs(collection(db, "orders"));
+                let isGiftBoxSection = (p.category === 'K' || (p.category && p.category.includes('بوكسات')) || (p.code && p.code.startsWith('K')));
 
-                let isDuplicate = false;
+                let cardContent = '';
+                let actionButton = '';
 
-                partnersSnap.forEach(docItem => {
-                    let pPhone = (docItem.data().phone || "").toString();
-                    let cleanStoredPhone = pPhone.replace(/^00970/, '').replace(/^00972/, '').replace(/^0/, '');
-                    if (cleanStoredPhone === rawNumber) isDuplicate = true;
-                });
+                if (isGiftBoxSection) {
+                    let storeWhatsApp = "970597180456";
+                    let waMessage = `مرحباً إيفا براند، لدي مناسبة وأريد بوكس يناسبها (بخصوص المنتج: ${p.name} - كود: ${p.code})`;
+                    let waUrl = `https://wa.me/${storeWhatsApp}?text=${encodeURIComponent(waMessage)}`;
 
-                ordersSnap.forEach(docItem => {
-                    let oPhone = (docItem.data().clientPhone || "").toString();
-                    let cleanStoredPhone = oPhone.replace(/^00970/, '').replace(/^00972/, '').replace(/^0/, '');
-                    if (cleanStoredPhone === rawNumber) isDuplicate = true;
-                });
+                    cardContent = `
+                        <div class="product-img-container" onclick='openImageModal(${jsonImages})'>
+                            <img src="${firstImg}" alt="${safeName}">
+                        </div>
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-code">كود المنتج: ${p.code}</div>
+                        <div style="font-size: 12px; color: #880e4f; font-weight: bold; margin-bottom: 8px;">✨ السعر حسب المناسبة والمحتوى</div>
+                    `;
 
-                if (isDuplicate) {
-                    alert('⚠️ عذراً يا رفيق، رقم الهاتف المدخل مسجل مسبقاً ولديك حساب مفعل أو طلب معلق في النظام. لا يمكنك التسجيل مرتين بنفس الرقم.');
-                    return;
+                    actionButton = `
+                        <a href="${waUrl}" target="_blank" class="whatsapp-gift-btn">
+                            لدي مناسبة وأريد بوكس يناسبها 💬
+                        </a>
+                    `;
+                } else {
+                    let profitHtml = showAgentProfit ? `<div class="product-profit">ارباح إيفا بلس: ${agentPriceValue} ₪</div>` : '';
+
+                    cardContent = `
+                        <div class="product-img-container" onclick='openImageModal(${jsonImages})'>
+                            <img src="${firstImg}" alt="${safeName}">
+                        </div>
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-code">كود المنتج: ${p.code}</div>
+                        <div class="product-price">${p.price} ₪</div>
+                        ${profitHtml}
+                    `;
+
+                    actionButton = isReserved ? 
+                        `<div class="reserved-badge">محجوز حالياً</div>` : 
+                        `<button class="order-btn" onclick='openOrderModal("${p.code}", "${safeName}")'>اطلب المنتج 🛍️</button>`;
                 }
-            } catch (err) {
-                console.error("Error checking duplication in Firebase:", err);
+
+                return `
+                    <div class="product-card">
+                        <div>${cardContent}</div>
+                        <div>${actionButton}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.openOrderModal = function(code, name) {
+            selectedProductForOrder = { code, name };
+            document.getElementById('modalProductName').innerText = `المنتج: ${name} (${code})`;
+            if (!localStorage.getItem('eva_current_user')) {
+                document.getElementById('clientName').value = '';
+                document.getElementById('clientPhone').value = '';
+                document.getElementById('clientAddress').value = '';
+            }
+            document.getElementById('orderModal').style.display = 'flex';
+        };
+
+        window.closeOrderModal = function() {
+            document.getElementById('orderModal').style.display = 'none';
+        };
+
+        window.submitOrder = async function() {
+            let name = document.getElementById('clientName').value.trim();
+            let prefix = document.getElementById('phonePrefix').value;
+            let rawPhone = document.getElementById('clientPhone').value.trim().replace(/^0+/, '');
+            let address = document.getElementById('clientAddress').value.trim();
+
+            if (!name || !rawPhone || !address) {
+                return alert('الرجاء إدخال كافة البيانات المطلوبة (الاسم، الهاتف، العنوان).');
             }
 
-            const randomIdNum = Math.floor(1000 + Math.random() * 9000);
-            const newPartnerId = `EVA-${randomIdNum}`;
+            let fullPhone = prefix + rawPhone;
 
-            const pendingPartnerData = {
-                partnerId: newPartnerId,
-                name: name,
-                address: address,
-                phone: fullPhone,
-                sponsor: refId,
-                uplineId: refId,
-                isJoinProcess: true,
-                status: 'pending',
-                date: new Date().toISOString()
-            };
+            try {
+                let orderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
+                let reserveDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-            localStorage.setItem('eva_current_user', JSON.stringify(pendingPartnerData));
-            window.location.href = `catalog.html?ref=${refId}&user=${newPartnerId}`;
-        }
+                await setDoc(doc(db, "products", selectedProductForOrder.code), {
+                    reservedUntil: reserveDate
+                }, { merge: true });
+
+                let pendingUserJson = localStorage.getItem('eva_current_user');
+                if (pendingUserJson) {
+                    try {
+                        let pData = JSON.parse(pendingUserJson);
+                        if (pData && pData.partnerId) {
+                            await setDoc(doc(db, "orders", orderId), {
+                                orderType: 'partner',
+                                isJoinProcess: true,
+                                partnerId: pData.partnerId,
+                                productCode: selectedProductForOrder.code,
+                                productName: selectedProductForOrder.name,
+                                clientName: name,
+                                clientPhone: fullPhone,
+                                clientAddress: address,
+                                sponsor: pData.sponsor || 'EVA-001',
+                                createdAt: new Date().toISOString()
+                            });
+
+                            localStorage.removeItem('eva_current_user');
+                            closeOrderModal();
+                            alert('✅ تم إرسال طلب انضمامك واختيار منتجك بنجاح! سيتم مراجعته وتفعيل حسابك قريباً.');
+                            window.location.href = 'catalog.html';
+                            return;
+                        }
+                    } catch(e) { console.error(e); }
+                }
+
+                if (isSystemPartnerOrder && partnerUser) {
+                    await setDoc(doc(db, "orders", orderId), {
+                        orderType: 'partner',
+                        productCode: selectedProductForOrder.code,
+                        productName: selectedProductForOrder.name,
+                        clientName: name,
+                        clientPhone: fullPhone,
+                        clientAddress: address,
+                        sponsor: partnerUser,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    closeOrderModal();
+                    alert('✅ تم إرسال طلبك عبر رابط الشريك بنجاح! سيتم مراجعته وتفعيل حسابك قريباً.');
+                    location.reload();
+
+                } else {
+                    await setDoc(doc(db, "orders", orderId), {
+                        orderType: 'normal',
+                        productCode: selectedProductForOrder.code,
+                        productName: selectedProductForOrder.name,
+                        clientName: name,
+                        clientPhone: fullPhone,
+                        clientAddress: address,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    let whatsappMsg = `مرحباً إيفا براند، أريد طلب المنتج رقم [${selectedProductForOrder.code}] - ${selectedProductForOrder.name}.\nالاسم: ${name}\nالهاتف: ${fullPhone}\nالعنوان: ${address}`;
+                    let storeWhatsApp = "970597180456";
+                    let waUrl = `https://wa.me/${storeWhatsApp}?text=${encodeURIComponent(whatsappMsg)}`;
+
+                    closeOrderModal();
+                    window.open(waUrl, '_blank');
+                    location.reload();
+                }
+
+            } catch (err) {
+                console.error("Error submitting order:", err);
+                alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.');
+            }
+        };
+
+        window.openImageModal = function(images) {
+            if(!images || images.length === 0) return;
+            document.getElementById('modalFullImg').src = images[0];
+            let thumbs = document.getElementById('imgThumbsContainer');
+            if(images.length > 1) {
+                thumbs.innerHTML = images.map(img => `<img src="${img}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid #fff;" onclick="document.getElementById('modalFullImg').src='${img}'">`).join('');
+                thumbs.style.display = 'flex';
+            } else {
+                thumbs.style.display = 'none';
+            }
+            document.getElementById('imageModal').style.display = 'flex';
+        };
+
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').style.display = 'none';
+        };
     </script>
-
 </body>
 </html>
