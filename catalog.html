@@ -139,6 +139,9 @@
     <footer>
         جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026<br>
         <a href="privacy.html" style="color: #ad1457; text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
+        <div style="margin-top: 8px; font-size: 11px; color: #555;">
+            👁️ عدد الزيارات: <span id="visitorCount" style="font-weight: bold; color: #880e4f;">954</span>
+        </div>
     </footer>
 
     <!-- نافذة الطلب -->
@@ -185,7 +188,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
@@ -227,6 +230,31 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
+            // عداد الزيارات المركزي عبر Firebase Firestore
+            try {
+                const counterRef = doc(db, "settings", "visitorCounter");
+                const counterSnap = await getDoc(counterRef);
+                
+                let currentVisits = 954;
+                if (counterSnap.exists()) {
+                    currentVisits = counterSnap.data().count || 954;
+                    // زيادة الزيارة بمقدار 1 وتحديثها في قاعدة البيانات لكل فتحة أو تحديث حقيقي للصفحة
+                    await updateDoc(counterRef, { count: increment(1) });
+                    currentVisits += 1;
+                } else {
+                    // إنشاء مستند العداد لأول مرة إذا لم يكن موجوداً بالقيمة الابتدائية
+                    await setDoc(counterRef, { count: 955 });
+                    currentVisits = 955;
+                }
+
+                let visitCounterElem = document.getElementById('visitorCount');
+                if (visitCounterElem) {
+                    visitCounterElem.innerText = currentVisits;
+                }
+            } catch (err) {
+                console.error("Error updating visitor counter:", err);
+            }
+
             let pendingUserJson = localStorage.getItem('eva_current_user');
             if (pendingUserJson) {
                 try {
