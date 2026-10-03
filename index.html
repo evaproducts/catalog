@@ -5,47 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>انضم إلى نظام EVA PLUS | اعمل من المنزل واربح معنا</title>
     <style>
-        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #fdfbfb 0%, #fce4ec 100%); color: #333; margin: 0; padding: 0; line-height: 1.8; }
-        .hero { background: linear-gradient(rgba(136,14,79,0.85), rgba(173,20,87,0.85)), url('https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; text-align: center; padding: 50px 20px; border-bottom: 4px solid #d4af37; }
-        .logo-img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #d4af37; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: #fff; }
-        .hero h1 { font-size: 28px; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
-        .hero p { font-size: 16px; color: #fffde7; max-width: 650px; margin: 0 auto; font-weight: bold; }
-        .container { max-width: 750px; margin: -30px auto 40px auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; border: 1px solid #f8bbd0; }
-        .sponsor-alert-box { background: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; font-weight: bold; text-align: center; display: none; }
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #d4af37; }
+        :root {
+            --linky-blue: #0088cc;
+            --linky-blue-hover: #0077b3;
+            --linky-bg: #f4f6f9;
+            --linky-border: #e1e8ed;
+            --linky-card-bg: #ffffff;
+            --linky-text: #333333;
+            --accent-gold: #d4af37;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 0; line-height: 1.8; }
+        .hero { background: linear-gradient(135deg, #0088cc 0%, #006699 100%); color: white; text-align: center; padding: 50px 20px; border-bottom: 4px solid var(--accent-gold); box-shadow: 0 4px 20px rgba(0,136,204,0.15); }
+        .logo-img { width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent-gold); margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); background: #fff; }
+        .hero h1 { font-size: 26px; margin-bottom: 5px; color: #fff; letter-spacing: -0.5px; font-weight: 800; }
+        .hero p { font-size: 15px; color: #e6f4fa; max-width: 650px; margin: 0 auto; font-weight: 600; }
+        .container { max-width: 750px; margin: -30px auto 40px auto; background: var(--linky-card-bg); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); position: relative; border: 1px solid var(--linky-border); }
+        .sponsor-alert-box { background: #e6f4fa; border: 1px solid #b3d9ec; color: #006699; padding: 12px 16px; border-radius: 12px; margin-bottom: 20px; font-size: 13.5px; font-weight: bold; text-align: center; display: none; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 14px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 2px solid var(--accent-gold); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
         /* تنسيق الأكورديون التفاعلي الشامل */
         .accordion-group { margin-bottom: 25px; }
-        .accordion-item { border: 1px solid #f8bbd0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: #fffdfd; transition: all 0.3s; }
-        .accordion-header { background: #fff0f5; color: #880e4f; padding: 14px 18px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
-        .accordion-header:hover { background: #ffe4ed; }
-        .accordion-header::after { content: '▼'; font-size: 11px; transition: transform 0.3s; color: #ad1457; }
-        .accordion-item.active .accordion-header::after { transform: rotate(180deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; padding: 0 18px; font-size: 14px; color: #444; line-height: 1.8; }
-        .accordion-item.active .accordion-content { max-height: 400px; padding: 15px 18px; border-top: 1px solid #f8bbd0; }
+        .accordion-item { border: 1px solid var(--linky-border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; background: var(--linky-card-bg); transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .accordion-header { background: #fafbfc; color: #1a1a1a; padding: 14px 18px; font-size: 14.5px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; border-bottom: 1px solid transparent; }
+        .accordion-header:hover { background: #f0f4f8; color: var(--linky-blue); }
+        .accordion-header::after { content: '▼'; font-size: 10px; transition: transform 0.3s; color: #666; }
+        .accordion-item.active .accordion-header::after { transform: rotate(180deg); color: var(--linky-blue); }
+        .accordion-item.active .accordion-header { border-bottom-color: var(--linky-border); color: var(--linky-blue); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; padding: 0 18px; font-size: 13.5px; color: #555; line-height: 1.8; }
+        .accordion-item.active .accordion-content { max-height: 400px; padding: 15px 18px; }
 
-        .accordion-content.payout-theme { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; }
-        .accordion-content.steps-theme { background: #fff0f5; color: #444; }
+        .accordion-content.payout-theme { background: #e8f5e9; color: #1b5e20; }
+        .accordion-content.steps-theme { background: #fafbfc; color: #444; }
 
-        .core-idea-box { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); color: #fff; padding: 22px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 15px rgba(136,14,79,0.15); }
-        .core-idea-box h3 { margin-top: 0; font-size: 20px; color: #fff; }
-        .core-idea-box p { font-size: 15px; margin-bottom: 0; line-height: 1.8; font-weight: bold; }
+        .core-idea-box { background: linear-gradient(135deg, #0088cc 0%, #006699 100%); color: #fff; padding: 22px; border-radius: 14px; margin-bottom: 25px; text-align: center; box-shadow: 0 6px 20px rgba(0,136,204,0.15); }
+        .core-idea-box h3 { margin-top: 0; font-size: 18px; color: #fff; }
+        .core-idea-box p { font-size: 14px; margin-bottom: 0; line-height: 1.8; font-weight: 600; color: #e6f4fa; }
         
-        h2 { color: #880e4f; font-size: 18px; margin-bottom: 15px; border-right: 4px solid #ad1457; padding-right: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
+        h2 { color: #1a1a1a; font-size: 17px; margin-bottom: 15px; border-right: 4px solid var(--linky-blue); padding-right: 10px; font-weight: 800; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-weight: bold; margin-bottom: 6px; color: #444; font-size: 13px; }
+        input, select { width: 100%; padding: 12px 14px; border: 1.5px solid var(--linky-border); border-radius: 12px; box-sizing: border-box; font-size: 13.5px; background: #fafbfc; }
+        input:focus, select:focus { outline: none; border-color: var(--linky-blue); background: #fff; }
         .phone-input-group { display: flex; gap: 8px; }
-        .phone-input-group select { flex: 0 0 130px; background: #f9f9f9; font-weight: bold; color: #880e4f; }
+        .phone-input-group select { flex: 0 0 140px; background: #fafbfc; font-weight: bold; color: var(--linky-blue); }
         .phone-input-group input { flex: 1; }
-        .register-btn { background: #ad1457; color: white; border: none; width: 100%; padding: 15px; font-size: 17px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 20px; box-shadow: 0 4px 12px rgba(173, 20, 87, 0.3); transition: 0.3s; }
-        .register-btn:hover { background: #880e4f; }
-        .support-box { background: #fce4ec; border: 1px solid #f8bbd0; padding: 15px; border-radius: 10px; text-align: center; margin-top: 25px; font-size: 14px; color: #880e4f; }
-        .support-box a { color: #ad1457; font-weight: bold; text-decoration: none; }
+        .register-btn { background: var(--linky-blue); color: white; border: none; width: 100%; padding: 14px; font-size: 15px; font-weight: bold; border-radius: 12px; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,136,204,0.25); transition: background 0.2s, transform 0.1s; }
+        .register-btn:hover { background: var(--linky-blue-hover); transform: translateY(-1px); }
+        .support-box { background: #e6f4fa; border: 1px solid #b3d9ec; padding: 16px; border-radius: 14px; text-align: center; margin-top: 25px; font-size: 13.5px; color: #006699; }
+        .support-box a { color: var(--linky-blue); font-weight: bold; text-decoration: none; }
+        .support-box a:hover { text-decoration: underline; }
         .footer-link { text-align: center; margin-top: 20px; font-size: 14px; }
-        .footer-link a { color: #880e4f; text-decoration: none; font-weight: bold; }
-        footer { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; margin-top: 30px; }
+        .footer-link a { color: var(--linky-blue); text-decoration: none; font-weight: bold; }
+        .footer-link a:hover { text-decoration: underline; }
+        footer { text-align: center; color: #666; font-size: 12px; margin-bottom: 30px; margin-top: 30px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -114,7 +128,7 @@
 
             <!-- 3. قسم خطوات البدء الفوري -->
             <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header" style="background: #fff0f5; color: #880e4f;">📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS</div>
+                <div class="accordion-header">📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS</div>
                 <div class="accordion-content steps-theme">
                     <ul style="padding-right: 15px; margin: 0;">
                         <li style="margin-bottom: 10px;"><strong>قدم طلب الانضمام أدناه:</strong> قم بتعبئة الطلب أدناه وأرسل بياناتك ليتم حفظها ونقلك فوراً لاختيار منتجك الأول من الكتالوج[cite: 5].</li>
@@ -175,7 +189,7 @@
 
     <footer>
         جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026<br>
-        <a href="privacy.html" style="color: #ad1457; text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
+        <a href="privacy.html" style="color: var(--linky-blue); text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
     </footer>
 
     <script>
@@ -251,7 +265,7 @@
                 });
 
                 if (isDuplicate) {
-                    alert('⚠️ عذراً يا رفيق، رقم الهاتف المدخل مسجل مسبقاً ولديك حساب مفعل أو طلب معلق في النظام. لا يمكنك التسجيل مرتين بنفس الرقم.');
+                    alert('⚠️ عذراً يا رفيق، رقم الهاتف المدخل مسجل مسبقاً ولديك حساب مفعل أو طلب معلقใน النظام. لا يمكنك التسجيل مرتين بنفس الرقم.');
                     return;
                 }
             } catch (err) {
