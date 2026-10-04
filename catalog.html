@@ -312,17 +312,9 @@
                 let joinBtn = document.getElementById('joinEvaPlusBtn');
                 if (joinBtn) joinBtn.style.display = 'none';
 
-                try {
-                    let pDoc = await getDoc(doc(db, "partners", partnerUser));
-                    let banner = document.getElementById('partnerBanner');
-                    if (pDoc.exists()) {
-                        banner.style.display = 'block';
-                        banner.innerHTML = `🌸 متجر برعاية الشريك المعتمد: ${pDoc.data().name} (${partnerUser})`;
-                    } else {
-                        banner.style.display = 'block';
-                        banner.innerHTML = `🌸 متجر برعاية الشريك المعتمد: (${partnerUser})`;
-                    }
-                } catch(e) { console.error(e); }
+                let banner = document.getElementById('partnerBanner');
+                banner.style.display = 'block';
+                banner.innerHTML = `🌸 متجر برعاية الشريك المعتمد: (${partnerUser})`;
             }
 
             try {
