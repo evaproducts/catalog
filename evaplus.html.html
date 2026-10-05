@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVA PLUS | منصة العمل والربح الذكي من المنزل</title>
+    
+    <meta name="theme-color" content="#0088cc">
+    <meta name="description" content="انضم إلى نظام EVA PLUS وابدأ بالربح الذكي من منزلك بدون رأس مال وبدون تعقيدات الشحن والتوصيل.">
+
+    <style>
+        :root {
+            --linky-blue: #0088cc;
+            --linky-blue-hover: #0077b3;
+            --linky-bg: #f4f6f9;
+            --linky-border: #e1e8ed;
+            --linky-card-bg: #ffffff;
+            --linky-text: #333333;
+            --accent-gold: #d4af37;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 15px; direction: rtl; min-height: 100vh; }
+        
+        .container { max-width: 600px; margin: 0 auto; }
+
+        /* الهيدر وشعار المنصة */
+        .header { text-align: center; padding: 25px 20px; background: var(--linky-card-bg); border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        .header img { max-height: 80px; width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid var(--linky-blue); margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,136,204,0.15); }
+        .header h1 { color: #1a1a1a; margin: 0; font-size: 22px; font-weight: 800; }
+        .header p { color: #666; font-size: 13px; margin: 8px 0 15px 0; }
+
+        /* السلايدر الدعائي العلوي */
+        .slider-container { background: #fff; border-radius: 20px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); position: relative; }
+        .slider-img { width: 100%; height: 220px; object-fit: cover; display: block; }
+
+        /* إطار الموبايل العارض (مثل دروبي) */
+        .phone-mockup-section { background: var(--linky-card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        .phone-frame { width: 100%; max-width: 280px; height: 480px; border: 8px solid #1a1a1a; border-radius: 35px; margin: 0 auto 15px auto; overflow: hidden; background: #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative; }
+        .phone-screen-content { padding: 15px; text-align: right; font-size: 12px; }
+
+        /* الأزرار الانتقالية الرئيسية */
+        .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .main-btn { background: var(--linky-blue); color: #fff; text-decoration: none; padding: 12px 15px; border-radius: 14px; font-size: 13.5px; font-weight: bold; text-align: center; box-shadow: 0 4px 15px rgba(0,136,204,0.2); transition: background 0.2s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
+        .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
+
+        /* قسم الشروحات وطريقة العمل والأرباح */
+        .info-section { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        .info-section h2 { font-size: 16px; color: var(--linky-blue); margin-top: 0; margin-bottom: 12px; font-weight: 800; border-bottom: 2px solid #e6f4fa; padding-bottom: 8px; }
+        .info-section p, .info-section li { font-size: 13px; color: #444; line-height: 1.6; }
+        .info-section ul { padding-right: 20px; margin: 8px 0; }
+
+        /* زر بوت الواتساب الثابت أو البارز */
+        .whatsapp-bot-box { background: linear-gradient(135deg, #25d366, #20ba5a); color: #fff; border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
+        .whatsapp-bot-btn { background: #fff; color: #20ba5a; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+
+        footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- الهيدر والشعار -->
+        <div class="header">
+            <div id="logoContainer">
+                <h1 style="color: #1a1a1a; margin:0; font-size: 22px; font-weight: 800;">EVA PLUS</h1>
+            </div>
+            <p>منصة العمل والربح الذكي من المنزل | بلا رأس مال</p>
+        </div>
+
+        <!-- السلايدر الترويجي العلوي -->
+        <div class="slider-container">
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80" class="slider-img" alt="EVA PLUS Promo" id="promoSliderImg">
+        </div>
+
+        <!-- أزرار التنقل السريعة الرئيسية -->
+        <div class="action-buttons-grid">
+            <a href="catalog.html" class="main-btn">
+                🛍 تصفح الكتالوج والمنتجات
+            </a>
+            <a href="partner.html" class="main-btn gold">
+                💼 لوحة تحكم الشريك
+            </a>
+        </div>
+
+        <!-- معاينة إطار الموبايل التفاعلي -->
+        <div class="phone-mockup-section">
+            <h3 style="font-size: 14.5px; margin-top: 0; color: #1a1a1a;">✨ تجربة تصفح سريعة ومرنة</h3>
+            <div class="phone-frame">
+                <div class="phone-screen-content">
+                    <div style="font-weight: bold; color: var(--linky-blue); margin-bottom: 8px;">📱 معاينة حية لمنصة إيفا</div>
+                    <p style="color: #666; margin-bottom: 10px;">تصفح آلاف منتجات العطور والساعات والحقائب الفاخرة مع أرباح واضحة لكل منتج.</p>
+                    <div style="background: #e6f4fa; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: #006699;">
+                        ارباح مضمونة لكل شريك 💵
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: #666; margin: 0;">مصمم خصيصاً ليعمل بكفاءة عالية على كافة الهواتف الذكية.</p>
+        </div>
+
+        <!-- قسم الشروحات: ما هي إيفا بلس وكيف نعمل؟ -->
+        <div class="info-section">
+            <h2>💡 ما هو نظام EVA PLUS؟</h2>
+            <p>هو نظام ريادي متكامل يتيح لك بناء مشروعك الخاص والعمل من منزلك بكل مرونة وبدون أي رأس مال أو مخاطرة. نحن نتولى تجهيز المنتجات، التغليف، وتوصيلها للزبائن نيابة عنك، وأنت تحصل على أرباحك بكل سهولة.</p>
+        </div>
+
+        <!-- قسم سحب الأرباح -->
+        <div class="info-section">
+            <h2>💵 كيف يتم سحب الأرباح؟</h2>
+            <ul>
+                <li>تظهر أرباحك بشكل مباشر وشفاف داخل لوحة التحكم الخاصة بك مع كل طلب يتم عبر رابطك.</li>
+                <li>يمكنك سحب أرباحك بشكل فوري بمجرد وصول رصيدك إلى <strong>100 شيكل</strong> فقط.</li>
+                <li>طرق السحب متاحة وميسرة: استلام نقدي (كاش) من المعرض، أو عبر التحويل الإلكتروني المعتمد (مثل آي براق أو التحويل البنكي).</li>
+            </ul>
+        </div>
+
+        <!-- صندوق بوت الواتساب الذكي -->
+        <div class="whatsapp-bot-box">
+            <h3 style="margin: 0 0 5px 0; font-size: 15px;">💬 لديك استفسار أو تريد معرفة المزيد؟</h3>
+            <p style="margin: 0; font-size: 12.5px; opacity: 0.9;">مساعدنا الذكي عبر الواتساب جاهز للرد على كافة أسئلتك فوراً!</p>
+            <a href="https://wa.me/970597180456?text=مرحباً، أود الاستفسار عن نظام EVA PLUS وكيفية البدء" target="_blank" class="whatsapp-bot-btn">
+                تواصل مع بوت الواتساب الآلي 🤖
+            </a>
+        </div>
+
+        <!-- الفوتر -->
+        <footer>
+            جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026
+        </footer>
+
+    </div>
+
+</body>
+</html>
