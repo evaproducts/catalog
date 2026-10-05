@@ -37,6 +37,13 @@
         .drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9998; backdrop-filter: blur(2px); }
         .drawer-overlay.active { display: block; }
 
+        /* نافذة منبثقة لعرض الفيديو داخل القائمة الجانبية */
+        .video-modal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .video-modal-content { background: #1a1f2c; width: 100%; max-width: 600px; border-radius: 20px; padding: 20px; position: relative; border: 1px solid #2a3447; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        .close-video-modal { background: none; border: none; color: #fff; font-size: 22px; font-weight: bold; cursor: pointer; float: left; margin-bottom: 10px; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 12px; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
         /* الهيدر وشعار المنصة العصري */
         .header { 
             text-align: center; 
@@ -60,17 +67,6 @@
         }
 
         .header p { color: #666; font-size: 13.5px; margin: 0; font-weight: 600; }
-
-        /* أزرار التنقل السريعة الرئيسية */
-        .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .main-btn { background: var(--linky-blue); color: #fff; text-decoration: none; padding: 12px 15px; border-radius: 14px; font-size: 13.5px; font-weight: bold; text-align: center; box-shadow: 0 4px 15px rgba(0,136,204,0.2); transition: background 0.2s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
-        .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
-
-        /* الفيديو التوضيحي */
-        .video-section { background: var(--linky-card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 2px solid var(--accent-gold); }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
         /* زر التسجيل البارز */
         .join-cta-box { background: var(--linky-card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
@@ -168,7 +164,7 @@
         .core-idea-box h3 { margin-top: 0; font-size: 18px; color: #fff; }
         .core-idea-box p { font-size: 13.5px; margin-bottom: 0; line-height: 1.8; font-weight: 600; color: #e6f4fa; }
 
-        /* بوت الواتساب المنبثق (Floating Popup) مربوط برقم الدعم */
+        /* بوت الواتساب المنبثق مربوط برقم الدعم */
         .whatsapp-float-popup { position: fixed; bottom: 20px; left: 20px; z-index: 9997; background: #25d366; color: white; border-radius: 50px; padding: 12px 18px; box-shadow: 0 5px 20px rgba(37,211,102,0.4); display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: bold; font-size: 13px; transition: transform 0.2s; }
         .whatsapp-float-popup:hover { transform: scale(1.05); }
         .whatsapp-close-btn { background: rgba(0,0,0,0.2); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: -5px; }
@@ -190,14 +186,25 @@
 </head>
 <body>
 
+    <!-- نافذة منبثقة لعرض فيديو التوضيح عند النقر عليه من القائمة الجانبية -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="close-video-modal" onclick="closeVideoModal()">✕</button>
+            <h3 style="color: #fff; margin-top: 0; font-size: 15px; margin-bottom: 12px; text-align: right;">🎥 فيديو توضيحي لطريقة التسجيل والعمل</h3>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/XlYoHwowL74" title="دليل الانضمام والعمل في نظام EVA PLUS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- القائمة الجانبية (Drawer Overlay & Menu) -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="side-drawer" id="sideDrawer">
         <button class="drawer-close-btn" onclick="toggleDrawer()">✕</button>
         <div style="font-weight: bold; color: var(--linky-blue); font-size: 16px; margin-bottom: 10px;">قائمة EVA PLUS</div>
         <div class="drawer-links">
-            <a href="#videoSection" onclick="toggleDrawer()">🎥 الفيديو التوضيحي</a>
-            <a href="catalog.html" onclick="toggleDrawer()">🛍️ الكتالوج الرقمي</a>
+            <a href="#" onclick="openVideoModal(); toggleDrawer(); return false;">🎥 الفيديو التوضيحي</a>
+            <a href="catalog.html" onclick="toggleDrawer()">🛍️ تصفح الكتالوج والمنتجات</a>
             <a href="partner.html" onclick="toggleDrawer()">💼 لوحة تحكم الشريك</a>
             <a href="index.html" id="drawerRegisterLink" onclick="toggleDrawer()">🚀 انضم إلينا الآن</a>
             <a href="https://wa.me/970594101632?text=مرحباً، أود التواصل مع فريق الدعم والاستفسار عن النظام" target="_blank">💬 التواصل مع الدعم</a>
@@ -218,24 +225,6 @@
             <p>✨ ابنِ فريقك.. واجعل أرباحهم مصدر دخلك المتصاعد ✨<br>اربح بلا توقف - اعمل من المنزل واربح معنا</p>
         </div>
 
-        <!-- أزرار التنقل السريعة الرئيسية -->
-        <div class="action-buttons-grid">
-            <a href="catalog.html" class="main-btn">
-                🛍 تصفح الكتالوج والمنتجات
-            </a>
-            <a href="partner.html" class="main-btn gold">
-                💼 لوحة تحكم الشريك
-            </a>
-        </div>
-
-        <!-- الفيديو التوضيحي لطريقة التسجيل والعمل -->
-        <div class="video-section" id="videoSection">
-            <h2 style="font-size: 16px; color: var(--linky-blue); margin-top: 0; margin-bottom: 12px; border-right: 4px solid var(--linky-blue); padding-right: 10px;">🎥 فيديو توضيحي لطريقة التسجيل والعمل</h2>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/XlYoHwowL74" title="دليل الانضمام والعمل في نظام EVA PLUS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-
         <!-- شاشة العرض الإعلانية الفاخرة المتحركة للمنتجات وأرباح إيفا بلس -->
         <div class="tv-mockup-section">
             <div class="tv-frame">
@@ -251,7 +240,7 @@
         <div class="accordion-group">
             
             <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">🛍️ هل تعمل/ين في "شي إن" (SHEIN) وتعبت من دوامة الطلبات وجع رأس التوصيل؟</div>
+                <div class="accordion-header">🛍️️ هل تعمل/ين في "شي إن" (SHEIN) وتعبت من دوامة الطلبات وجع رأس التوصيل؟</div>
                 <div class="accordion-content">
                     إذا كنت تعمل في مجال الوساطة التجارية وتتعب في جمع الطلبات، متابعة الطرود، مشاكل التوصيل، وهامش الربح البسيط وسط تنافس الأسعار الشديد... <b>لدينا الحل الجذري!</b><br>
                     في نظام <b>EVA PLUS</b>، لا توجد طرود ولا استلام وتسليم، أنت تعتمد على <b>النشاط الرقمي وبناء الفريق فقط</b>. شارك رابط كتالوجك الراقي أو ادع معارفك للانضمام، واحصل على عمولتك المباشرة بذكاء وسهولة تامة من منزلك!
@@ -347,7 +336,7 @@
 
     </div>
 
-    <!-- كود الجافاسكريبت للأكورديون والقائمة الجانبية والاتصال -->
+    <!-- كود الجافاسكريبت للأكورديون والقائمة الجانبية والفيديو والاتصال -->
     <script>
         function toggleAccordion(element) {
             const allItems = document.querySelectorAll('.accordion-item');
@@ -363,6 +352,14 @@
             const overlay = document.getElementById('drawerOverlay');
             drawer.classList.toggle('open');
             overlay.classList.toggle('active');
+        }
+
+        // فتح وإغلاق نافذة الفيديو التوضيحي المنبثقة
+        function openVideoModal() {
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+        function closeVideoModal() {
+            document.getElementById('videoModal').style.display = 'none';
         }
 
         // إغلاق بوت الواتساب المنبثق
