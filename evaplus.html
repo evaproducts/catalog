@@ -21,9 +21,9 @@
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 15px; direction: rtl; min-height: 100vh; }
         
-        .container { max-width: 600px; margin: 0 auto; }
+        .container { max-width: 650px; margin: 0 auto; }
 
-        /* الهيدر وشعار المنصة بتصميم عصري أنيق ومميز */
+        /* الهيدر وشعار المنصة العصري */
         .header { 
             text-align: center; 
             padding: 30px 20px; 
@@ -47,29 +47,43 @@
 
         .header p { color: #666; font-size: 13px; margin: 0; font-weight: 600; }
 
-        /* إطار الموبايل المطابق للصورة */
-        .phone-mockup-section { background: var(--linky-card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        /* أزرار التنقل السريعة الرئيسية */
+        .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .main-btn { background: var(--linky-blue); color: #fff; text-decoration: none; padding: 12px 15px; border-radius: 14px; font-size: 13.5px; font-weight: bold; text-align: center; box-shadow: 0 4px 15px rgba(0,136,204,0.2); transition: background 0.2s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
+        .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
+
+        /* تصميم شاشة العرض الإعلانية الفاخرة (مثل شاشات العرض الذكية) */
+        .tv-mockup-section { 
+            background: var(--linky-card-bg); 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            border: 1px solid var(--linky-border); 
+        }
         
-        .phone-frame { 
+        .tv-frame { 
             width: 100%; 
-            max-width: 290px; 
-            height: 520px; 
+            max-width: 580px; 
+            height: 380px; 
             background: #11141d; 
-            border: 10px solid #1a1d24; 
-            border-radius: 40px; 
+            border: 12px solid #1a1d24; 
+            border-radius: 24px; 
             margin: 0 auto; 
             overflow: hidden; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.25); 
             position: relative; 
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* شاشة الموبايل الداخلية */
-        .phone-inner-screen {
-            flex: 1;
-            overflow: hidden;
+        /* شاشة العرض الداخلية */
+        .tv-inner-screen {
+            width: 100%;
+            height: 100%;
             position: relative;
             background: #11141d;
             display: flex;
@@ -77,23 +91,13 @@
             justify-content: center;
         }
 
-        /* حاوية السلايدر المتحرك العشوائي */
-        .phone-slideshow-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .phone-slide-item {
+        .tv-slide-item {
             position: absolute;
-            width: 90%;
+            width: 92%;
             height: 88%;
             background: #1a1f2c;
             border-radius: 16px;
-            padding: 12px;
+            padding: 15px;
             box-sizing: border-box;
             border: 1px solid #2a3447;
             display: flex;
@@ -106,77 +110,52 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
-        .phone-slide-item.active {
+        .tv-slide-item.active {
             opacity: 1;
         }
 
-        .phone-slide-img {
-            width: 130px;
-            height: 130px;
+        .tv-slide-img {
+            width: 140px;
+            height: 140px;
             border-radius: 12px;
             object-fit: contain;
             background: #fff;
-            margin-bottom: 8px;
-            padding: 4px;
+            margin-bottom: 10px;
+            padding: 5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .phone-slide-title {
-            font-size: 13.5px;
+        .tv-slide-title {
+            font-size: 16px;
             font-weight: bold;
             color: #60a5fa;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        .phone-slide-code {
-            font-size: 10.5px;
+        .tv-slide-code {
+            font-size: 11.5px;
             color: #9ca3af;
             background: #232d42;
-            padding: 2px 6px;
+            padding: 3px 10px;
             border-radius: 6px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        .phone-slide-price {
-            font-size: 12px;
+        .tv-slide-price {
+            font-size: 13.5px;
             color: #e5e7eb;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        .phone-slide-profit {
-            font-size: 11px;
+        .tv-slide-profit {
+            font-size: 12.5px;
             font-weight: bold;
             color: #22c55e;
             background: rgba(34, 197, 94, 0.15);
-            padding: 3px 8px;
+            padding: 4px 12px;
             border-radius: 6px;
             border: 1px solid rgba(34, 197, 94, 0.3);
         }
-
-        /* شريط التنقل السفلي للموبايل */
-        .phone-bottom-nav {
-            background: #161a23;
-            border-top: 1px solid #222938;
-            padding: 8px 10px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        .nav-item {
-            font-size: 9.5px;
-            color: #9ca3af;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .nav-item.active { color: #60a5fa; }
-
-        /* الأزرار الانتقالية الرئيسية */
-        .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .main-btn { background: var(--linky-blue); color: #fff; text-decoration: none; padding: 12px 15px; border-radius: 14px; font-size: 13.5px; font-weight: bold; text-align: center; box-shadow: 0 4px 15px rgba(0,136,204,0.2); transition: background 0.2s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
-        .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
 
         /* قسم الشروحات وطريقة العمل والأرباح */
         .info-section { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
@@ -189,6 +168,12 @@
         .whatsapp-bot-btn { background: #fff; color: #20ba5a; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
 
         footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; line-height: 1.6; }
+
+        @media (max-width: 600px) {
+            .tv-frame { height: 320px; }
+            .tv-slide-img { width: 110px; height: 110px; }
+            .tv-slide-title { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
@@ -211,22 +196,13 @@
             </a>
         </div>
 
-        <!-- إطار الموبايل العارض للمنتجات المتبدلة عشوائياً تلقائياً -->
-        <div class="phone-mockup-section">
-            <div class="phone-frame">
-                <!-- شاشة الموبايل الداخلية (سلايدر منتجات عشوائي متحرك) -->
-                <div class="phone-inner-screen">
-                    <div class="phone-slideshow-container" id="phoneSlideshowContainer">
-                        <div style="color: #9ca3af; font-size: 12px; text-align: center;">جاري جلب المنتجات...</div>
+        <!-- شاشة العرض الإعلانية الفاخرة (بدل الموبايل) -->
+        <div class="tv-mockup-section">
+            <div class="tv-frame">
+                <div class="tv-inner-screen">
+                    <div class="tv-slideshow-container" id="tvSlideshowContainer" style="width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div style="color: #9ca3af; font-size: 13px; text-align: center;">جاري جلب المنتجات...</div>
                     </div>
-                </div>
-
-                <!-- شريط التنقل السفلي -->
-                <div class="phone-bottom-nav">
-                    <div class="nav-item">📦 <span>طلبيات</span></div>
-                    <div class="nav-item">➕ <span>إضافة</span></div>
-                    <div class="nav-item active">📋 <span>منتجاتي</span></div>
-                    <div class="nav-item">🗂 <span>القسم</span></div>
                 </div>
             </div>
         </div>
@@ -263,7 +239,7 @@
 
     </div>
 
-    <!-- كود جافاسكريبت لجلب المنتجات من فايربيس وتقليبها تلقائياً مع إظهار أرباح إيفا بلس -->
+    <!-- كود جافاسكريبت لجلب المنتجات وعرضها بشكل شاشة إعلانية أفقية متغيرة تلقائياً -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -280,7 +256,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function initPhoneSlideshow() {
+        async function initTvSlideshow() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 let products = [];
@@ -300,41 +276,41 @@
                 });
 
                 if (products.length === 0) {
-                    document.getElementById('phoneSlideshowContainer').innerHTML = `<div style="color: #9ca3af; font-size: 12px; text-align: center;">لا توجد منتجات حالياً</div>`;
+                    document.getElementById('tvSlideshowContainer').innerHTML = `<div style="color: #9ca3af; font-size: 13px; text-align: center;">لا توجد منتجات حالياً</div>`;
                     return;
                 }
 
                 // خلط المنتجات عشوائياً
                 products.sort(() => Math.random() - 0.5);
 
-                let container = document.getElementById('phoneSlideshowContainer');
+                let container = document.getElementById('tvSlideshowContainer');
                 container.innerHTML = products.map((p, index) => `
-                    <div class="phone-slide-item ${index === 0 ? 'active' : ''}">
-                        <img src="${p.image}" class="phone-slide-img" alt="${p.name}">
-                        <div class="phone-slide-title">${p.name}</div>
-                        <div class="phone-slide-code">كود: ${p.code}</div>
-                        <div class="phone-slide-price">السعر: ${p.price} ₪</div>
-                        <div class="phone-slide-profit">أرباح إيفا بلس: ${p.profit} ₪</div>
+                    <div class="tv-slide-item ${index === 0 ? 'active' : ''}">
+                        <img src="${p.image}" class="tv-slide-img" alt="${p.name}">
+                        <div class="tv-slide-title">${p.name}</div>
+                        <div class="tv-slide-code">كود: ${p.code}</div>
+                        <div class="tv-slide-price">السعر: ${p.price} ₪</div>
+                        <div class="tv-slide-profit">أرباح إيفا بلس: ${p.profit} ₪</div>
                     </div>
                 `).join('');
 
-                // تفعيل التقليب التلقائي كل 3 ثوانٍ
-                let slides = container.querySelectorAll('.phone-slide-item');
+                // تفعيل التقليب التلقائي كل 3.5 ثانية
+                let slides = container.querySelectorAll('.tv-slide-item');
                 let currentIndex = 0;
                 
                 setInterval(() => {
                     slides[currentIndex].classList.remove('active');
                     currentIndex = (currentIndex + 1) % slides.length;
                     slides[currentIndex].classList.add('active');
-                }, 3000);
+                }, 3500);
 
             } catch (err) {
-                console.error("Error loading products for slideshow:", err);
-                document.getElementById('phoneSlideshowContainer').innerHTML = `<div style="color: #ef4444; font-size: 12px; text-align: center;">خطأ في التحميل</div>`;
+                console.error("Error loading products for TV slideshow:", err);
+                document.getElementById('tvSlideshowContainer').innerHTML = `<div style="color: #ef4444; font-size: 13px; text-align: center;">خطأ في التحميل</div>`;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', initPhoneSlideshow);
+        window.addEventListener('DOMContentLoaded', initTvSlideshow);
     </script>
 </body>
 </html>
