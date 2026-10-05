@@ -21,7 +21,21 @@
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 15px; direction: rtl; min-height: 100vh; line-height: 1.8; }
         
-        .container { max-width: 650px; margin: 0 auto; }
+        .container { max-width: 650px; margin: 0 auto; position: relative; }
+
+        /* شريط علوي مع زر القائمة (3 شحطات) */
+        .top-navbar { display: flex; justify-content: space-between; align-items: center; background: var(--linky-card-bg); padding: 12px 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--linky-border); }
+        .menu-toggle-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--linky-blue); font-weight: bold; padding: 0; }
+        
+        /* القائمة الجانبية (Drawer) */
+        .side-drawer { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: #fff; z-index: 9999; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.3s ease; padding: 20px; box-sizing: border-box; }
+        .side-drawer.open { right: 0; }
+        .drawer-close-btn { background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer; color: #666; float: left; margin-bottom: 20px; }
+        .drawer-links { display: flex; flex-direction: column; gap: 15px; margin-top: 40px; }
+        .drawer-links a { color: #333; text-decoration: none; font-weight: bold; font-size: 14.5px; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
+        .drawer-links a:hover { background: #f0f4f8; color: var(--linky-blue); }
+        .drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9998; backdrop-filter: blur(2px); }
+        .drawer-overlay.active { display: block; }
 
         /* الهيدر وشعار المنصة العصري */
         .header { 
@@ -53,7 +67,12 @@
         .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
         .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
 
-        /* زر التسجيل البارز الجديد */
+        /* الفيديو التوضيحي */
+        .video-section { background: var(--linky-card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 2px solid var(--accent-gold); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* زر التسجيل البارز */
         .join-cta-box { background: var(--linky-card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
         .join-now-btn { background: linear-gradient(135deg, #d4af37, #aa771c); color: #fff; text-decoration: none; padding: 15px 25px; border-radius: 14px; font-size: 16px; font-weight: bold; display: block; box-shadow: 0 6px 20px rgba(212,175,55,0.3); transition: transform 0.1s, opacity 0.2s; }
         .join-now-btn:hover { opacity: 0.95; transform: translateY(-2px); }
@@ -149,9 +168,10 @@
         .core-idea-box h3 { margin-top: 0; font-size: 18px; color: #fff; }
         .core-idea-box p { font-size: 13.5px; margin-bottom: 0; line-height: 1.8; font-weight: 600; color: #e6f4fa; }
 
-        /* صندوق بوت الواتساب الدائم */
-        .whatsapp-bot-box { background: linear-gradient(135deg, #25d366, #20ba5a); color: #fff; border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
-        .whatsapp-bot-btn { background: #fff; color: #20ba5a; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+        /* بوت الواتساب المنبثق (Floating Popup) مربوط برقم الدعم */
+        .whatsapp-float-popup { position: fixed; bottom: 20px; left: 20px; z-index: 9997; background: #25d366; color: white; border-radius: 50px; padding: 12px 18px; box-shadow: 0 5px 20px rgba(37,211,102,0.4); display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: bold; font-size: 13px; transition: transform 0.2s; }
+        .whatsapp-float-popup:hover { transform: scale(1.05); }
+        .whatsapp-close-btn { background: rgba(0,0,0,0.2); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: -5px; }
 
         .support-box { background: #e6f4fa; border: 1px solid #b3d9ec; padding: 16px; border-radius: 14px; text-align: center; margin-top: 25px; font-size: 13px; color: #006699; }
         .support-box a { color: var(--linky-blue); font-weight: bold; text-decoration: none; }
@@ -170,8 +190,28 @@
 </head>
 <body>
 
+    <!-- القائمة الجانبية (Drawer Overlay & Menu) -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <button class="drawer-close-btn" onclick="toggleDrawer()">✕</button>
+        <div style="font-weight: bold; color: var(--linky-blue); font-size: 16px; margin-bottom: 10px;">قائمة EVA PLUS</div>
+        <div class="drawer-links">
+            <a href="#videoSection" onclick="toggleDrawer()">🎥 الفيديو التوضيحي</a>
+            <a href="catalog.html" onclick="toggleDrawer()">🛍️ الكتالوج الرقمي</a>
+            <a href="partner.html" onclick="toggleDrawer()">💼 لوحة تحكم الشريك</a>
+            <a href="index.html" id="drawerRegisterLink" onclick="toggleDrawer()">🚀 انضم إلينا الآن</a>
+            <a href="https://wa.me/970594101632?text=مرحباً، أود التواصل مع فريق الدعم والاستفسار عن النظام" target="_blank">💬 التواصل مع الدعم</a>
+        </div>
+    </div>
+
     <div class="container">
         
+        <!-- الشريط العلوي مع زر 3 شحطات -->
+        <div class="top-navbar">
+            <button class="menu-toggle-btn" onclick="toggleDrawer()">☰</button>
+            <span style="font-weight: bold; font-size: 14px; color: #444;">القائمة الرئيسية</span>
+        </div>
+
         <!-- الهيدر والشعار العصري الأنيق -->
         <div class="header">
             <h1 class="brand-logo-text">EVA PLUS</h1>
@@ -188,6 +228,14 @@
             </a>
         </div>
 
+        <!-- الفيديو التوضيحي لطريقة التسجيل والعمل -->
+        <div class="video-section" id="videoSection">
+            <h2 style="font-size: 16px; color: var(--linky-blue); margin-top: 0; margin-bottom: 12px; border-right: 4px solid var(--linky-blue); padding-right: 10px;">🎥 فيديو توضيحي لطريقة التسجيل والعمل</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/XlYoHwowL74" title="دليل الانضمام والعمل في نظام EVA PLUS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
         <!-- شاشة العرض الإعلانية الفاخرة المتحركة للمنتجات وأرباح إيفا بلس -->
         <div class="tv-mockup-section">
             <div class="tv-frame">
@@ -199,7 +247,7 @@
             </div>
         </div>
 
-        <!-- الأقسام التفاعلية المنسدلة (الأكورديون الشامل - مخاطبة كافة الفئات) -->
+        <!-- الأقسام التفاعلية المنسدلة (الأكورديون الشامل) -->
         <div class="accordion-group">
             
             <div class="accordion-item" onclick="toggleAccordion(this)">
@@ -234,7 +282,7 @@
             <div class="accordion-item" onclick="toggleAccordion(this)">
                 <div class="accordion-header">💻 هل أنت مهتم بالتجارة الإلكترونية وترغب في دخول السوق بذكاء؟</div>
                 <div class="accordion-content">
-                    إذا كنت مهتمًأ بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
+                    إذا كنت مهتماً بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
                 </div>
             </div>
 
@@ -242,7 +290,7 @@
             <div class="accordion-item" onclick="toggleAccordion(this)">
                 <div class="accordion-header" style="background: #e8f5e9; color: #1b5e20;">💵 كيف ومتى تحصل على أرباحك وعمولاتك؟</div>
                 <div class="accordion-content payout-theme">
-                    الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من معرض إيفا!
+                    الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من المعرض!
                 </div>
             </div>
 
@@ -277,14 +325,11 @@
             </a>
         </div>
 
-        <!-- صندوق بوت الواتساب الذكي -->
-        <div class="whatsapp-bot-box">
-            <h3 style="margin: 0 0 5px 0; font-size: 15px;">💬 لديك استفسار أو تريد معرفة المزيد؟</h3>
-            <p style="margin: 0; font-size: 12.5px; opacity: 0.9;">مساعدنا الذكي عبر الواتساب جاهز للرد على كافة أسئلتك فوراً!</p>
-            <a href="https://wa.me/970597180456?text=مرحباً، أود الاستفسار عن نظام EVA PLUS وكيفية البدء" target="_blank" class="whatsapp-bot-btn">
-                تواصل مع بوت الواتساب الآلي 🤖
-            </a>
-        </div>
+        <!-- زر الواتساب المنبثق برقم الدعم مع إشارة X -->
+        <a href="https://wa.me/970594101632?text=مرحباً، أود التواصل مع فريق الدعم والاستفسار عن النظام" target="_blank" class="whatsapp-float-popup" id="whatsappFloatPopup">
+            <span>💬 تواصل مع الدعم</span>
+            <button class="whatsapp-close-btn" onclick="closeWhatsappPopup(event)">✕</button>
+        </a>
 
         <div class="support-box">
             ❓ <b>هل تحتاج إلى مساعدة أو استفسار؟</b><br>
@@ -296,13 +341,13 @@
         </div>
 
         <footer>
-            جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026<br>
+            جميع الحقوق محفوظة © نظام EVA PLUS 2026<br>
             <a href="privacy.html" style="color: var(--linky-blue); text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
         </footer>
 
     </div>
 
-    <!-- كود الجافاسكريبت للأكورديون ونقل رابط الإحالة (ref) لزر التسجيل -->
+    <!-- كود الجافاسكريبت للأكورديون والقائمة الجانبية والاتصال -->
     <script>
         function toggleAccordion(element) {
             const allItems = document.querySelectorAll('.accordion-item');
@@ -312,13 +357,30 @@
             element.classList.toggle('active');
         }
 
-        // الحفاظ على رابط الإحالة (ref) في حال دخل الزائر عبر رابط شريك ونقله لزر التسجيل
+        // فتح وإغلاق القائمة الجانبية (3 شحطات)
+        function toggleDrawer() {
+            const drawer = document.getElementById('sideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // إغلاق بوت الواتساب المنبثق
+        function closeWhatsappPopup(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            document.getElementById('whatsappFloatPopup').style.display = 'none';
+        }
+
+        // الحفاظ على رابط الإحالة (ref) في حال دخل الزائر عبر رابط شريك
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const refVal = urlParams.get('ref');
             if (refVal) {
                 const registerBtn = document.getElementById('goToRegisterBtn');
                 registerBtn.href = `index.html?ref=${refVal}`;
+                const drawerRegLink = document.getElementById('drawerRegisterLink');
+                drawerRegLink.href = `index.html?ref=${refVal}`;
             }
         });
     </script>
