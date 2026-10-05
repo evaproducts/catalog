@@ -19,7 +19,7 @@
             --accent-gold: #d4af37;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 15px; direction: rtl; min-height: 100vh; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: var(--linky-text); margin: 0; padding: 15px; direction: rtl; min-height: 100vh; line-height: 1.8; }
         
         .container { max-width: 650px; margin: 0 auto; }
 
@@ -45,7 +45,7 @@
             display: inline-block;
         }
 
-        .header p { color: #666; font-size: 13px; margin: 0; font-weight: 600; }
+        .header p { color: #666; font-size: 13.5px; margin: 0; font-weight: 600; }
 
         /* أزرار التنقل السريعة الرئيسية */
         .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -53,7 +53,12 @@
         .main-btn:hover { background: var(--linky-blue-hover); transform: translateY(-2px); }
         .main-btn.gold { background: linear-gradient(135deg, #d4af37, #aa771c); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
 
-        /* تصميم شاشة العرض الإعلانية الفاخرة (مثل شاشات العرض الذكية) */
+        /* زر التسجيل البارز الجديد */
+        .join-cta-box { background: var(--linky-card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
+        .join-now-btn { background: linear-gradient(135deg, #d4af37, #aa771c); color: #fff; text-decoration: none; padding: 15px 25px; border-radius: 14px; font-size: 16px; font-weight: bold; display: block; box-shadow: 0 6px 20px rgba(212,175,55,0.3); transition: transform 0.1s, opacity 0.2s; }
+        .join-now-btn:hover { opacity: 0.95; transform: translateY(-2px); }
+
+        /* شاشة العرض الإعلانية الفاخرة */
         .tv-mockup-section { 
             background: var(--linky-card-bg); 
             border-radius: 20px; 
@@ -80,7 +85,6 @@
             justify-content: center;
         }
 
-        /* شاشة العرض الداخلية */
         .tv-inner-screen {
             width: 100%;
             height: 100%;
@@ -110,9 +114,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
-        .tv-slide-item.active {
-            opacity: 1;
-        }
+        .tv-slide-item.active { opacity: 1; }
 
         .tv-slide-img {
             width: 140px;
@@ -125,49 +127,39 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .tv-slide-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #60a5fa;
-            margin-bottom: 6px;
-        }
+        .tv-slide-title { font-size: 16px; font-weight: bold; color: #60a5fa; margin-bottom: 6px; }
+        .tv-slide-code { font-size: 11.5px; color: #9ca3af; background: #232d42; padding: 3px 10px; border-radius: 6px; margin-bottom: 6px; }
+        .tv-slide-price { font-size: 13.5px; color: #e5e7eb; margin-bottom: 6px; }
+        .tv-slide-profit { font-size: 12.5px; font-weight: bold; color: #22c55e; background: rgba(34, 197, 94, 0.15); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(34, 197, 94, 0.3); }
 
-        .tv-slide-code {
-            font-size: 11.5px;
-            color: #9ca3af;
-            background: #232d42;
-            padding: 3px 10px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-        }
+        /* تنسيق الأكورديون التفاعلي */
+        .accordion-group { margin-bottom: 25px; }
+        .accordion-item { border: 1px solid var(--linky-border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; background: var(--linky-card-bg); transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .accordion-header { background: #fafbfc; color: #1a1a1a; padding: 14px 18px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; border-bottom: 1px solid transparent; }
+        .accordion-header:hover { background: #f0f4f8; color: var(--linky-blue); }
+        .accordion-header::after { content: '▼'; font-size: 10px; transition: transform 0.3s; color: #666; }
+        .accordion-item.active .accordion-header::after { transform: rotate(180deg); color: var(--linky-blue); }
+        .accordion-item.active .accordion-header { border-bottom-color: var(--linky-border); color: var(--linky-blue); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; padding: 0 18px; font-size: 13.5px; color: #555; line-height: 1.8; }
+        .accordion-item.active .accordion-content { max-height: 400px; padding: 15px 18px; }
+        .accordion-content.payout-theme { background: #e8f5e9; color: #1b5e20; }
+        .accordion-content.steps-theme { background: #fafbfc; color: #444; }
 
-        .tv-slide-price {
-            font-size: 13.5px;
-            color: #e5e7eb;
-            margin-bottom: 6px;
-        }
+        .core-idea-box { background: linear-gradient(135deg, #0088cc 0%, #006699 100%); color: #fff; padding: 22px; border-radius: 14px; margin-bottom: 25px; text-align: center; box-shadow: 0 6px 20px rgba(0,136,204,0.15); }
+        .core-idea-box h3 { margin-top: 0; font-size: 18px; color: #fff; }
+        .core-idea-box p { font-size: 13.5px; margin-bottom: 0; line-height: 1.8; font-weight: 600; color: #e6f4fa; }
 
-        .tv-slide-profit {
-            font-size: 12.5px;
-            font-weight: bold;
-            color: #22c55e;
-            background: rgba(34, 197, 94, 0.15);
-            padding: 4px 12px;
-            border-radius: 6px;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        /* قسم الشروحات وطريقة العمل والأرباح */
-        .info-section { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
-        .info-section h2 { font-size: 16px; color: var(--linky-blue); margin-top: 0; margin-bottom: 12px; font-weight: 800; border-bottom: 2px solid #e6f4fa; padding-bottom: 8px; }
-        .info-section p, .info-section li { font-size: 13px; color: #444; line-height: 1.6; }
-        .info-section ul { padding-right: 20px; margin: 8px 0; }
-
-        /* صندوق بوت الواتساب */
+        /* صندوق بوت الواتساب الدائم */
         .whatsapp-bot-box { background: linear-gradient(135deg, #25d366, #20ba5a); color: #fff; border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
         .whatsapp-bot-btn { background: #fff; color: #20ba5a; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
 
-        footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; line-height: 1.6; }
+        .support-box { background: #e6f4fa; border: 1px solid #b3d9ec; padding: 16px; border-radius: 14px; text-align: center; margin-top: 25px; font-size: 13px; color: #006699; }
+        .support-box a { color: var(--linky-blue); font-weight: bold; text-decoration: none; }
+        .support-box a:hover { text-decoration: underline; }
+
+        .footer-link { text-align: center; margin-top: 20px; font-size: 14px; }
+        .footer-link a { color: var(--linky-blue); text-decoration: none; font-weight: bold; }
+        footer { text-align: center; color: #666; font-size: 12px; margin-bottom: 30px; margin-top: 30px; line-height: 1.6; }
 
         @media (max-width: 600px) {
             .tv-frame { height: 320px; }
@@ -183,7 +175,7 @@
         <!-- الهيدر والشعار العصري الأنيق -->
         <div class="header">
             <h1 class="brand-logo-text">EVA PLUS</h1>
-            <p>منصة العمل والربح الذكي من المنزل | بلا رأس مال</p>
+            <p>✨ ابنِ فريقك.. واجعل أرباحهم مصدر دخلك المتصاعد ✨<br>اربح بلا توقف - اعمل من المنزل واربح معنا</p>
         </div>
 
         <!-- أزرار التنقل السريعة الرئيسية -->
@@ -196,31 +188,93 @@
             </a>
         </div>
 
-        <!-- شاشة العرض الإعلانية الفاخرة (بدل الموبايل) -->
+        <!-- شاشة العرض الإعلانية الفاخرة المتحركة للمنتجات وأرباح إيفا بلس -->
         <div class="tv-mockup-section">
             <div class="tv-frame">
                 <div class="tv-inner-screen">
                     <div class="tv-slideshow-container" id="tvSlideshowContainer" style="width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center;">
-                        <div style="color: #9ca3af; font-size: 13px; text-align: center;">جاري جلب المنتجات...</div>
+                        <div style="color: #9ca3af; font-size: 13px; text-align: center;">جاري جلب المنتجات والأرباح...</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- قسم الشروحات: ما هي إيفا بلس وكيف نعمل؟ -->
-        <div class="info-section">
-            <h2>💡 ما هو نظام EVA PLUS؟</h2>
-            <p>هو نظام ريادي متكامل يتيح لك بناء مشروعك الخاص والعمل من منزلك بكل مرونة وبدون أي رأس مال أو مخاطرة. نحن نتولى تجهيز المنتجات، التغليف، وتوصيلها للزبائن نيابة عنك، وأنت تحصل على أرباحك بكل سهولة.</p>
+        <!-- الأقسام التفاعلية المنسدلة (الأكورديون الشامل - مخاطبة كافة الفئات) -->
+        <div class="accordion-group">
+            
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">🛍️ هل تعمل/ين في "شي إن" (SHEIN) وتعبت من دوامة الطلبات وجع رأس التوصيل؟</div>
+                <div class="accordion-content">
+                    إذا كنت تعمل في مجال الوساطة التجارية وتتعب في جمع الطلبات، متابعة الطرود، مشاكل التوصيل، وهامش الربح البسيط وسط تنافس الأسعار الشديد... <b>لدينا الحل الجذري!</b><br>
+                    في نظام <b>EVA PLUS</b>، لا توجد طرود ولا استلام وتسليم، أنت تعتمد على <b>النشاط الرقمي وبناء الفريق فقط</b>. شارك رابط كتالوجك الراقي أو ادع معارفك للانضمام، واحصل على عمولتك المباشرة بذكاء وسهولة تامة من منزلك!
+                </div>
+            </div>
+
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">📱 هل لديك هاتف ذكي وإنترنت، وتقلب الفيديوهات طوال الليل بلا فائدة؟</div>
+                <div class="accordion-content">
+                    الكثير منا يقضي ساعات طويلة يومياً في تصفح مواقع التواصل الاجتماعي دون مقابل. مع نظام <b>EVA PLUS</b>، يمكنك تحويل هذه الأوقات إلى استثمار حقيقي ودخل متصاعد من خلال هاتفك فقط ومن مكانك.
+                </div>
+            </div>
+
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">👥 هل لديك أصدقاء كثر ومعارف على السوشيال ميديا أو الواقع؟</div>
+                <div class="accordion-content">
+                    شبكة معارفك هي رأس مالك الحقيقي! بدلاً من مشاركة الروابط المجانية، قم بدعوة أصدقائك ومعارفك للانضمام لشجرتك في النظام، وكل عملية بيع أو استقطاب تحدث عبر فريقك تمنحك أرباحاً وعمولات مضاعفة ومباشرة.
+                </div>
+            </div>
+
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">🎓 هل أنت طالب/ة جامعي وتبحث عن دخل مرن لا يتعارض مع دراستك؟</div>
+                <div class="accordion-content">
+                    نظامنا مصمم خصيصاً ليمنحك الحرية الكاملة؛ لا يوجد دوام مكتبي أو التزام بساعات محددة. أدر عملك المالي بحرية وبدون أي رأس مال أو مخاطرة وأنت في مقاعد الدراسة.
+                </div>
+            </div>
+
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">💻 هل أنت مهتم بالتجارة الإلكترونية وترغب في دخول السوق بذكاء؟</div>
+                <div class="accordion-content">
+                    إذا كنت مهتمًأ بعالم التجارة الرقمية وتطبيقات الويب المتقدمة وترغب في امتلاك مشروعك التجاري الخاص بخطوات مدروسة وبدون تعقيدات التشغيل التقليدية، نظامنا يوفر لك البيئة المتكاملة لتحقيق ذلك.
+                </div>
+            </div>
+
+            <!-- قسم الأرباح والعمولات -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header" style="background: #e8f5e9; color: #1b5e20;">💵 كيف ومتى تحصل على أرباحك وعمولاتك؟</div>
+                <div class="accordion-content payout-theme">
+                    الأرباح تُسجل في حسابك فوراً وبشكل آلي مع كل عملية بيع من كتالوجك أو انضمام جديد في شبكتك. وبمجرد وصول رصيدك المتراكم إلى <b>100 شيقل فقط</b>، يتم تحويل المبلغ مباشرة أو استلامه **نقداً (كاش)** بكل سهولة من معرض إيفا!
+                </div>
+            </div>
+
+            <!-- قسم خطوات البدء الفوري -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">📌 خطوتك البسيطة للبدء الفوري مع EVA PLUS</div>
+                <div class="accordion-content steps-theme">
+                    <ul style="padding-right: 15px; margin: 0;">
+                        <li style="margin-bottom: 10px;"><strong>قدم طلب الانضمام:</strong> اضغط على زر التسجيل أدناه وأرسل بياناتك ليتم حفظها ونقلك لاختيار منتجك الأول.</li>
+                        <li style="margin-bottom: 10px;"><strong>اختر منتجك الأول:</strong> تصفح الكتالوج واطلب منتجك لتأكيد الطلب ودخولك في نظام EVA PLUS.</li>
+                        <li style="margin-bottom: 10px;"><strong>استلم روابطك الذكية:</strong> فور تأكيد الإدارة، ستقوم الإدارة بتفعيل حسابك وإرسال **رابط الصفحة الشخصية** مع بيانات الدخول الخاصة بك عبر الواتساب!</li>
+                        <li style="margin-bottom: 0;"><strong>شارك واجني الأرباح:</strong> شارك رابط الكتالوج الخاص بك لتحقيق الأرباح، وشارك رابط الاستقطاب لتعريف أصدقائك بالفكرة لينضموا تحتك في الشجرة وتصبح شريكاً في العمولات.</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
-        <!-- قسم سحب الأرباح -->
-        <div class="info-section">
-            <h2>💵 كيف يتم سحب الأرباح؟</h2>
-            <ul>
-                <li>تظهر أرباحك بشكل مباشر وشفاف داخل لوحة التحكم الخاصة بك مع كل طلب يتم عبر رابطك.</li>
-                <li>يمكنك سحب أرباحك بشكل فوري بمجرد وصول رصيدك إلى <strong>100 شيكل</strong> فقط.</li>
-                <li>طرق السحب متاحة وميسرة: استلام نقدي (كاش) من المعرض، أو عبر التحويل الإلكتروني المعتمد (مثل آي براق أو التحويل البنكي).</li>
-            </ul>
+        <div class="core-idea-box">
+            <h3>💡 أنت لا تبيع منتجاً.. أنت تبيع فكرة!</h3>
+            <p>
+                سر النجاح الحقيقي في نظام <b>EVA PLUS</b> ليس في عرض السلع فقط، بل في دعوة معارفك وأصدقائك للانضمام إلى نظام الشراكة الذكي. حالما يختار كل شريك منتجه الأول ويدخل الشبكة، ستصبح شريكاً في أرباحهم وتتضاعف دخولكم معاً بلا توقف!
+            </p>
+        </div>
+
+        <!-- زر الانتقال لصفحة الانضمام والتسجيل -->
+        <div class="join-cta-box">
+            <h3 style="margin-top: 0; color: #1a1a1a; font-size: 18px;">جاهز لبدء مشروعك الذكي؟</h3>
+            <p style="color: #666; font-size: 13.5px; margin-bottom: 15px;">انضم الآن إلى نظام EVA PLUS وابدأ رحلة الأرباح المتصاعدة</p>
+            <a href="index.html" id="goToRegisterBtn" class="join-now-btn">
+                🚀 انضم الآن وسجل بياناتك
+            </a>
         </div>
 
         <!-- صندوق بوت الواتساب الذكي -->
@@ -232,14 +286,43 @@
             </a>
         </div>
 
-        <!-- الفوتر -->
+        <div class="support-box">
+            ❓ <b>هل تحتاج إلى مساعدة أو استفسار؟</b><br>
+            تواصل معنا مباشرة عبر الواتساب: <a href="https://wa.me/970594101632" target="_blank">970594101632</a>
+        </div>
+
+        <div class="footer-link" style="margin-top: 30px;">
+            تصفح روابطنا الأخرى: <a href="https://linky.ps/eva" target="_blank">linky.ps/eva</a>
+        </div>
+
         <footer>
-            جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026
+            جميع الحقوق محفوظة © معرض إيفا براند - نظام EVA PLUS 2026<br>
+            <a href="privacy.html" style="color: var(--linky-blue); text-decoration: underline; font-size: 11px; margin-top: 5px; display: inline-block;">سياسة الخصوصية</a>
         </footer>
 
     </div>
 
-    <!-- كود جافاسكريبت لجلب المنتجات وعرضها بشكل شاشة إعلانية أفقية متغيرة تلقائياً -->
+    <!-- كود الجافاسكريبت للأكورديون ونقل رابط الإحالة (ref) لزر التسجيل -->
+    <script>
+        function toggleAccordion(element) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                if (item !== element) item.classList.remove('active');
+            });
+            element.classList.toggle('active');
+        }
+
+        // الحفاظ على رابط الإحالة (ref) في حال دخل الزائر عبر رابط شريك ونقله لزر التسجيل
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refVal = urlParams.get('ref');
+            if (refVal) {
+                const registerBtn = document.getElementById('goToRegisterBtn');
+                registerBtn.href = `index.html?ref=${refVal}`;
+            }
+        });
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -256,6 +339,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // جلب المنتجات لعرض الشاشة الإعلانية التلفزيونية المتحركة
         async function initTvSlideshow() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
@@ -280,7 +364,6 @@
                     return;
                 }
 
-                // خلط المنتجات عشوائياً
                 products.sort(() => Math.random() - 0.5);
 
                 let container = document.getElementById('tvSlideshowContainer');
@@ -294,7 +377,6 @@
                     </div>
                 `).join('');
 
-                // تفعيل التقليب التلقائي كل 3.5 ثانية
                 let slides = container.querySelectorAll('.tv-slide-item');
                 let currentIndex = 0;
                 
@@ -312,5 +394,6 @@
 
         window.addEventListener('DOMContentLoaded', initTvSlideshow);
     </script>
+
 </body>
 </html>
