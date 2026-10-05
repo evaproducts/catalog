@@ -25,7 +25,6 @@
 
         /* الهيدر وشعار المنصة */
         .header { text-align: center; padding: 25px 20px; background: var(--linky-card-bg); border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
-        .header img { max-height: 80px; width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid var(--linky-blue); margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,136,204,0.15); }
         .header h1 { color: #1a1a1a; margin: 0; font-size: 22px; font-weight: 800; }
         .header p { color: #666; font-size: 13px; margin: 8px 0 15px 0; }
 
@@ -33,10 +32,86 @@
         .slider-container { background: #fff; border-radius: 20px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); position: relative; }
         .slider-img { width: 100%; height: 220px; object-fit: cover; display: block; }
 
-        /* إطار الموبايل العارض (مثل دروبي) */
+        /* إطار الموبايل المطابق للصورة */
         .phone-mockup-section { background: var(--linky-card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--linky-border); }
-        .phone-frame { width: 100%; max-width: 280px; height: 480px; border: 8px solid #1a1a1a; border-radius: 35px; margin: 0 auto 15px auto; overflow: hidden; background: #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative; }
-        .phone-screen-content { padding: 15px; text-align: right; font-size: 12px; }
+        
+        .phone-frame { 
+            width: 100%; 
+            max-width: 290px; 
+            height: 520px; 
+            background: #11141d; 
+            border: 10px solid #1a1d24; 
+            border-radius: 40px; 
+            margin: 0 auto 15px auto; 
+            overflow: hidden; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25); 
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* شاشة الموبايل الداخلية */
+        .phone-inner-screen {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            color: #fff;
+            text-align: right;
+            direction: rtl;
+        }
+        .phone-inner-screen::-webkit-scrollbar { display: none; }
+
+        /* كارت المنتج داخل شاشة الموبايل */
+        .phone-product-card {
+            background: #1a1f2c;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #2a3447;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .phone-product-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #fff;
+        }
+        .phone-product-info h4 {
+            font-size: 12px;
+            margin: 0 0 4px 0;
+            color: #60a5fa;
+        }
+        .phone-product-info span {
+            font-size: 10px;
+            color: #9ca3af;
+            background: #232d42;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* شريط التنقل السفلي للموبايل */
+        .phone-bottom-nav {
+            background: #161a23;
+            border-top: 1px solid #222938;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .nav-item {
+            font-size: 9.5px;
+            color: #9ca3af;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .nav-item.active { color: #60a5fa; }
 
         /* الأزرار الانتقالية الرئيسية */
         .action-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
@@ -50,7 +125,7 @@
         .info-section p, .info-section li { font-size: 13px; color: #444; line-height: 1.6; }
         .info-section ul { padding-right: 20px; margin: 8px 0; }
 
-        /* زر بوت الواتساب الثابت أو البارز */
+        /* صندوق بوت الواتساب */
         .whatsapp-bot-box { background: linear-gradient(135deg, #25d366, #20ba5a); color: #fff; border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
         .whatsapp-bot-btn { background: #fff; color: #20ba5a; text-decoration: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
 
@@ -63,9 +138,7 @@
         
         <!-- الهيدر والشعار -->
         <div class="header">
-            <div id="logoContainer">
-                <h1 style="color: #1a1a1a; margin:0; font-size: 22px; font-weight: 800;">EVA PLUS</h1>
-            </div>
+            <h1 style="color: #1a1a1a; margin:0; font-size: 22px; font-weight: 800;">EVA PLUS</h1>
             <p>منصة العمل والربح الذكي من المنزل | بلا رأس مال</p>
         </div>
 
@@ -84,19 +157,26 @@
             </a>
         </div>
 
-        <!-- معاينة إطار الموبايل التفاعلي -->
+        <!-- إطار الموبايل العارض للمنتجات العشوائية من فايربيس -->
         <div class="phone-mockup-section">
-            <h3 style="font-size: 14.5px; margin-top: 0; color: #1a1a1a;">✨ تجربة تصفح سريعة ومرنة</h3>
+            <h3 style="font-size: 14.5px; margin-top: 0; color: #1a1a1a; margin-bottom: 12px;">✨ معاينة حية للمنتجات والأرباح</h3>
+            
             <div class="phone-frame">
-                <div class="phone-screen-content">
-                    <div style="font-weight: bold; color: var(--linky-blue); margin-bottom: 8px;">📱 معاينة حية لمنصة إيفا</div>
-                    <p style="color: #666; margin-bottom: 10px;">تصفح آلاف منتجات العطور والساعات والحقائب الفاخرة مع أرباح واضحة لكل منتج.</p>
-                    <div style="background: #e6f4fa; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: #006699;">
-                        ارباح مضمونة لكل شريك 💵
-                    </div>
+                <!-- شاشة الموبايل الداخلية -->
+                <div class="phone-inner-screen" id="phoneProductsContainer">
+                    <div style="text-align: center; color: #9ca3af; padding-top: 50px; font-size: 12px;">جاري تحميل المنتجات...</div>
+                </div>
+
+                <!-- شريط التنقل السفلي -->
+                <div class="phone-bottom-nav">
+                    <div class="nav-item">📦 <span>طلبيات</span></div>
+                    <div class="nav-item">➕ <span>إضافة</span></div>
+                    <div class="nav-item active">📋 <span>منتجاتي</span></div>
+                    <div class="nav-item">🗂 <span>القسم</span></div>
                 </div>
             </div>
-            <p style="font-size: 12px; color: #666; margin: 0;">مصمم خصيصاً ليعمل بكفاءة عالية على كافة الهواتف الذكية.</p>
+            
+            <p style="font-size: 12px; color: #666; margin: 0;">معاينة حية ومباشرة من مخزن المعرض.</p>
         </div>
 
         <!-- قسم الشروحات: ما هي إيفا بلس وكيف نعمل؟ -->
@@ -131,5 +211,68 @@
 
     </div>
 
+    <!-- كود جافاسكريبت لجلب المنتجات عشوائياً من فايربيس وعرضها داخل إطار الموبايل -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
+            authDomain: "eva-plus-66b96.firebaseapp.com",
+            projectId: "eva-plus-66b96",
+            storageBucket: "eva-plus-66b96.firebasestorage.app",
+            messagingSenderId: "686798536842",
+            appId: "1:686798536842:web:8c09932cd5869292eb6d73"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadRandomPhoneProducts() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                let products = [];
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    let img = (data.images && data.images.length > 0) ? data.images[0] : '';
+                    if (img && data.name) {
+                        products.push({
+                            code: data.code || doc.id,
+                            name: data.name,
+                            image: img,
+                            price: data.price || '0'
+                        });
+                    }
+                });
+
+                // خلط المنتجات عشوائياً
+                products.sort(() => Math.random() - 0.5);
+                let selectedProducts = products.slice(0, 5); // أخذ أول 5 منتجات عشوائية
+
+                let container = document.getElementById('phoneProductsContainer');
+                if (selectedProducts.length === 0) {
+                    container.innerHTML = `<div style="text-align: center; color: #9ca3af; padding-top: 50px;">لا توجد منتجات مضافة حالياً.</div>`;
+                    return;
+                }
+
+                container.innerHTML = selectedProducts.map(p => `
+                    <div class="phone-product-card">
+                        <img src="${p.image}" class="phone-product-img" alt="${p.name}">
+                        <div class="phone-product-info">
+                            <h4>${p.name}</h4>
+                            <span>كود: ${p.code}</span>
+                            <div style="font-size: 11px; color: #34d399; margin-top: 3px; font-weight: bold;">السعر: ${p.price} ₪</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error("Error loading products for mockup:", err);
+                document.getElementById('phoneProductsContainer').innerHTML = `<div style="text-align: center; color: #ef4444; padding-top: 50px;">خطأ في تحميل المعاينة.</div>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadRandomPhoneProducts);
+    </script>
 </body>
 </html>
