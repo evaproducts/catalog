@@ -75,10 +75,10 @@
         .phone-slide-item {
             position: absolute;
             width: 90%;
-            height: 85%;
+            height: 88%;
             background: #1a1f2c;
             border-radius: 16px;
-            padding: 15px;
+            padding: 12px;
             box-sizing: border-box;
             border: 1px solid #2a3447;
             display: flex;
@@ -96,36 +96,46 @@
         }
 
         .phone-slide-img {
-            width: 150px;
-            height: 150px;
+            width: 130px;
+            height: 130px;
             border-radius: 12px;
             object-fit: contain;
             background: #fff;
-            margin-bottom: 12px;
-            padding: 5px;
+            margin-bottom: 8px;
+            padding: 4px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .phone-slide-title {
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: bold;
             color: #60a5fa;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .phone-slide-code {
-            font-size: 11px;
+            font-size: 10.5px;
             color: #9ca3af;
             background: #232d42;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 6px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .phone-slide-price {
-            font-size: 13px;
-            color: #34d399;
+            font-size: 12px;
+            color: #e5e7eb;
+            margin-bottom: 4px;
+        }
+
+        .phone-slide-profit {
+            font-size: 11px;
             font-weight: bold;
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
         /* شريط التنقل السفلي للموبايل */
@@ -170,7 +180,7 @@
 
     <div class="container">
         
-        <!-- الهيدر والشعار -->
+        <!-- الهيدر وشعار المنصة -->
         <div class="header">
             <h1 style="color: #1a1a1a; margin:0; font-size: 22px; font-weight: 800;">EVA PLUS</h1>
             <p>منصة العمل والربح الذكي من المنزل | بلا رأس مال</p>
@@ -247,7 +257,7 @@
 
     </div>
 
-    <!-- كود جافاسكريبت لجلب المنتجات من فايربيس وتقليبها تلقائياً بشكل عشوائي -->
+    <!-- كود جافاسكريبت لجلب المنتجات من فايربيس وتقليبها تلقائياً مع إظهار أرباح إيفا بلس -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -271,12 +281,14 @@
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
                     let img = (data.images && data.images.length > 0) ? data.images[0] : '';
+                    let profitVal = data.agentPrice || data.profit || data.evaProfit || 0;
                     if (img && data.name) {
                         products.push({
                             code: data.code || doc.id,
                             name: data.name,
                             image: img,
-                            price: data.price || '0'
+                            price: data.price || '0',
+                            profit: profitVal
                         });
                     }
                 });
@@ -296,6 +308,7 @@
                         <div class="phone-slide-title">${p.name}</div>
                         <div class="phone-slide-code">كود: ${p.code}</div>
                         <div class="phone-slide-price">السعر: ${p.price} ₪</div>
+                        <div class="phone-slide-profit">أرباح إيفا بلس: ${p.profit} ₪</div>
                     </div>
                 `).join('');
 
