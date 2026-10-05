@@ -178,7 +178,7 @@
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeOrderModal()">&times;</span>
-            <h3 style="color: #1a1a1a; margin-top: 0; margin-bottom: 10px; font-size: 17px;">🛍️ إتمام طلب المنتج</h3>
+            <h3 style="color: #1a1a1a; margin-top: 0; margin-bottom: 10px; font-size: 17px;">🛍️️ إتمام طلب المنتج</h3>
             <p id="modalProductName" style="font-weight: bold; color: var(--linky-blue); margin-bottom: 15px; font-size: 13.5px;"></p>
             
             <h4 style="color: #444; font-size: 13.5px; margin: 10px 0 6px 0; border-bottom: 1px solid var(--linky-border); padding-bottom: 6px;">ادخل معلومات التوصيل</h4>
@@ -239,7 +239,7 @@
         let rawPartnerInput = (urlParams.get('ref') || urlParams.get('user') || '').trim();
         let partnerUser = null;
         let isSystemPartnerOrder = false;
-        let showAgentProfit = false;
+        let showAgentProfit = true; // تم ضبطها لتكون true دائماً لضمان ظهور الأرباح لجميع الزوار
 
         if (rawPartnerInput && rawPartnerInput.toUpperCase().startsWith('EVA-')) {
             partnerUser = rawPartnerInput.toUpperCase();
@@ -289,7 +289,6 @@
                     if (pData && pData.partnerId) {
                         partnerUser = pData.sponsor || 'EVA-001';
                         isSystemPartnerOrder = true;
-                        showAgentProfit = true;
                         document.getElementById('clientName').value = pData.name || '';
                         document.getElementById('clientAddress').value = pData.address || '';
                         if (pData.phone) {
