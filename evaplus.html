@@ -54,44 +54,78 @@
         /* شاشة الموبايل الداخلية */
         .phone-inner-screen {
             flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-            color: #fff;
-            text-align: right;
-            direction: rtl;
+            overflow: hidden;
+            position: relative;
+            background: #11141d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .phone-inner-screen::-webkit-scrollbar { display: none; }
 
-        /* كارت المنتج داخل شاشة الموبايل */
-        .phone-product-card {
+        /* حاوية السلايدر المتحرك العشوائي */
+        .phone-slideshow-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-slide-item {
+            position: absolute;
+            width: 90%;
+            height: 85%;
             background: #1a1f2c;
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 10px;
+            border-radius: 16px;
+            padding: 15px;
+            box-sizing: border-box;
             border: 1px solid #2a3447;
             display: flex;
-            gap: 10px;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
-        .phone-product-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            object-fit: cover;
+
+        .phone-slide-item.active {
+            opacity: 1;
+        }
+
+        .phone-slide-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            object-fit: contain;
             background: #fff;
+            margin-bottom: 12px;
+            padding: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        .phone-product-info h4 {
-            font-size: 12px;
-            margin: 0 0 4px 0;
+
+        .phone-slide-title {
+            font-size: 14px;
+            font-weight: bold;
             color: #60a5fa;
+            margin-bottom: 6px;
         }
-        .phone-product-info span {
-            font-size: 10px;
+
+        .phone-slide-code {
+            font-size: 11px;
             color: #9ca3af;
             background: #232d42;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .phone-slide-price {
+            font-size: 13px;
+            color: #34d399;
+            font-weight: bold;
         }
 
         /* شريط التنقل السفلي للموبايل */
@@ -157,14 +191,16 @@
             </a>
         </div>
 
-        <!-- إطار الموبايل العارض للمنتجات العشوائية من فايربيس -->
+        <!-- إطار الموبايل العارض للمنتجات المتبدلة عشوائياً تلقائياً -->
         <div class="phone-mockup-section">
             <h3 style="font-size: 14.5px; margin-top: 0; color: #1a1a1a; margin-bottom: 12px;">✨ معاينة حية للمنتجات والأرباح</h3>
             
             <div class="phone-frame">
-                <!-- شاشة الموبايل الداخلية -->
-                <div class="phone-inner-screen" id="phoneProductsContainer">
-                    <div style="text-align: center; color: #9ca3af; padding-top: 50px; font-size: 12px;">جاري تحميل المنتجات...</div>
+                <!-- شاشة الموبايل الداخلية (سلايدر منتجات عشوائي متحرك) -->
+                <div class="phone-inner-screen">
+                    <div class="phone-slideshow-container" id="phoneSlideshowContainer">
+                        <div style="color: #9ca3af; font-size: 12px; text-align: center;">جاري جلب المنتجات...</div>
+                    </div>
                 </div>
 
                 <!-- شريط التنقل السفلي -->
@@ -176,7 +212,7 @@
                 </div>
             </div>
             
-            <p style="font-size: 12px; color: #666; margin: 0;">معاينة حية ومباشرة من مخزن المعرض.</p>
+            <p style="font-size: 12px; color: #666; margin: 0;">معاينة حية ومباشرة تتحدث تلقائياً من مخزن المعرض.</p>
         </div>
 
         <!-- قسم الشروحات: ما هي إيفا بلس وكيف نعمل؟ -->
@@ -211,7 +247,7 @@
 
     </div>
 
-    <!-- كود جافاسكريبت لجلب المنتجات عشوائياً من فايربيس وعرضها داخل إطار الموبايل -->
+    <!-- كود جافاسكريبت لجلب المنتجات من فايربيس وتقليبها تلقائياً بشكل عشوائي -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -228,7 +264,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function loadRandomPhoneProducts() {
+        async function initPhoneSlideshow() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 let products = [];
@@ -245,34 +281,41 @@
                     }
                 });
 
-                // خلط المنتجات عشوائياً
-                products.sort(() => Math.random() - 0.5);
-                let selectedProducts = products.slice(0, 5); // أخذ أول 5 منتجات عشوائية
-
-                let container = document.getElementById('phoneProductsContainer');
-                if (selectedProducts.length === 0) {
-                    container.innerHTML = `<div style="text-align: center; color: #9ca3af; padding-top: 50px;">لا توجد منتجات مضافة حالياً.</div>`;
+                if (products.length === 0) {
+                    document.getElementById('phoneSlideshowContainer').innerHTML = `<div style="color: #9ca3af; font-size: 12px; text-align: center;">لا توجد منتجات حالياً</div>`;
                     return;
                 }
 
-                container.innerHTML = selectedProducts.map(p => `
-                    <div class="phone-product-card">
-                        <img src="${p.image}" class="phone-product-img" alt="${p.name}">
-                        <div class="phone-product-info">
-                            <h4>${p.name}</h4>
-                            <span>كود: ${p.code}</span>
-                            <div style="font-size: 11px; color: #34d399; margin-top: 3px; font-weight: bold;">السعر: ${p.price} ₪</div>
-                        </div>
+                // خلط المنتجات عشوائياً
+                products.sort(() => Math.random() - 0.5);
+
+                let container = document.getElementById('phoneSlideshowContainer');
+                container.innerHTML = products.map((p, index) => `
+                    <div class="phone-slide-item ${index === 0 ? 'active' : ''}">
+                        <img src="${p.image}" class="phone-slide-img" alt="${p.name}">
+                        <div class="phone-slide-title">${p.name}</div>
+                        <div class="phone-slide-code">كود: ${p.code}</div>
+                        <div class="phone-slide-price">السعر: ${p.price} ₪</div>
                     </div>
                 `).join('');
 
+                // تفعيل التقليب التلقائي كل 3 ثوانٍ
+                let slides = container.querySelectorAll('.phone-slide-item');
+                let currentIndex = 0;
+                
+                setInterval(() => {
+                    slides[currentIndex].classList.remove('active');
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    slides[currentIndex].classList.add('active');
+                }, 3000);
+
             } catch (err) {
-                console.error("Error loading products for mockup:", err);
-                document.getElementById('phoneProductsContainer').innerHTML = `<div style="text-align: center; color: #ef4444; padding-top: 50px;">خطأ في تحميل المعاينة.</div>`;
+                console.error("Error loading products for slideshow:", err);
+                document.getElementById('phoneSlideshowContainer').innerHTML = `<div style="color: #ef4444; font-size: 12px; text-align: center;">خطأ في التحميل</div>`;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', loadRandomPhoneProducts);
+        window.addEventListener('DOMContentLoaded', initPhoneSlideshow);
     </script>
 </body>
 </html>
