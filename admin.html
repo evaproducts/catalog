@@ -220,4 +220,172 @@
                 <input type="text" id="editCatName" placeholder="الاسم المعدل" style="font-size: 12px; margin-bottom: 6px;">
                 
                 <div style="text-align: center; margin-bottom: 8px;">
-                    <img id="currentCatImgPreview" src="" alt="معاينة الصورة" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #d4af3
+                    <img id="currentCatImgPreview" src="" alt="معاينة الصورة" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #d4af37; display: none;">
+                </div>
+                <label style="font-size: 11px;">تحديث صورة القسم:</label>
+                <input type="file" id="editCatImageInput" accept="image/*" style="font-size: 11px; margin-bottom: 8px;">
+
+                <div style="display: flex; gap: 5px;">
+                    <button onclick="updateCategory()" class="blue-btn" style="font-size: 11px; padding: 6px;">حفظ</button>
+                    <button onclick="deleteCategory()" class="delete-btn" style="font-size: 11px; padding: 6px; margin-top: 0;">حذف</button>
+                </div>
+            </div>
+
+            <!-- إضافة منتج جديد -->
+            <div class="box" style="margin-bottom: 15px;">
+                <h2>➕ إضافة منتج</h2>
+                <label style="font-size: 11px;">القسم:</label>
+                <select id="pCategory" onchange="updateProductCodePreview()" style="font-size: 12px;"></select>
+                <label style="font-size: 11px;">صور المنتج:</label>
+                <input type="file" id="pImages" accept="image/*" multiple style="font-size: 11px;">
+                <label style="font-size: 11px;">اسم المنتج:</label>
+                <input type="text" id="pName" placeholder="اسم المنتج" style="font-size: 12px;">
+                <label style="font-size: 11px;">الكود التلقائي:</label>
+                <input type="text" id="pCode" readonly style="font-size: 12px;">
+                <label style="font-size: 11px;">السعر ₪:</label>
+                <input type="number" id="pPrice" placeholder="150" style="font-size: 12px;">
+                <label style="font-size: 11px;">ربح الشركاء ₪:</label>
+                <input type="number" id="pAgentPrice" placeholder="20" style="font-size: 12px;">
+                <button onclick="saveProduct()" style="font-size: 12px; padding: 8px;">حفظ المنتج</button>
+            </div>
+
+            <!-- تعديل منتج -->
+            <div class="box" style="margin-bottom: 15px;">
+                <h2>✏️ تعديل منتج</h2>
+                <label style="font-size: 11px;">أدخل كود المنتج:</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="lookupProdCode" placeholder="A1" style="margin-bottom: 8px; font-size: 12px;">
+                    <button onclick="fetchProductDataForEdit()" class="blue-btn" style="width: 80px; height: 35px; font-size: 11px;">بحث</button>
+                </div>
+                <label style="font-size: 11px;">الاسم:</label>
+                <div class="editable-field-wrapper">
+                    <input type="text" id="editProdName" readonly style="font-size: 12px;">
+                    <span class="edit-pen-icon" onclick="enableField('editProdName')">✏️️</span>
+                </div>
+                <label style="font-size: 11px;">السعر:</label>
+                <div class="editable-field-wrapper">
+                    <input type="number" id="editProdPrice" readonly style="font-size: 12px;">
+                    <span class="edit-pen-icon" onclick="enableField('editProdPrice')">✏️</span>
+                </div>
+                <label style="font-size: 11px;">ربح الشركاء:</label>
+                <div class="editable-field-wrapper">
+                    <input type="number" id="editProdAgentPrice" readonly style="font-size: 12px;">
+                    <span class="edit-pen-icon" onclick="enableField('editProdAgentPrice')">✏️</span>
+                </div>
+                <label style="font-size: 11px;">تحديث الصور:</label>
+                <input type="file" id="editProdImages" accept="image/*" multiple style="font-size: 11px;">
+                <button onclick="saveUpdatedProductData()" class="orange-btn" style="font-size: 12px; padding: 8px;">حفظ التعديلات</button>
+            </div>
+
+            <!-- حذف منتج -->
+            <div class="box">
+                <h2>🗑️ حذف منتج</h2>
+                <label style="font-size: 11px;">كود المنتج:</label>
+                <input type="text" id="delCode" placeholder="A1" style="font-size: 12px;">
+                <button class="delete-btn" onclick="deleteProduct()" style="font-size: 12px; padding: 8px;">حذف نهائي</button>
+            </div>
+        </div>
+
+        <!-- الشاشة الرئيسية (بنك إيفا بلس، استعلام الرصيد، والطلبات) -->
+        <div class="admin-grid">
+
+            <!-- بنك إيفا بلس واستعلام رصيد الشريك -->
+            <div class="box" style="background: linear-gradient(135deg, #fff5f8, #fff); border: 1px solid #d4af37;">
+                <h2>🏦 بنك إيفا بلس والاستعلام</h2>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div style="font-size: 12px; color: #666;">إجمالي أرصدة ومستحقات كافة العملاء والشركاء:</div>
+                    <div id="totalBankBalance" style="font-size: 22px; font-weight: bold; color: #880e4f; margin-top: 5px;">جاري الحساب... ₪</div>
+                </div>
+                <hr>
+                <label>🔍 استعلام عن رصيد شريك:</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="searchPartnerIdInput" placeholder="أدخل رقم الشريك (مثال: EVA-491)" style="margin-bottom: 0;">
+                    <button onclick="queryPartnerBalance()" class="blue-btn" style="width: 100px; margin-bottom: 0;">استعلام</button>
+                </div>
+            </div>
+
+            <!-- طلبات الزبائن -->
+            <div class="box">
+                <h2>
+                    <span>🛍️ طلبات الزبائن (متجر الكتالوج المباشر)</span>
+                    <span id="normalOrdersBadge" style="display: none;" class="badge-notification">0</span>
+                </h2>
+                <p style="font-size: 12px; color: #666; margin-top:0;">الطلبات الواردة من الكتالوج مباشرة بدون روابط شركاء.</p>
+                <div style="overflow-x: auto;">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>تفاصيل الزبون والطلب</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="normalOrdersTableBody">
+                            <tr><td colspan="2">جاري التحميل...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- طلبات أيفا بلس -->
+            <div class="box">
+                <h2>
+                    <span>🌳 طلبات أيفا بلس (عبر روابط الشركاء والوسطاء)</span>
+                    <span id="partnerOrdersBadge" style="display: none;" class="badge-notification">0</span>
+                </h2>
+                <p style="font-size: 12px; color: #666; margin-top:0;">الطلبات الواردة عبر روابط الشركاء لتوزيع الأرباح على الشجرة.</p>
+                <div style="overflow-x: auto;">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>تفاصيل الزبون والطلب والعنوان</th>
+                                <th>الشريك صاحب الرابط</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partnerOrdersTableBody">
+                            <tr><td colspan="3">جاري التحميل...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- نافذة منبثقة (Modal) لعرض معلومات الرصيد والشريك المستعلم عنه -->
+    <div id="partnerModal">
+        <div class="modal-content">
+            <h3 style="color: #880e4f; margin-top: 0; border-right: 4px solid #d4af37; padding-right: 8px;">👤 بيانات الشريك والرصيد</h3>
+            <div id="partnerModalBody" style="font-size: 13px; color: #333; line-height: 1.6;">
+                <!-- البيانات ستظهر هنا ديناميكياً -->
+            </div>
+            <button onclick="closePartnerModal()" class="blue-btn" style="margin-top: 15px;">إغلاق النافذة</button>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
+        authDomain: "eva-plus-66b96.firebaseapp.com",
+        projectId: "eva-plus-66b96",
+        storageBucket: "eva-plus-66b96.firebasestorage.app",
+        messagingSenderId: "686798536842",
+        appId: "1:686798536842:web:8c09932cd5869292eb6d73"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allProducts = [];
+    let loadedCategoriesData = [];
+
+    // التحكم بالقائمة الجانبية (Drawer)
+    window.toggleDrawer = function() {
+        document.getElementById('sideDrawer').classList.toggle('open');
+        document.getElementById('drawerOverlay').classList.toggle('open');
+    }
+
+    // التحقق من حالة تسجيل الدخول م
