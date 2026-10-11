@@ -1,247 +1,136 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد الإعلانات الطولي (9:16) | EVA PLUS</title>
-    <meta name="theme-color" content="#11141d">
-    <style>
-        :root {
-            --linky-blue: #0088cc;
-            --linky-bg: #f4f6f9;
-            --accent-gold: #d4af37;
-        }
+<div class="ad-maker-container">
+    <h2>اختر قالب الإعلان المناسب لحملتك</h2>
+    <p class="subtitle">الأناقة بس من عنا ✨</p>
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--linky-bg); color: #333; margin: 0; padding: 15px; direction: rtl; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 450px; width: 100%; margin: 0 auto; text-align: center; }
-
-        .top-navbar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e1e8ed; width: 100%; box-sizing: border-box; }
-        .back-btn { background: #e1e8ed; color: #333; text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; }
-
-        h1 { font-size: 19px; color: var(--linky-blue); margin-bottom: 5px; }
-        p.subtitle { font-size: 12.5px; color: #666; margin-top: 0; margin-bottom: 20px; }
-
-        /* البوستر الإعلاني بمقاس 9:16 الطولي المناسب للحالات والستوري */
-        #adPosterCard {
-            width: 360px;
-            height: 640px;
-            background: linear-gradient(135deg, #0b0f19 0%, #151b2b 50%, #1f293d 100%);
-            border-radius: 28px;
-            padding: 30px 20px;
-            box-sizing: border-box;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-            border: 4px solid var(--accent-gold);
-            margin: 0 auto 20px auto;
-            position: relative;
-            text-align: center;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
-        }
-
-        /* تأثيرات جمالية خلفية خفيفة */
-        #adPosterCard::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: rgba(212, 175, 55, 0.08);
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        .poster-header { position: relative; z-index: 2; }
-        .poster-brand { font-size: 26px; font-weight: 900; color: var(--accent-gold); letter-spacing: 1.5px; margin-bottom: 4px; text-shadow: 0 2px 10px rgba(212,175,55,0.3); }
-        .poster-tagline { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
-
-        .poster-middle { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; margin: 15px 0; }
-        
-        .poster-img-container {
-            width: 240px;
-            height: 240px;
-            background: #fff;
-            border-radius: 20px;
-            padding: 10px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-        .poster-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .poster-prod-name { font-size: 17px; font-weight: bold; color: #60a5fa; margin-bottom: 6px; line-height: 1.4; padding: 0 10px; }
-        .poster-prod-code { font-size: 11px; color: #9ca3af; background: rgba(255,255,255,0.07); padding: 3px 12px; border-radius: 6px; display: inline-block; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .poster-financial-box {
-            background: rgba(17, 24, 39, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 14px;
-            padding: 10px 15px;
-            width: 90%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        .poster-price-item { font-size: 13px; color: #e5e7eb; }
-        .poster-profit-item { font-size: 14px; font-weight: bold; color: #22c55e; }
-
-        .poster-footer { position: relative; z-index: 2; border-top: 1px dashed rgba(212, 175, 55, 0.3); padding-top: 12px; }
-        .poster-slogan { font-size: 13px; color: var(--accent-gold); font-weight: bold; margin-bottom: 4px; }
-        .poster-action-text { font-size: 10.5px; color: #9ca3af; }
-
-        /* الأزرار بالخارج */
-        .action-btns-group { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin: 0 auto; }
-        .btn-action { background: var(--linky-blue); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,136,204,0.2); }
-        .btn-action:hover { opacity: 0.95; transform: translateY(-2px); }
-        .btn-download { background: #27ae60; box-shadow: 0 4px 15px rgba(39,174,96,0.2); }
-
-        .loading-text { color: #aaa; font-size: 14px; margin: auto; }
-    </style>
-
-    <!-- مكتبة html2canvas لتحويل البوستر إلى صورة دقيقة عالية الجودة -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</head>
-<body>
-
-    <div class="container">
-        <!-- شريط علوي -->
-        <div class="top-navbar">
-            <a href="index.html" class="back-btn">← الرئيسية</a>
-            <span style="font-weight: bold; font-size: 14px; color: #444;">مولد الإعلانات الطولي (9:16)</span>
+    <div class="templates-grid">
+        <!-- القالب الأول: المنتج الرابح -->
+        <div class="template-card" id="template-1">
+            <div class="badge">قالب 1</div>
+            <h3>المنتج الرابح (ربح فوري)</h3>
+            <div class="product-preview">[صورة المنتج العشوائي]</div>
+            <p><strong>الوصف:</strong> تصميم عصري وخامات عالية الجودة.</p>
+            <p><strong>السعر:</strong> ₪150 | <strong>ربح الشريك:</strong> ₪30</p>
+            <p class="desc">لا تحتاج لرأس مال أو تخزين؛ سوّق هذا المنتج وابدأ الأرباح الفورية.</p>
+            <button class="select-btn" onclick="selectTemplate(1)">اختر القالب الأول</button>
         </div>
 
-        <h1>🎨 بوستر الستوري والحالات الذكي</h1>
-        <p class="subtitle">يتم توليد إعلان طولي احترافي جاهز للتحشر الفوري على الواتساب والإنستغرام!</p>
-
-        <!-- هيكل البوستر الطولي 9:16 -->
-        <div id="adPosterCard">
-            <div class="poster-header">
-                <div class="poster-brand">EVA PLUS</div>
-                <div class="poster-tagline">✨ نظام الشراكة والأرباح الذكية ✨</div>
-            </div>
-            
-            <div class="poster-middle" id="posterContentArea">
-                <div class="loading-text">جاري جلب المنتج وتنسيق البوستر...</div>
-            </div>
-            
-            <div class="poster-footer">
-                <div class="poster-slogan">الأناقة بس من عنا & إيفا بلس</div>
-                <div class="poster-action-text">انضم الآن لشجرتك وابدأ تحقيق الأرباح</div>
-            </div>
+        <!-- القالب الثاني: شبكة الأرباح التراكمية -->
+        <div class="template-card" id="template-2">
+            <div class="badge">قالب 2</div>
+            <h3>شبكة الأرباح (EVA PLUS)</h3>
+            <div class="product-preview">[نموذج شبكة الأرباح]</div>
+            <p><strong>آلية العمل:</strong> سوّق المنتجات وابنِ فريقك وشبكتك.</p>
+            <p class="desc">نظام ربحي شفاف ومستدام يضاعف دخلك تدريجياً مع إيفا بلس.</p>
+            <button class="select-btn" onclick="selectTemplate(2)">اختر القالب الثاني</button>
         </div>
 
-        <!-- الأزرار -->
-        <div class="action-btns-group">
-            <button class="btn-action" onclick="generateRandomAdPoster()">🔄 اختيار منتج عشوائي آخر</button>
-            <button class="btn-action btn-download" id="downloadBtn" onclick="downloadPosterImage()" style="display: none;">📥 تحميل البوستر الطولي (PNG)</button>
+        <!-- القالب الثالث: الفرصة الشاملة -->
+        <div class="template-card" id="template-3">
+            <div class="badge">قالب 3</div>
+            <h3>الفرصة الشاملة (الكتالوج)</h3>
+            <div class="product-preview">[تنوع المنتجات والتقنيات]</div>
+            <p><strong>العنوان:</strong> نوع دخلك واجعل هاتفك مصدر أرباحك.</p>
+            <p class="desc">انضم لبرنامج الشركاء وتمتع بمنصة تجارية متكاملة تلبي كافة الاحتياجات.</p>
+            <button class="select-btn" onclick="selectTemplate(3)">اختر القالب الثالث</button>
         </div>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<style>
+.ad-maker-container {
+    font-family: 'Cairo', sans-serif;
+    background: #fdfbf7;
+    padding: 20px;
+    text-align: center;
+    direction: rtl;
+}
+.ad-maker-container h2 {
+    color: #2c2c2c;
+    margin-bottom: 5px;
+}
+.subtitle {
+    color: #b89753;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.templates-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.template-card {
+    background: #ffffff;
+    border: 2px solid #e6dbcc;
+    border-radius: 12px;
+    width: 300px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+.template-card:hover {
+    transform: translateY(-5px);
+    border-color: #b89753;
+}
+.badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #b89753;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+.product-preview {
+    background: #f4efe6;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin: 15px 0;
+    color: #666;
+    font-size: 14px;
+}
+.template-card h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.template-card p {
+    font-size: 13px;
+    color: #555;
+    margin: 8px 0;
+    text-align: right;
+}
+.template-card .desc {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.4;
+}
+.select-btn {
+    background: #2c2c2c;
+    color: #b89753;
+    border: 1px solid #b89753;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background 0.2s, color 0.2s;
+}
+.select-btn:hover {
+    background: #b89753;
+    color: #fff;
+}
+</style>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
-            authDomain: "eva-plus-66b96.firebaseapp.com",
-            projectId: "eva-plus-66b96",
-            storageBucket: "eva-plus-66b96.firebasestorage.app",
-            messagingSenderId: "686798536842",
-            appId: "1:686798536842:web:8c09932cd5869292eb6d73"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let cachedProducts = [];
-
-        async function fetchProductsForAds() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                cachedProducts = [];
-                querySnapshot.forEach((doc) => {
-                    let data = doc.data();
-                    let img = (data.images && data.images.length > 0) ? data.images[0] : '';
-                    let profitVal = data.agentPrice || data.profit || data.evaProfit || 0;
-                    if (img && data.name) {
-                        cachedProducts.push({
-                            code: data.code || doc.id,
-                            name: data.name,
-                            image: img,
-                            price: data.price || '0',
-                            profit: profitVal
-                        });
-                    }
-                });
-                if (cachedProducts.length > 0) {
-                    generateRandomAdPoster();
-                } else {
-                    document.getElementById('posterContentArea').innerHTML = `<div style="color: #ef4444;">لا توجد منتجات متاحة حالياً.</div>`;
-                }
-            } catch (err) {
-                console.error("Error:", err);
-                document.getElementById('posterContentArea').innerHTML = `<div style="color: #ef4444;">خطأ في الاتصال بقاعدة البيانات.</div>`;
-            }
-        }
-
-        window.generateRandomAdPoster = function() {
-            if (cachedProducts.length === 0) return;
-            
-            let randomProd = cachedProducts[Math.floor(Math.random() * cachedProducts.length)];
-
-            let contentArea = document.getElementById('posterContentArea');
-            contentArea.innerHTML = `
-                <div class="poster-img-container">
-                    <img src="${randomProd.image}" alt="${randomProd.name}" crossorigin="anonymous">
-                </div>
-                <div class="poster-prod-name">${randomProd.name}</div>
-                <div class="poster-prod-code">كود المنتج: ${randomProd.code}</div>
-                <div class="poster-financial-box">
-                    <span class="poster-price-item">السعر: <b>${randomProd.price} ₪</b></span>
-                    <span class="poster-profit-item">ربحك: +${randomProd.profit} ₪</span>
-                </div>
-            `;
-
-            document.getElementById('downloadBtn').style.display = 'block';
-        }
-
-        window.downloadPosterImage = function() {
-            let posterElement = document.getElementById('adPosterCard');
-            let downloadBtn = document.getElementById('downloadBtn');
-            
-            downloadBtn.innerText = "جاري تصدير البوستر...";
-            downloadBtn.disabled = true;
-
-            html2canvas(posterElement, {
-                useCORS: true,
-                scale: 2 // لضمان خروج الصورة بأعلى جودة ووضوح تام (HD)
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = 'eva-story-ad-' + Math.floor(1000 + Math.random() * 9000) + '.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-
-                downloadBtn.innerText = "📥 تحميل البوستر الطولي (PNG)";
-                downloadBtn.disabled = false;
-            }).catch(err => {
-                console.error("Error generating image:", err);
-                alert("حدث خطأ أثناء تصدير البوستر.");
-                downloadBtn.innerText = "📥 تحميل البوستر الطولي (PNG)";
-                downloadBtn.disabled = false;
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', fetchProductsForAds);
-    </script>
-
-</body>
-</html>
+<script>
+function selectTemplate(templateNumber) {
+    alert("تم اختيار القالب رقم " + templateNumber + " بنجاح! سيتم الانتقال لتخصيص الإعلان الآن.");
+    // هنا يمكنك إضافة الكود البرمجية الخاص بك لتوجيه الشريك أو حفظ القالب المختار في النظام
+}
+</script>
