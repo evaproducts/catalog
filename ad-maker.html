@@ -1,240 +1,247 @@
-<div class="ad-maker-wrapper">
-    <div class="header-section">
-        <h2>مولد البوسترات الإعلانية الاحترافية</h2>
-        <p>الأناقة بس من عنا ✨ - أنشئ بوستر ترويجي خاص بنظام إيفا بلس مع منتج عشوائي مميز</p>
-        <button class="generate-main-btn" onclick="generateRandomPoster()">✨ توليد إعلان جديد (بوستر 9:16)</button>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد الإعلانات والبوسترات - EVA PLUS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #fdfbf7;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #2c2c2c;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #b89753;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        /* اختيار القوالب */
+        .templates-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .template-btn {
+            background: #f4efe6;
+            border: 2px solid #e6dbcc;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            color: #333;
+            transition: 0.2s;
+        }
+        .template-btn.active, .template-btn:hover {
+            background: #b89753;
+            color: #fff;
+            border-color: #b89753;
+        }
+        
+        /* حاوية البوستر النهائي */
+        .poster-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            aspect-ratio: 9/16;
+            margin: 0 auto 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: #000;
+        }
+        .poster-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* صندوق دمج المنتج داخل المربع الأبيض في الصورة */
+        .product-overlay-box {
+            position: absolute;
+            /* هذه الإحداثيات تضبط المربع داخل المساحة البيضاء في القالب تماماً */
+            top: 36%;
+            left: 14%;
+            width: 72%;
+            height: 38%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px dashed #b89753;
+        }
+
+        .prod-img-placeholder {
+            width: 100%;
+            height: 55%;
+            background: #2c2c2c;
+            color: #f4efe6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .prod-info {
+            width: 100%;
+            text-align: center;
+        }
+        .prod-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #2c2c2c;
+            margin: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .prod-price-row {
+            display: flex;
+            justify-content: space-around;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .price {
+            color: #333;
+            font-weight: bold;
+        }
+        .profit {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        /* زر التوليد والتحميل */
+        .action-btn {
+            background: linear-gradient(135deg, #b89753, #967538);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(184, 151, 83, 0.3);
+        }
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>مولد الإعلانات الاحترافي</h2>
+    <p class="subtitle">الأناقة بس من عنا ✨ - اختر القالب واضغط توليد لدمج المنتج عشوائياً</p>
+
+    <!-- أزرار اختيار القوالب الأربعة المرفوعة -->
+    <div class="templates-selector">
+        <button class="template-btn active" onclick="changeTemplate(1)">قالب 1</button>
+        <button class="template-btn" onclick="changeTemplate(2)">قالب 2</button>
+        <button class="template-btn" onclick="changeTemplate(3)">قالب 3</button>
+        <button class="template-btn" onclick="changeTemplate(4)">قالب 4</button>
     </div>
 
-    <!-- معاينة البستر الإعلاني (مقاس 9:16 عمودي متناسق للموبايل) -->
-    <div class="poster-preview-container">
-        <div class="eva-poster" id="evaPoster">
-            <!-- الهوية والشعار -->
-            <div class="poster-header">
-                <span class="brand-tag">EVA BRAND & PLUS</span>
-                <h3>انضم إلى نظام إيفا بلس وابدأ الربح</h3>
+    <!-- عرض البوستر مع خلفية الصورة المرفوعة -->
+    <div class="poster-wrapper" id="posterArea">
+        <img id="posterImage" src="eva-template-1.png" class="poster-bg" alt="EVA Template">
+        
+        <!-- الطبقة التي تظهر داخل المربع الأبيض -->
+        <div class="product-overlay-box">
+            <div class="prod-img-placeholder" id="boxImgText">
+                [صورة المنتج العشوائي]
             </div>
-
-            <!-- عرض المنتج العشوائي بتنسيق جزئي راقي -->
-            <div class="poster-product-box">
-                <div class="product-badge" id="pCategory">قسم الإلكترونيات / العطور</div>
-                <div class="product-image-placeholder" id="pImgPlaceholder">
-                    <!-- هنا تظهر صورة المنتج العشوائي المجلوبة من الكتالوج -->
-                    <span id="pName">ساعة يد فاخرة / سماعة ألترا</span>
+            <div class="prod-info">
+                <div class="prod-title" id="boxTitle">اسم المنتج يظهر هنا</div>
+                <div class="prod-price-row">
+                    <span class="price" id="boxPrice">السعر: ₪150</span>
+                    <span class="profit" id="boxProfit">ربح الشريك: ₪30</span>
                 </div>
-                <div class="product-details-mini">
-                    <span id="pPrice">السعر: ₪150</span>
-                    <span id="pProfit" class="profit-tag">ربح الشريك: ₪30</span>
-                </div>
-            </div>
-
-            <!-- فكرة إيفا بلس الأساسية والدعوة للانضمام -->
-            <div class="poster-core-idea">
-                <p>🚀 <strong>ابنِ شبكتك وضاعف دخلك:</strong></p>
-                <p>لا تحتاج لرأس مال أو تخزين. سوّق منتجاتنا وشارك في نظام الأرباح التراكمي المستدام.</p>
-            </div>
-
-            <!-- الفوتر وشعار الأناقة -->
-            <div class="poster-footer">
-                <span class="slogan">الأناقة بس من عنا</span>
-                <span class="cta-hint">انضم لعائلة الشركاء اليوم</span>
             </div>
         </div>
     </div>
 
-    <!-- زر تحميل وحفظ الصورة -->
-    <div class="action-buttons" style="margin-top: 20px; text-align: center;">
-        <button class="download-btn" onclick="downloadPoster()">📥 تحميل البستر (جاهز للنشر)</button>
-    </div>
+    <!-- أزرار التحكم -->
+    <button class="action-btn" onclick="generateRandomAd()">🎲 توليد منتج عشوائي جديد</button>
+    <button class="action-btn" style="background: #2c2c2c; color: #b89753; border: 1px solid #b89753;" onclick="downloadFinalPoster()">📥 حفظ ونشر البوستر</button>
 </div>
 
-<style>
-.ad-maker-wrapper {
-    font-family: 'Cairo', sans-serif;
-    background: #fdfbf7;
-    padding: 20px;
-    direction: rtl;
-    max-width: 480px;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-.header-section {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.header-section h2 {
-    color: #2c2c2c;
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-.header-section p {
-    color: #b89753;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-.generate-main-btn {
-    background: linear-gradient(135deg, #b89753, #967538);
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(184, 151, 83, 0.3);
-    width: 100%;
-}
-.generate-main-btn:hover {
-    opacity: 0.9;
-}
-
-/* تنسيق البوستر العمودي (9:16) المتناسق للموبايل */
-.poster-preview-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.eva-poster {
-    width: 100%;
-    max-width: 340px;
-    aspect-ratio: 9/16;
-    background: linear-gradient(180deg, #fbf9f4 0%, #f4efe6 100%);
-    border: 3px solid #b89753;
-    border-radius: 16px;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-}
-.poster-header .brand-tag {
-    font-size: 11px;
-    color: #8c6d2c;
-    letter-spacing: 2px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-.poster-header h3 {
-    color: #1a1a1a;
-    font-size: 17px;
-    margin: 0;
-    line-height: 1.4;
-}
-
-/* صندوق المنتج العشوائي الجزئي داخل البوستر */
-.poster-product-box {
-    background: #ffffff;
-    border: 1px solid #e6dbcc;
-    border-radius: 12px;
-    padding: 12px;
-    margin: 10px 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.product-badge {
-    font-size: 10px;
-    background: #2c2c2c;
-    color: #b89753;
-    padding: 2px 8px;
-    border-radius: 10px;
-    display: inline-block;
-    margin-bottom: 8px;
-}
-.product-image-placeholder {
-    background: #2c2c2c;
-    color: #f4efe6;
-    height: 110px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 0 10px;
-    margin-bottom: 8px;
-    border: 1px solid #b89753;
-}
-.product-details-mini {
-    display: flex;
-    justify-content: space-around;
-    font-size: 12px;
-    color: #444;
-}
-.profit-tag {
-    color: #27ae60;
-    font-weight: bold;
-}
-
-/* فكرة إيفا بلس */
-.poster-core-idea {
-    background: rgba(184, 151, 83, 0.1);
-    border-right: 3px solid #b89753;
-    padding: 8px 10px;
-    text-align: right;
-    border-radius: 6px;
-}
-.poster-core-idea p {
-    font-size: 11px;
-    color: #333;
-    margin: 2px 0;
-    line-height: 1.3;
-}
-
-/* الفوتر */
-.poster-footer .slogan {
-    font-size: 13px;
-    color: #b89753;
-    font-weight: bold;
-    display: block;
-}
-.poster-footer .cta-hint {
-    font-size: 10px;
-    color: #777;
-}
-
-/* زر التحميل */
-.download-btn {
-    background: #2c2c2c;
-    color: #b89753;
-    border: 1px solid #b89753;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.2s;
-}
-.download-btn:hover {
-    background: #b89753;
-    color: #fff;
-}
-</style>
-
 <script>
-// مصفوفة منتجات عشوائية لتوليد إعلانات متنوعة للشركاء تلقائياً
-const sampleProducts = [
-    { cat: "قسم الإلكترونيات", name: "سماعات الأذن Ultra Wireless Pods", price: "140 شيكل", profit: "25 شيكل" },
-    { cat: "قسم العطور الفاخرة", name: "عطر GLOW IN ROME النسائي", price: "120 شيكل", profit: "30 شيكل" },
-    { cat: "قسم الإكسسوارات الرجالية", name: "محفظة جلدية مع حزام فخم", price: "90 شيكل", profit: "20 شيكل" },
-    { cat: "قسم الساعات", name: "ساعة كلاسيكية معدنية ذهبية", price: "180 شيكل", profit: "40 شيكل" }
+// عينة منتجات عشوائية لسحبها ودمجها داخل القالب
+const catalogProducts = [
+    { name: "سماعات الأذن Ultra Wireless Pods", price: "₪140", profit: "₪25" },
+    { name: "عطر GLOW IN ROME النسائي الفاخر", price: "₪120", profit: "₪30" },
+    { name: "محفظة رجالية جلدية أصلية مع حزام", price: "₪90", profit: "₪20" },
+    { name: "ساعة يد كلاسيكية معدنية ذهبية", price: "₪180", profit: "₪40" },
+    { name: "صندوق عروض العناية الملكية الشاملة", price: "₪220", profit: "₪50" }
 ];
 
-function generateRandomPoster() {
-    // اختيار منتج عشوائي بشكل آلي
-    const randomProd = sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
+let currentTemplateNum = 1;
+
+function changeTemplate(num) {
+    currentTemplateNum = num;
+    // تحديث صورة الخلفية بناءً على الأسماء التي رفعتها على جيت هب
+    document.getElementById('posterImage').src = `eva-template-${num}.png`;
     
-    // تحديث محتويات البوستر ديناميكياً
-    document.getElementById('pCategory').innerText = randomProd.cat;
-    document.getElementById('pName').innerText = randomProd.name;
-    document.getElementById('pPrice').innerText = "السعر: " + randomProd.price;
-    document.getElementById('pProfit').innerText = "ربح الشريك: " + randomProd.profit;
+    // تحديث الأزرار النشطة
+    document.querySelectorAll('.template-btn').forEach((btn, index) => {
+        if(index + 1 === num) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 }
 
-function downloadPoster() {
-    alert("جاهز! في النسخة البرمجية الكاملة، سيتم تحويل هذا البوستر فوراً إلى صورة عالية الدقة (PNG) ليقوم الشريك بحفظها ونشرها مباشرة على ستوري واتساب أو إنستغرام.");
+function generateRandomAd() {
+    // اختيار منتج عشوائي
+    const randomItem = catalogProducts[Math.floor(Math.random() * catalogProducts.length)];
+    
+    // تحديث النصوص داخل المربع الأبيض بدقة
+    document.getElementById('boxTitle').innerText = randomItem.name;
+    document.getElementById('boxPrice').innerText = "السعر: " + randomItem.price;
+    document.getElementById('boxProfit').innerText = "الربح: " + randomItem.profit;
+    document.getElementById('boxImgText').innerText = randomItem.name;
 }
+
+function downloadFinalPoster() {
+    alert("في النسخة النهائية المكتملة، سيقوم النظام بتصدير هذا البوستر المدمج كصورة PNG عالية الدقة ليقوم الشريك بحفظها ونشرها مباشرة على ستوري واتساب أو إنستغرام!");
+}
+
+// توليد أول منتج تلقائياً عند فتح الصفحة
+window.onload = function() {
+    generateRandomAd();
+};
 </script>
+
+</body>
+</html>
