@@ -34,6 +34,12 @@
             <button class="select-btn" onclick="selectTemplate(3)">اختر القالب الثالث</button>
         </div>
     </div>
+
+    <!-- منطقة عرض محتوى القالب المختار -->
+    <div id="selected-output" style="margin-top: 30px; padding: 20px; background: #fff; border: 2px dashed #b89753; border-radius: 10px; display: none; text-align: right;">
+        <h3 id="output-title" style="color: #b89753; margin-bottom: 10px;"></h3>
+        <p id="output-desc"></p>
+    </div>
 </div>
 
 <style>
@@ -58,6 +64,7 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    flex-direction: row-reverse; /* لضمان ترتيب القوالب من اليمين لليسار */
 }
 .template-card {
     background: #ffffff;
@@ -68,6 +75,7 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     position: relative;
     transition: transform 0.3s ease;
+    text-align: right;
 }
 .template-card:hover {
     transform: translateY(-5px);
@@ -103,7 +111,6 @@
     font-size: 13px;
     color: #555;
     margin: 8px 0;
-    text-align: right;
 }
 .template-card .desc {
     font-size: 12px;
@@ -130,7 +137,27 @@
 
 <script>
 function selectTemplate(templateNumber) {
-    alert("تم اختيار القالب رقم " + templateNumber + " بنجاح! سيتم الانتقال لتخصيص الإعلان الآن.");
-    // هنا يمكنك إضافة الكود البرمجية الخاص بك لتوجيه الشريك أو حفظ القالب المختار في النظام
+    const outputDiv = document.getElementById('selected-output');
+    const outputTitle = document.getElementById('output-title');
+    const outputDesc = document.getElementById('output-desc');
+
+    let titleText = "";
+    let descText = "";
+
+    if (templateNumber === 1) {
+        titleText = "تم اختيار: القالب الأول (المنتج الرابح - ربح فوري)";
+        descText = "هذا القالب يركز على عرض المنتج العشوائي بتفاصيله وسعره وربح الشريك المباشر.";
+    } else if (templateNumber === 2) {
+        titleText = "تم اختيار: القالب الثاني (شبكة الأرباح EVA PLUS)";
+        descText = "هذا القالب يبرز آلية بناء الشبكة والتسويق التراكمي لتعظيم الأرباح.";
+    } else if (templateNumber === 3) {
+        titleText = "تم اختيار: القالب الثالث (الفرصة الشاملة والكتالوج الذكي)";
+        descText = "هذا القالب يجمع بين تنوع منتجات المنصة ودعوة الشريك للبدء الفوري.";
+    }
+
+    outputTitle.innerText = titleText;
+    outputDesc.innerText = descText;
+    outputDiv.style.display = "block";
+    outputDiv.scrollIntoView({ behavior: 'smooth' });
 }
 </script>
