@@ -74,6 +74,7 @@
             object-fit: fill;
             display: block;
         }
+        /* ضبط إحداثيات ومقاسات المربع الأبيض بدقة تامة ليتناسب مع كافة القوالب */
         .product-overlay-box {
             position: absolute;
             top: 41%;
@@ -92,7 +93,7 @@
         }
         .prod-img-container {
             width: 100%;
-            height: 52%;
+            height: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -110,7 +111,7 @@
             text-align: center;
         }
         .prod-title {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: bold;
             color: #2c2c2c;
             margin: 2px 0;
@@ -148,6 +149,11 @@
         .action-btn:hover {
             opacity: 0.9;
         }
+        .download-btn {
+            background: #2c2c2c;
+            color: #b89753;
+            border: 1px solid #b89753;
+        }
         .status-msg {
             color: #666;
             font-size: 12px;
@@ -161,13 +167,15 @@
     <h2>مولد الإعلانات الاحترافي</h2>
     <p class="subtitle">الأناقة بس من عنا ✨ - اختر القالب واضغط توليد لإدراج منتج حقيقي عشوائياً</p>
 
+    <!-- أزرار القوالب الأربعة تعمل بتبديل دقيق وتفاعل سليم -->
     <div class="templates-selector">
         <button class="template-btn active" onclick="changeTemplate(1)">قالب 1</button>
         <button class="template-btn" onclick="changeTemplate(2)">قالب 2</button>
-        <button class="template-btn" onclick="changeTemplate(3)">قالب 3</button>
-        <button class="template-btn" onclick="changeTemplate(4)">قالب 4</button>
+        <button class="template-btn" onclick="templateBtnHandler(3)">قالب 3</button>
+        <button class="template-btn" onclick="templateBtnHandler(4)">قالب 4</button>
     </div>
 
+    <!-- حاوية البوستر -->
     <div class="poster-wrapper" id="posterArea">
         <img id="posterImage" src="eva-template-1.png" class="poster-bg" alt="EVA Template">
         
@@ -185,9 +193,14 @@
         </div>
     </div>
 
+    <!-- الأزرار الوظيفية -->
     <button class="action-btn" onclick="pickRandomRealProduct()">🎲 جلب منتج حقيقي عشوائي</button>
+    <button class="action-btn download-btn" onclick="downloadPosterImage()">📥 تحميل وحفظ البوستر</button>
     <div id="statusMsg" class="status-msg">جاري الاتصال بقاعدة البيانات...</div>
 </div>
+
+<!-- مكتبة html2canvas لتصدير البوستر كصورة PNG حقيقية عند التحميل -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -230,12 +243,10 @@
                 setTimeout(() => { document.getElementById('statusMsg').style.display = 'none'; }, 2000);
                 pickRandomRealProduct();
             } else {
-                document.getElementById('statusMsg').innerText = "تنبيه: لا توجد منتجات في قاعدة البيانات، جاري استخدام بيانات تجريبية.";
                 loadFallbackProducts();
             }
         } catch (err) {
             console.error("Error fetching products:", err);
-            document.getElementById('statusMsg').innerText = "تعذر الاتصال بـ Firebase، جاري استخدام المنتجات المحلية.";
             loadFallbackProducts();
         }
     }
@@ -246,13 +257,11 @@
             { name: "ساعة يد كلاسيكية معدنية ذهبية", image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300", price: "180", profit: "40" }
         ];
         pickRandomRealProduct();
+        document.getElementById('statusMsg').style.display = 'none';
     }
 
     window.pickRandomRealProduct = function() {
-        if (realProductsList.length === 0) {
-            alert("جاري التحميل...");
-            return;
-        }
+        if (realProductsList.length === 0) return;
         const randomIndex = Math.floor(Math.random() * realProductsList.length);
         const p = realProductsList[randomIndex];
 
@@ -266,14 +275,31 @@
 </script>
 
 <script>
+    // دالة تبديل القوالب بسلاسة وتحديث الأزرار النشطة
     function changeTemplate(num) {
         document.getElementById('posterImage').src = `eva-template-${num}.png`;
-        document.querySelectorAll('.template-btn').forEach((btn, index) => {
+        const buttons = document.querySelectorAll('.template-btn');
+        buttons.forEach((btn, index) => {
             if (index + 1 === num) {
-                btn.classList.0 = btn.classList.add('active');
+                btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
+        });
+    }
+
+    function templateBtnHandler(num) {
+        changeTemplate(num);
+    }
+
+    // دالة تحميل البوستر كصورة PNG جاهزة للنشر
+    function downloadPosterImage() {
+        const posterElement = document.getElementById('posterArea');
+        html2canvas(posterElement, { useCORS: true, scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'eva-plus-ad.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         });
     }
 </script>
