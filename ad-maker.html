@@ -25,30 +25,32 @@
         h2 {
             color: #2c2c2c;
             margin-bottom: 5px;
+            font-size: 20px;
         }
         .subtitle {
             color: #b89753;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 20px;
         }
-        /* اختيار القوالب */
+        /* أزرار اختيار القوالب */
         .templates-selector {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
         .template-btn {
             background: #f4efe6;
             border: 2px solid #e6dbcc;
-            padding: 8px 15px;
+            padding: 6px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
             font-weight: bold;
             color: #333;
+            font-size: 13px;
             transition: 0.2s;
         }
         .template-btn.active, .template-btn:hover {
@@ -57,11 +59,11 @@
             border-color: #b89753;
         }
         
-        /* حاوية البوستر النهائي */
+        /* حاوية البوستر النهائي (نسبة 9:16 للموبايل) */
         .poster-wrapper {
             position: relative;
             width: 100%;
-            max-width: 360px;
+            max-width: 340px;
             aspect-ratio: 9/16;
             margin: 0 auto 20px auto;
             border-radius: 12px;
@@ -72,40 +74,38 @@
         .poster-bg {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: fill; /* لضمان تطابق الصورة بالكامل مع الإطار */
             display: block;
         }
 
-        /* صندوق دمج المنتج داخل المربع الأبيض في الصورة */
+        /* صندوق دمج المنتج داخل المربع الأبيض في الصورة بدقة تامة */
         .product-overlay-box {
             position: absolute;
-            top: 36%;
-            left: 14%;
-            width: 72%;
-            height: 38%;
+            top: 41%;       /* تم ضبطها لتنزل داخل المربع الأبيض تماماً */
+            left: 20%;      /* تم ضبط العرض والسنتر بدقة */
+            width: 60%;
+            height: 31%;
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 6px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #e6dbcc;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
-        /* مكان عرض صورة المنتج الحقيقية */
+        /* حاوية صورة المنتج الحقيقية */
         .prod-img-container {
             width: 100%;
-            height: 58%;
+            height: 52%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #fdfbf7;
+            background: #faf8f5;
             border-radius: 6px;
             overflow: hidden;
-            border: 1px solid #f4efe6;
         }
         .prod-img-container img {
             max-height: 100%;
@@ -118,7 +118,7 @@
             text-align: center;
         }
         .prod-title {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: bold;
             color: #2c2c2c;
             margin: 2px 0;
@@ -129,11 +129,11 @@
         .prod-price-row {
             display: flex;
             justify-content: space-around;
-            font-size: 11px;
+            font-size: 10.5px;
             margin-top: 2px;
         }
         .price {
-            color: #333;
+            color: #444;
             font-weight: bold;
         }
         .profit {
@@ -141,14 +141,14 @@
             font-weight: bold;
         }
 
-        /* زر التوليد والتحميل */
+        /* أزرار التحكم */
         .action-btn {
             background: linear-gradient(135deg, #b89753, #967538);
             color: #fff;
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
@@ -158,13 +158,18 @@
         .action-btn:hover {
             opacity: 0.9;
         }
+        .loading-text {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>مولد الإعلانات الاحترافي</h2>
-    <p class="subtitle">الأناقة بس من عنا ✨ - اختر القالب واضغط توليد لدمج المنتج عشوائياً</p>
+    <p class="subtitle">الأناقة بس من عنا ✨ - اختر القالب واضغط توليد لإدراج منتج حقيقي عشوائياً</p>
 
     <!-- أزرار اختيار القوالب الأربعة المرفوعة -->
     <div class="templates-selector">
@@ -174,93 +179,111 @@
         <button class="template-btn" onclick="changeTemplate(4)">قالب 4</button>
     </div>
 
-    <!-- عرض البوستر مع خلفية الصورة المرفوعة -->
+    <!-- عرض البوستر مع خلفية القالب المختار -->
     <div class="poster-wrapper" id="posterArea">
         <img id="posterImage" src="eva-template-1.png" class="poster-bg" alt="EVA Template">
         
-        <!-- الطبقة التي تظهر داخل المربع الأبيض بدقة -->
+        <!-- الطبقة التي تستقر بداخل المربع الأبيض بدقة -->
         <div class="product-overlay-box">
             <div class="prod-img-container">
                 <img id="boxImg" src="" alt="صورة المنتج">
             </div>
             <div class="prod-info">
-                <div class="prod-title" id="boxTitle">اسم المنتج يظهر هنا</div>
+                <div class="prod-title" id="boxTitle">جاري تحميل المنتج...</div>
                 <div class="prod-price-row">
-                    <span class="price" id="boxPrice">السعر: ₪150</span>
-                    <span class="profit" id="boxProfit">ربح الشريك: ₪30</span>
+                    <span class="price" id="boxPrice">السعر: -</span>
+                    <span class="profit" id="boxProfit">الربح: -</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- أزرار التحكم -->
-    <button class="action-btn" onclick="generateRandomAd()">🎲 توليد منتج عشوائي جديد</button>
-    <button class="action-btn" style="background: #2c2c2c; color: #b89753; border: 1px solid #b89753;" onclick="downloadFinalPoster()">📥 حفظ ونشر البوستر</button>
+    <!-- زر توليد منتج عشوائي حقيقي -->
+    <button class="action-btn" onclick="pickRandomRealProduct()">🎲 جلب منتج حقيقي عشوائي</button>
+    <div id="statusMsg" class="loading-text">جاري الاتصال بقاعدة البيانات...</div>
 </div>
 
-<script>
-// مصفوفة المنتجات مع صور حقيقية (يمكنك تعديل روابط الصور أو أسماء ملفاتها لتطابق صور منتجاتك في الكتالوج)
-const catalogProducts = [
-    { 
-        name: "سماعات الأذن Ultra Wireless Pods", 
-        price: "₪140", 
-        profit: "₪25", 
-        img: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300" // مثال صورة سماعات
-    },
-    { 
-        name: "عطر GLOW IN ROME النسائي الفاخر", 
-        price: "₪120", 
-        profit: "₪30", 
-        img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=300" // مثال صورة عطر
-    },
-    { 
-        name: "محفظة رجالية جلدية أصلية مع حزام", 
-        price: "₪90", 
-        profit: "₪20", 
-        img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=300" // مثال صورة محفظة
-    },
-    { 
-        name: "ساعة يد كلاسيكية معدنية ذهبية", 
-        price: "₪180", 
-        profit: "₪40", 
-        img: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300" // مثال صورة ساعة
-    }
-];
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-let currentTemplateNum = 1;
+    const firebaseConfig = {
+        apiKey: "AIzaSyAqPpKqqHBEIJZTCGCROFzqZyHOYlnDgP4",
+        authDomain: "eva-plus-66b96.firebaseapp.com",
+        projectId: "eva-plus-66b96",
+        storageBucket: "eva-plus-66b96.firebasestorage.app",
+        messagingSenderId: "686798536842",
+        appId: "1:686798536842:web:8c09932cd5869292eb6d73"
+    };
 
-function changeTemplate(num) {
-    currentTemplateNum = num;
-    document.getElementById('posterImage').src = `eva-template-${num}.png`;
-    
-    document.querySelectorAll('.template-btn').forEach((btn, index) => {
-        if(index + 1 === num) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let realProductsList = [];
+
+    // جلب المنتجات الحقيقية من فايربيس عند فتح الصفحة
+    async function fetchRealProducts() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "products"));
+            realProductsList = [];
+            querySnapshot.forEach((doc) => {
+                let data = doc.data();
+                let img = (data.images && data.images.length > 0) ? data.images[0] : '';
+                let profitVal = data.agentPrice || data.profit || data.evaProfit || '10';
+                if (img && data.name) {
+                    realProductsList.push({
+                        name: data.name,
+                        image: img,
+                        price: data.price || '0',
+                        profit: profitVal
+                    });
+                }
+            });
+
+            if (realProductsList.length > 0) {
+                document.getElementById('statusMsg.innerText = "تم الاتصال بنجاح وتوافر " + realProductsList.length + " منتج حقيقي!";'
+                // إخفاء رسالة الحالة بعد ثانيتين
+                setTimeout(() => { document.getElementById('statusMsg').style.display = 'none'; }, 2000);
+                pickRandomRealProduct(); // عرض أول منتج عشوائي فوراً
+            } else {
+                document.getElementById('statusMsg').innerText = "لم يتم العثور على منتجات في قاعدة البيانات.";
+            }
+        } catch (err) {
+            console.error("Error fetching products:", err);
+            document.getElementById('statusMsg').innerText = "خطأ في الاتصال بقاعدة البيانات.";
         }
-    });
-}
+    }
 
-function generateRandomAd() {
-    // اختيار منتج عشوائي
-    const randomItem = catalogProducts[Math.floor(Math.random() * catalogProducts.length)];
-    
-    // تعبئة البيانات وصورة المنتج الحقيقية داخل القالب
-    document.getElementById('boxTitle').innerText = randomItem.name;
-    document.getElementById('boxPrice').innerText = "السعر: " + randomItem.price;
-    document.getElementById('boxProfit').innerText = "الربح: " + randomItem.profit;
-    document.getElementById('boxImg').src = randomItem.img;
-}
+    // دالة لاختيار وعرض منتج عشوائي حقيقي من القائمة المجلوبة
+    window.pickRandomRealProduct = function() {
+        if (realProductsList.length === 0) {
+            alert("جاري تحميل المنتجات، يرجى الانتظار قليلاً...");
+            return;
+        }
+        const randomIndex = Math.floor(Math.random() * realProductsList.length);
+        const p = realProductsList[randomIndex];
 
-function downloadFinalPoster() {
-    alert("في النسخة النهائية المكتملة، سيقوم النظام بتصدير هذا البوستر المدمج كصورة PNG عالية الدقة ليقوم الشريك بحفظها ونشرها مباشرة على ستوري واتساب أو إنستغرام!");
-}
+        document.getElementById('boxTitle').innerText = p.name;
+        document.getElementById('boxPrice').innerText = "السعر: " + p.price + " ₪";
+        document.getElementById('boxProfit').innerText = "الربح: " + p.profit + " ₪";
+        document.getElementById('boxImg').src = p.image;
+    };
 
-// توليد أول منتج تلقائياً عند فتح الصفحة
-window.onload = function() {
-    generateRandomAd();
-};
+    window.addEventListener('DOMContentLoaded', fetchRealProducts);
+</script>
+
+<script>
+    // تبديل القوالب الأربعة
+    function changeTemplate(num) {
+        document.getElementById('posterImage').src = `eva-template-${num}.png`;
+        document.querySelectorAll('.template-btn').forEach((btn, index) => {
+            if (index + 1 === num) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
 </script>
 
 </body>
