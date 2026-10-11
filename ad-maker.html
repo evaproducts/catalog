@@ -3,78 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد الإعلانات والبوسترات - EVA PLUS</title>
+    <title>مولد الإعلانات - EVA PLUS</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #fdfbf7;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-            text-align: center;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        h2 {
-            color: #2c2c2c;
-            margin-bottom: 5px;
-            font-size: 20px;
-        }
-        .subtitle {
-            color: #b89753;
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .templates-selector {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .template-btn {
-            background: #f4efe6;
-            border: 2px solid #e6dbcc;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            font-weight: bold;
-            color: #333;
-            font-size: 13px;
-            transition: 0.2s;
-        }
-        .template-btn.active, .template-btn:hover {
-            background: #b89753;
-            color: #fff;
-            border-color: #b89753;
-        }
-        .poster-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 320px;
-            aspect-ratio: 9/16;
-            margin: 0 auto 20px auto;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            background: #fff;
-        }
-        .poster-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: fill;
-            display: block;
-        }
-        /* ضبط إحداثيات ومقاسات المربع الأبيض بدقة تامة ليتناسب مع كافة القوالب */
+        body { font-family: 'Cairo', sans-serif; background: #fdfbf7; margin: 0; padding: 20px; direction: rtl; text-align: center; }
+        .container { max-width: 480px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2c2c2c; font-size: 18px; margin-bottom: 5px; }
+        .subtitle { color: #b89753; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+        
+        /* أزرار القوالب */
+        .templates-selector { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+        .template-btn { background: #f4efe6; border: 1px solid #e6dbcc; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: bold; font-size: 12px; color: #333; }
+        .template-btn.active, .template-btn:hover { background: #b89753; color: #fff; border-color: #b89753; }
+
+        /* حاوية البوستر */
+        .poster-wrapper { position: relative; width: 100%; max-width: 320px; aspect-ratio: 9/16; margin: 0 auto 15px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15); background: #fff; }
+        .poster-bg { width: 100%; height: 100%; object-fit: fill; display: block; }
+
+        /* المربع الأبيض المخصص للمنتج (متوافق وثابت في جميع القوالب) */
         .product-overlay-box {
             position: absolute;
             top: 41%;
@@ -82,109 +28,54 @@
             width: 60%;
             height: 31%;
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 8px;
-            padding: 6px;
+            border-radius: 6px;
+            padding: 5px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
-        .prod-img-container {
-            width: 100%;
-            height: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #faf8f5;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .prod-img-container img {
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: contain;
-        }
-        .prod-info {
-            width: 100%;
-            text-align: center;
-        }
-        .prod-title {
-            font-size: 10.5px;
-            font-weight: bold;
-            color: #2c2c2c;
-            margin: 2px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .prod-price-row {
-            display: flex;
-            justify-content: space-around;
-            font-size: 10px;
-            margin-top: 2px;
-        }
-        .price {
-            color: #444;
-            font-weight: bold;
-        }
-        .profit {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .action-btn {
-            background: linear-gradient(135deg, #b89753, #967538);
-            color: #fff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(184, 151, 83, 0.3);
-        }
-        .action-btn:hover {
-            opacity: 0.9;
-        }
-        .download-btn {
-            background: #2c2c2c;
-            color: #b89753;
-            border: 1px solid #b89753;
-        }
-        .status-msg {
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
-        }
+        .prod-img-container { width: 100%; height: 55%; display: flex; align-items: center; justify-content: center; background: #faf8f5; border-radius: 4px; overflow: hidden; }
+        .prod-img-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        
+        .prod-info { width: 100%; text-align: center; }
+        .prod-title { font-size: 10px; font-weight: bold; color: #2c2c2c; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .prod-price-row { display: flex; justify-content: space-around; font-size: 9.5px; }
+        .price { color: #444; font-weight: bold; }
+        .profit { color: #22c55e; font-weight: bold; }
+
+        /* الأزرار */
+        .action-btn { background: #b89753; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 8px; font-family: 'Cairo', sans-serif; }
+        .action-btn:hover { opacity: 0.9; }
+        .download-btn { background: #2c2c2c; color: #b89753; border: 1px solid #b89753; }
+        .status-msg { color: #666; font-size: 11px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>مولد الإعلانات الاحترافي</h2>
-    <p class="subtitle">الأناقة بس من عنا ✨ - اختر القالب واضغط توليد لإدراج منتج حقيقي عشوائياً</p>
+    <p class="subtitle">اختر القالب واستعرض منتجاتك الحقيقية من الكتالوج</p>
 
-    <!-- أزرار القوالب الأربعة تعمل بتبديل دقيق وتفاعل سليم -->
+    <!-- أزرار اختيار القوالب -->
     <div class="templates-selector">
         <button class="template-btn active" onclick="changeTemplate(1)">قالب 1</button>
         <button class="template-btn" onclick="changeTemplate(2)">قالب 2</button>
-        <button class="template-btn" onclick="templateBtnHandler(3)">قالب 3</button>
-        <button class="template-btn" onclick="templateBtnHandler(4)">قالب 4</button>
+        <button class="template-btn" onclick="changeTemplate(3)">قالب 3</button>
+        <button class="template-btn" onclick="changeTemplate(4)">قالب 4</button>
     </div>
 
-    <!-- حاوية البوستر -->
+    <!-- عرض البوستر -->
     <div class="poster-wrapper" id="posterArea">
-        <img id="posterImage" src="eva-template-1.png" class="poster-bg" alt="EVA Template">
+        <img id="posterImage" src="eva-template-1.png" class="poster-bg" alt="Template">
         
         <div class="product-overlay-box">
             <div class="prod-img-container">
                 <img id="boxImg" src="" alt="صورة المنتج">
             </div>
             <div class="prod-info">
-                <div class="prod-title" id="boxTitle">جاري تحميل المنتج...</div>
+                <div class="prod-title" id="boxTitle">جاري تحميل المنتجات...</div>
                 <div class="prod-price-row">
                     <span class="price" id="boxPrice">السعر: -</span>
                     <span class="profit" id="boxProfit">الربح: -</span>
@@ -193,15 +84,15 @@
         </div>
     </div>
 
-    <!-- الأزرار الوظيفية -->
-    <button class="action-btn" onclick="pickRandomRealProduct()">🎲 جلب منتج حقيقي عشوائي</button>
-    <button class="action-btn download-btn" onclick="downloadPosterImage()">📥 تحميل وحفظ البوستر</button>
+    <button class="action-btn" onclick="pickRandomProduct()">🎲 جلب منتج عشوائي آخر</button>
+    <button class="action-btn download-btn" onclick="downloadPosterImage()">📥 تحميل البوستر كصورة</button>
     <div id="statusMsg" class="status-msg">جاري الاتصال بقاعدة البيانات...</div>
 </div>
 
-<!-- مكتبة html2canvas لتصدير البوستر كصورة PNG حقيقية عند التحميل -->
+<!-- مكتبة html2canvas لتحميل الصورة -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<!-- ربط فايربيس وجلب المنتجات الحقيقية تماماً مثل الكود الخاص بك -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -218,18 +109,18 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let realProductsList = [];
+    let productsList = [];
 
-    async function fetchRealProducts() {
+    async function loadProducts() {
         try {
             const querySnapshot = await getDocs(collection(db, "products"));
-            realProductsList = [];
+            productsList = [];
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
                 let img = (data.images && data.images.length > 0) ? data.images[0] : '';
                 let profitVal = data.agentPrice || data.profit || data.evaProfit || '10';
                 if (img && data.name) {
-                    realProductsList.push({
+                    productsList.push({
                         name: data.name,
                         image: img,
                         price: data.price || '0',
@@ -238,32 +129,23 @@
                 }
             });
 
-            if (realProductsList.length > 0) {
-                document.getElementById('statusMsg').innerText = "تم الاتصال بنجاح وتوافر " + realProductsList.length + " منتج حقيقي!";
+            if (productsList.length > 0) {
+                document.getElementById('statusMsg').innerText = "تم الاتصال بنجاح (" + productsList.length + " منتج متاح)";
                 setTimeout(() => { document.getElementById('statusMsg').style.display = 'none'; }, 2000);
-                pickRandomRealProduct();
+                pickRandomProduct();
             } else {
-                loadFallbackProducts();
+                document.getElementById('statusMsg').innerText = "لا توجد منتجات مطابقة في قاعدة البيانات.";
             }
         } catch (err) {
-            console.error("Error fetching products:", err);
-            loadFallbackProducts();
+            console.error("Firebase Error:", err);
+            document.getElementById('statusMsg').innerText = "خطأ في الاتصال بقاعدة البيانات.";
         }
     }
 
-    function loadFallbackProducts() {
-        realProductsList = [
-            { name: "حقيبة نسائية فاخرة هاي كواليتي سان لوران", image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300", price: "50", profit: "10" },
-            { name: "ساعة يد كلاسيكية معدنية ذهبية", image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300", price: "180", profit: "40" }
-        ];
-        pickRandomRealProduct();
-        document.getElementById('statusMsg').style.display = 'none';
-    }
-
-    window.pickRandomRealProduct = function() {
-        if (realProductsList.length === 0) return;
-        const randomIndex = Math.floor(Math.random() * realProductsList.length);
-        const p = realProductsList[randomIndex];
+    window.pickRandomProduct = function() {
+        if (productsList.length === 0) return;
+        const randomIndex = Math.floor(Math.random() * productsList.length);
+        const p = productsList[randomIndex];
 
         document.getElementById('boxTitle').innerText = p.name;
         document.getElementById('boxPrice').innerText = "السعر: " + p.price + " ₪";
@@ -271,11 +153,11 @@
         document.getElementById('boxImg').src = p.image;
     };
 
-    window.addEventListener('DOMContentLoaded', fetchRealProducts);
+    window.addEventListener('DOMContentLoaded', loadProducts);
 </script>
 
 <script>
-    // دالة تبديل القوالب بسلاسة وتحديث الأزرار النشطة
+    // تبديل القوالب بسلاسة وتحديد القالب النشط
     function changeTemplate(num) {
         document.getElementById('posterImage').src = `eva-template-${num}.png`;
         const buttons = document.querySelectorAll('.template-btn');
@@ -288,11 +170,7 @@
         });
     }
 
-    function templateBtnHandler(num) {
-        changeTemplate(num);
-    }
-
-    // دالة تحميل البوستر كصورة PNG جاهزة للنشر
+    // تحميل البوستر كصورة
     function downloadPosterImage() {
         const posterElement = document.getElementById('posterArea');
         html2canvas(posterElement, { useCORS: true, scale: 2 }).then(canvas => {
