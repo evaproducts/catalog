@@ -544,12 +544,6 @@
         loadedCategoriesData = [];
         catSnapshot.forEach(docItem => loadedCategoriesData.push({ id: docItem.id, ...docItem.data() }));
         
-        if (loadedCategoriesData.length === 0) {
-            await setDoc(doc(db, "categories", "A"), { name: "الحقائب الفاخرة" });
-            await setDoc(doc(db, "categories", "B"), { name: "العطور والساعات" });
-            loadedCategoriesData = [{id: 'A', name: 'الحقائب الفاخرة'}, {id: 'B', name: 'العطور والساعات'}];
-        }
-
         let html = loadedCategoriesData.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         document.getElementById('pCategory').innerHTML = html;
         document.getElementById('catSelect').innerHTML = html;
